@@ -4,31 +4,8 @@
 
 ```
 hr_management_system/
-├── include/
-│   ├── benefits.h
-│   ├── commissionemployee.h
-│   ├── dentalbenefit.h
-│   ├── dentalhealth.h
-│   ├── department.h
-│   ├── employee.h
-│   ├── healthbenefit.h
-│   ├── hourlyemployee.h
-│   ├── hrsystem.h
-│   ├── manageremployee.h
-│   └── salariedemployee.h
-│
-├── src/
-│   ├── main.cpp
-│   ├── benefits.cpp
-│   ├── employee.cpp
-│   ├── department.cpp
-│   ├── hrsystem.cpp
-│   ├── commissionemployee.cpp
-│   ├── hourlyemployee.cpp
-│   ├── manageremployee.cpp
-│   └── salariedemployee.cpp
-│
-├── build/                  # (tự tạo khi compile)
+|── *.h
+|── *.cpp
 ├── README.md
 └── Makefile                # (hoặc file CMakeLists.txt nếu dùng CMake)
 ```
