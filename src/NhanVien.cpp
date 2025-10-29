@@ -36,15 +36,34 @@ void NhanVien::docTuFile(std::istream& is) {
     
     std::string ngayVaoLamStr;
     std::getline(is, ngayVaoLamStr, ',');
-    int d, m, y;
-    char slash;
-    std::stringstream ss(ngayVaoLamStr);
-    ss >> d >> slash >> m >> slash >> y;
-    ngayVaoLam.setDate(d, m, y);
+
+    try {
+        int d, m, y;
+        char slash1, slash2; // Sửa lỗi logic (cần 2 biến slash)
+        std::stringstream ss(ngayVaoLamStr);
+        ss >> d >> slash1 >> m >> slash2 >> y;
+        
+        // Nếu stream bị lỗi (ví dụ: chuỗi rỗng) hoặc không đúng định dạng
+        if (ss.fail() || slash1 != '/' || slash2 != '/') {
+            ngayVaoLam.setDate(1, 1, 2000); // Đặt ngày mặc định
+        } else {
+            ngayVaoLam.setDate(d, m, y);
+        }
+    } catch (const std::exception& e) {
+        ngayVaoLam.setDate(1, 1, 2000); // Đặt ngày mặc định nếu có lỗi
+    }
 
     std::string trangThaiStr;
     std::getline(is, trangThaiStr, ',');
-    trangThai = static_cast<TrangThaiLamViec>(std::stoi(trangThaiStr));
+
+    try {
+        // Lệnh std::stoi(trangThaiStr) sẽ gây crash nếu trangThaiStr là rỗng ""
+        trangThai = static_cast<TrangThaiLamViec>(std::stoi(trangThaiStr));
+    } catch (const std::exception& e) {
+        // Nếu lỗi (do file hỏng hoặc dòng trống), đặt trạng thái mặc định
+        trangThai = TrangThaiLamViec::THU_VIEC; 
+        // std::cerr << "(!) Loi doc file: Trang thai khong hop le cho NV " << maNV << ". Dat mac dinh Thu Viec.\n";
+    }
 
     std::getline(is, maPhongBan, ',');
     std::getline(is, maChucDanh, ',');

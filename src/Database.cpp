@@ -208,8 +208,21 @@ void Database::taiLichSu() {
         std::getline(ss, giaTriMoi, ',');
 
         // Chuyển đổi chuỗi ngày thành đối tượng Date
-        Date ngay = Date::fromString(ngayStr); // Sử dụng hàm fromString
-
+        Date ngay; // Khởi tạo ngày mặc định
+        try {
+            int d, m, y;
+            char slash1, slash2;
+            std::stringstream date_ss(ngayStr);
+            date_ss >> d >> slash1 >> m >> slash2 >> y;
+            
+            if (date_ss.fail() || slash1 != '/' || slash2 != '/') {
+                ngay.setDate(1, 1, 2000); // Ngày mặc định nếu lỗi
+            } else {
+                ngay.setDate(d, m, y);
+            }
+        } catch (const std::exception& e) {
+            ngay.setDate(1, 1, 2000); // Ngày mặc định nếu lỗi
+        }
         // Thêm vào map
         dsLichSu[maNV].emplace_back(ngay, moTa, giaTriCu, giaTriMoi);
     }

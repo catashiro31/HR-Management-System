@@ -689,7 +689,7 @@ void QuanLyNhanSu::chucNang_XuatDanhSachNhanVien() {
     Helper::xoaManHinh();
     std::cout << "--- [4.2] Xuất Danh Sách Nhân Viên (CSV) ---\n";
     std::string tenFile = Helper::nhapChuoi(" - Nhập tên file để xuất (ví dụ: export.csv): ");
-
+    tenFile = "../Stored/" + tenFile; // Lưu trong thư mục Stored
     std::ofstream file(tenFile);
     if (!file.is_open()) {
         std::cout << " (!) Không thể tạo file để xuất.\n";

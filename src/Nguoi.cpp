@@ -35,11 +35,24 @@ void Nguoi::docTuFile(std::istream& is) {
     std::string ngaySinhStr;
     std::getline(is, ngaySinhStr, ',');
     // Chuyển đổi chuỗi "dd/mm/yyyy" sang đối tượng Date
-    int d, m, y;
-    char slash;
-    std::stringstream ss(ngaySinhStr);
-    ss >> d >> slash >> m >> slash >> y;
-    ngaySinh.setDate(d, m, y);
+    // === BỌC BẢO VỆ (0): XỬ LÝ ĐỌC NGÀY AN TOÀN ===
+    try {
+        // Chuyển đổi chuỗi "dd/mm/yyyy" sang đối tượng Date
+        int d, m, y;
+        char slash1, slash2; // SUA LOI LOGIC: Can 2 bien
+        std::stringstream ss(ngaySinhStr);
+        ss >> d >> slash1 >> m >> slash2 >> y;
+
+        // Kiem tra neu doc loi (chuoi rong/hong) hoac sai dinh dang
+        if (ss.fail() || slash1 != '/' || slash2 != '/') {
+            ngaySinh.setDate(1, 1, 1990); // Dat ngay mac dinh
+        } else {
+            ngaySinh.setDate(d, m, y);
+        }
+    } catch (const std::exception& e) {
+        // Bat moi loi khac co the xay ra
+        ngaySinh.setDate(1, 1, 1990); // Dat ngay mac dinh
+    }
 }
 
 // Implement getters/setters

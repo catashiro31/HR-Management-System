@@ -49,9 +49,26 @@ void NVHoaHong::docTuFile(std::istream& is) {
     std::getline(is, doanhSoStr, ',');
     std::getline(is, tyLeStr); // Đọc đến hết dòng
 
-    luongCoBan = luongCBStr.empty() ? 0.0 : std::stod(luongCBStr);
-    doanhSoBanHang = doanhSoStr.empty() ? 0.0 : std::stod(doanhSoStr);
-    tyLeHoaHong = tyLeStr.empty() ? 0.0 : std::stod(tyLeStr);
+    // === BỌC BẢO VỆ (4): LƯƠNG CƠ BẢN ===
+    try {
+        luongCoBan = luongCBStr.empty() ? 0.0 : std::stod(luongCBStr);
+    } catch (const std::exception& e) {
+        luongCoBan = 0.0; // Dat mac dinh neu loi
+    }
+
+    // === BỌC BẢO VỆ (5): DOANH SỐ ===
+    try {
+        doanhSoBanHang = doanhSoStr.empty() ? 0.0 : std::stod(doanhSoStr);
+    } catch (const std::exception& e) {
+        doanhSoBanHang = 0.0; // Dat mac dinh neu loi
+    }
+
+    // === BỌC BẢO VỆ (6): TỶ LỆ ===
+    try {
+        tyLeHoaHong = tyLeStr.empty() ? 0.0 : std::stod(tyLeStr);
+    } catch (const std::exception& e) {
+        tyLeHoaHong = 0.0; // Dat mac dinh neu loi
+    }
 }
 
 void NVHoaHong::nhapThongTinRieng() {

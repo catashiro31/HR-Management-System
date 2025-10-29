@@ -50,8 +50,19 @@ void NVTheoGio::docTuFile(std::istream& is) {
     std::getline(is, mucLuongStr, ',');
     std::getline(is, soGioStr); // Đọc đến hết dòng
 
-    mucLuongGio = mucLuongStr.empty() ? 0.0 : std::stod(mucLuongStr);
-    soGioLamTrongThang = soGioStr.empty() ? 0.0 : std::stod(soGioStr);
+    // === BỌC BẢO VỆ (7): MỨC LƯƠNG GIỜ ===
+    try {
+        mucLuongGio = mucLuongStr.empty() ? 0.0 : std::stod(mucLuongStr);
+    } catch (const std::exception& e) {
+        mucLuongGio = 0.0; // Dat mac dinh neu loi
+    }
+
+    // === BỌC BẢO VỆ (8): SỐ GIỜ LÀM ===
+    try {
+        soGioLamTrongThang = soGioStr.empty() ? 0.0 : std::stod(soGioStr);
+    } catch (const std::exception& e) {
+        soGioLamTrongThang = 0.0; // Dat mac dinh neu loi
+    }
 }
 
 void NVTheoGio::nhapThongTinRieng() {
