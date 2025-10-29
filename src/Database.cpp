@@ -88,7 +88,7 @@ void Database::taiChucDanh() {
 
     dsChucDanh.clear();
     std::string line;
-    std::getline(file, line); // Bỏ qua header
+    std::getline(file, line); 
 
     while (std::getline(file, line)) {
         std::stringstream ss(line);
@@ -148,7 +148,7 @@ void Database::taiNhanVien() {
 
         std::stringstream ss(line);
         std::string loaiNVStr;
-        std::getline(ss, loaiNVStr, '|'); // Đọc trường đầu tiên: Loại NV
+        std::getline(ss, loaiNVStr, ','); // Đọc trường đầu tiên: Loại NV
 
         if (loaiNVStr.empty()) { 
             continue; 
@@ -235,10 +235,9 @@ void Database::taiLichSu() {
 void Database::luuDuLieuVaoFile() {
     std::cout << "\nĐang lưu dữ liệu ra file...\n";
     luuPhongBan();
-    luuChucDanh(); // Gọi 1 lần
+    luuChucDanh();
     luuNhanVien();
     luuLichSu(); 
-    // luuChucDanh(); // <-- XÓA DÒNG BỊ LẶP NÀY
     luuPhucLoi();
     luuDangKyPhucLoi();
     std::cout << "Lưu dữ liệu thành công.\n";

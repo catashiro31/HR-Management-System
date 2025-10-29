@@ -582,11 +582,13 @@ void QuanLyNhanSu::chucNang_GhiDanhPhucLoi() {
 }
 // ========================================================
 
+// Hàm này nằm trong file QuanLyNhanSu.cpp
 void QuanLyNhanSu::chucNang_ChayBangLuong() {
     Helper::xoaManHinh();
-    std::cout << "--- [2.2] Tính Lương Hàng Tháng ---\n";
+    std::cout << "--- [2.2] Tính Lương Hàng Tháng ---\n"; // Giữ theo code của bạn
     std::cout << " (Chức năng này sẽ tính toán lương cho tất cả nhân viên)\n";
 
+    // --- Phần 1: Nhập liệu (Giữ nguyên code của bạn) ---
     for (NhanVien* nv : db.getDSNhanVien()) {
         if (nv->getLoaiNV() == LoaiNhanVien::THEO_GIO) {
             NVTheoGio* nvTheoGio = static_cast<NVTheoGio*>(nv);
@@ -600,29 +602,65 @@ void QuanLyNhanSu::chucNang_ChayBangLuong() {
         }
     }
 
-    std::cout << "\n--- BẢNG LƯƠNG THÁNG (GIẢ ĐỊNH) ---\n";
-    std::cout << "+--------+---------------------------+-----------------+\n";
-    std::cout << "| Mã NV  | Họ Tên                    | Lương Thực Lĩnh |\n";
-    std::cout << "+--------+---------------------------+-----------------+\n";
+    // --- Phần 2: Tính toán và In Bảng Lương (Đã nâng cấp để trừ Phúc Lợi) ---
+    std::cout << "\n--- BẢNG LƯƠNG THÁNG (CHI TIẾT) ---\n";
+    // Mở rộng bảng để thêm cột "Giảm Trừ (PL)"
+    std::cout << "+--------+---------------------------+-----------------+-----------------+-----------------+-----------------+\n";
+    std::cout << "| Mã NV  | Họ Tên                    | Lg. Gốc (NV)    | Lg. Chức Danh   | Giảm Trừ (PL)   | LƯƠNG THỰC LĨNH |\n";
+    std::cout << "+--------+---------------------------+-----------------+-----------------+-----------------+-----------------+\n";
     
-    double tongLuong = 0.0;
+    double tongChiPhiLuong = 0.0;
 
     for (const NhanVien* nv : db.getDSNhanVien()) {
         if (nv->getTrangThai() == TrangThaiLamViec::DA_NGHI) continue;
         
-        double luong = nv->tinhLuong();
-        tongLuong += luong;
+        // 1. Lấy lương gốc từ chính Nhân viên (tinhLuong() ảo)
+        double luongGocNV = nv->tinhLuong();
 
+        // 2. Lấy lương từ Chức Danh (từ Database)
+        double luongChucDanh = 0.0;
+        ChucDanh* cd = db.timChucDanhTheoMa(nv->getMaChucDanh());
+        if (cd != nullptr) {
+            luongChucDanh = cd->getLuongCoBan();
+        }
+
+        // 3. (MỚI) Tính tổng chi phí phúc lợi đã đăng ký
+        double chiPhiPhucLoi = 0.0;
+        std::vector<PhucLoi*> dsPhucLoiNV = db.getPhucLoiCuaNhanVien(nv->getMaNV());
+        for (const PhucLoi* pl : dsPhucLoiNV) {
+            chiPhiPhucLoi += pl->getChiPhiHangThang();
+        }
+
+        // 4. Tính lương tổng (Lương Gộp)
+        double luongGop = 0.0;
+        if (nv->getLoaiNV() == LoaiNhanVien::THEO_GIO) {
+            luongGop = luongGocNV; // Lương NV Theo Giờ đã là tổng
+            luongChucDanh = 0.0; // Không áp dụng lương chức danh
+        } else {
+            // NV Lương Cứng và Hoa Hồng
+            luongGop = luongGocNV + luongChucDanh;
+        }
+        
+        // 5. (MỚI) Tính Lương Thực Lĩnh = Lương Gộp - Chi Phí Phúc Lợi
+        double luongThucLinh = luongGop - chiPhiPhucLoi;
+        
+        tongChiPhiLuong += luongThucLinh; // Cộng vào tổng
+
+        // 6. In ra
         std::cout << "| " << std::left << std::setw(6) << nv->getMaNV()
                   << " | " << std::setw(25) << nv->getHoTen()
-                  << " | " << std::right << std::setw(15) << std::fixed << std::setprecision(0) << luong << " |\n";
+                  << " | " << std::right << std::setw(15) << Helper::formatCurrency(luongGocNV)
+                  << " | " << std::setw(15) << Helper::formatCurrency(luongChucDanh)
+                  << " | " << std::setw(15) << Helper::formatCurrency(chiPhiPhucLoi) // In cột mới
+                  << " | " << std::setw(15) << Helper::formatCurrency(luongThucLinh) << " |\n";
     }
     
-    std::cout << "+--------+---------------------------+-----------------+\n";
-    std::cout << "| " << std::left << std::setw(34) << "TỔNG CHI PHÍ LƯƠNG"
-              << " | " << std::right << std::setw(15) << std::fixed << std::setprecision(0) << tongLuong << " |\n";
-    std::cout << "+--------+---------------------------+-----------------+\n";
-
+    std::cout << "+--------+---------------------------+-----------------+-----------------+-----------------+-----------------+\n";
+    // Cập nhật lại setw cho dòng tổng (tăng thêm 18 ký tự cho cột mới)
+    std::cout << "| " << std::left << std::setw(87) // (69 + 18)
+              << "TONG CHI PHI LUONG" 
+              << " | " << std::right << std::setw(15) << Helper::formatCurrency(tongChiPhiLuong) << " |\n";
+    std::cout << "+--------+---------------------------+-----------------+-----------------+-----------------+-----------------+\n";
 }
 
 
@@ -723,10 +761,8 @@ void QuanLyNhanSu::thoatChuongTrinh() {
     std::cout << "[2] Hủy\n";
     int chon = Helper::nhapSoNguyen(" >> Lựa chọn: ", 1, 2);
     if (chon == 1) {
-        std::cout << "Đang lưu tất cả dữ liệu..." << std::endl;
-        // --- LƯU DỮ LIỆU KHI THOÁT ---
         db.luuDuLieuVaoFile();
-        std::cout << "Đã lưu thành công. Tạm biệt!" << std::endl;
+        std::cout << "Tạm biệt!" << std::endl;
         dangChay = false;
     }
 }
