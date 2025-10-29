@@ -27,35 +27,9 @@ hr_management_system/
 
 ## 🧱 Makefile (đơn giản nhất)
 
-Tạo file `Makefile` trong thư mục gốc:
-
-```makefile
-CXX = g++
-CXXFLAGS = -std=c++17 -Iinclude -Wall -Wextra
-SRC = $(wildcard src/*.cpp)
-OBJ = $(SRC:src/%.cpp=build/%.o)
-TARGET = build/hr_management_system.exe
-
-$(TARGET): $(OBJ)
-	$(CXX) $(OBJ) -o $(TARGET)
-
-build/%.o: src/%.cpp | build
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-build:
-	mkdir -p build
-
-clean:
-	rm -rf build
-
-run: $(TARGET)
-	./$(TARGET)
-```
-
-Cách chạy:
-
-```bash
-make        # biên dịch
-make run    # chạy chương trình
-make clean  # xoá file build
-```
+Cách chạy: Tại đường dẫn file Main.cpp
+Gõ lần lượt lệnh sau:
+'''
+g++ *.cpp -o app.exe
+.\app.exe
+'''
