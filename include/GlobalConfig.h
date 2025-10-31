@@ -4,14 +4,14 @@
 #include <string>
 
 // Cấu hình file
-const std::string FILE_NHANVIEN = "nhanvien.csv";
-const std::string FILE_PHONGBAN = "phongban.csv";
-const std::string FILE_LICHSU = "lichsu.csv";
+const std::string FILE_NHANVIEN = "../Stored/nhanvien.csv";
+const std::string FILE_PHONGBAN = "../Stored/phongban.csv";
+const std::string FILE_LICHSU = "../Stored/lichsu.csv";
 
 // --- FILE MOI ---
-const std::string FILE_CHUCDANH = "chucdanh.csv";
-const std::string FILE_PHUCLOI = "phucloi.csv";
-const std::string FILE_DANGKY_PHUCLOI = "nhanvien_phucloi.csv";
+const std::string FILE_CHUCDANH = "../Stored/chucdanh.csv";
+const std::string FILE_PHUCLOI = "../Stored/phucloi.csv";
+const std::string FILE_DANGKY_PHUCLOI = "../Stored/nhanvien_phucloi.csv";
 
 // Cấu hình hệ thống
 enum class LoaiNhanVien {

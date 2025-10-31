@@ -20,13 +20,11 @@ public:
     static double nhapSoThuc(const std::string& prompt, double min);
 
     // Hàm nhập liệu gốc
-    static int nhapSoNguyen(); // Giữ lại hàm cũ của tôi nếu bạn chưa có
     static std::string nhapChuoi(const std::string& prompt, bool choPhepRong = false);
 
     // Chuyển đổi
     static std::string trangThaiToString(TrangThaiLamViec trangThai);
     static TrangThaiLamViec stringToTrangThai(const std::string& str);
-    static std::string toLower(const std::string& str);
 
     // --- HAM MOI CAN THEM ---
     static std::string formatCurrency(double value, bool showVND = false);

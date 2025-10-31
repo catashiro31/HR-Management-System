@@ -1,5 +1,5 @@
-#include "../include/QuanLyNhanSu.h"
-#include "../include/Helper.h"
+#include "include/QuanLyNhanSu.h"
+#include "include/Helper.h"
 #include <iostream>
 
 int main() {
