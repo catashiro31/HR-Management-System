@@ -30,6 +30,6 @@ hr_management_system/
 Cách chạy: Tại đường dẫn file Main.cpp
 Gõ lần lượt lệnh sau:
 ```
-g++ *.cpp -o app.exe
+g++ Main.cpp src/*.cpp -o app.exe
 .\app.exe
 ```
