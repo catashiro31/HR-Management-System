@@ -1,26 +1,27 @@
 #include "../include/PhucLoi.h"
-#include "../include/Helper.h" // Sẽ dùng cho formatCurrency
+#include "../include/Helper.h"
 #include <iostream>
 #include <iomanip>
+using namespace std;
 
-PhucLoi::PhucLoi(const std::string& ma, const std::string& ten, double chiPhi)
+PhucLoi::PhucLoi(const string& ma, const string& ten, double chiPhi)
     : maPhucLoi(ma), tenPhucLoi(ten), chiPhiHangThang(chiPhi) {}
 
-std::string PhucLoi::getMaPhucLoi() const { return maPhucLoi; }
-std::string PhucLoi::getTenPhucLoi() const { return tenPhucLoi; }
+string PhucLoi::getMaPhucLoi() const { return maPhucLoi; }
+string PhucLoi::getTenPhucLoi() const { return tenPhucLoi; }
 double PhucLoi::getChiPhiHangThang() const { return chiPhiHangThang; }
 
-void PhucLoi::setTenPhucLoi(const std::string& ten) { tenPhucLoi = ten; }
+void PhucLoi::setTenPhucLoi(const string& ten) { tenPhucLoi = ten; }
 void PhucLoi::setChiPhiHangThang(double chiPhi) { chiPhiHangThang = chiPhi; }
 
 void PhucLoi::hienThi() const {
-    std::cout << "| " << std::left << std::setw(10) << maPhucLoi
-              << " | " << std::setw(30) << tenPhucLoi
-              << " | " << std::right << std::setw(15) << Helper::formatCurrency(chiPhiHangThang) << " VND |\n";
+    cout << "| " << left << setw(10) << maPhucLoi
+              << " | " << setw(30) << tenPhucLoi
+              << " | " << right << setw(15) << Helper::formatCurrency(chiPhiHangThang) << " VND |\n";
 }
 
-std::string PhucLoi::toStringCSV() const {
-    std::stringstream ss;
+string PhucLoi::toStringCSV() const {
+    stringstream ss;
     ss << maPhucLoi << "," << tenPhucLoi << "," << chiPhiHangThang;
     return ss.str();
 }

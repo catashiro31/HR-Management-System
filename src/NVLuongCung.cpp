@@ -2,11 +2,12 @@
 #include "../include/Helper.h"
 #include <iostream>
 #include <iomanip>
+using namespace std;
 
-NVLuongCung::NVLuongCung(std::string ma, std::string ten, std::string cccd,
-                         std::string dc, std::string sdt, std::string mail,
+NVLuongCung::NVLuongCung(string ma, string ten, string cccd,
+                         string dc, string sdt, string mail,
                          Date ns, Date nvl, TrangThaiLamViec tt,
-                         std::string pb, std::string cd, double luong)
+                         string pb, string cd, double luong)
     : NhanVien(ma, ten, cccd, dc, sdt, mail, ns, nvl, tt, pb, cd), luongCoBan(luong) {}
 
 NVLuongCung::~NVLuongCung() {}
@@ -21,25 +22,25 @@ double NVLuongCung::tinhLuong() const {
 
 // Định nghĩa hàm hiển thị
 void NVLuongCung::hienThiThongTin() const {
-    std::cout << std::left << std::setw(15) << "Mã Nhân Viên:" << maNV << "\n"
-              << std::setw(15) << "Họ Tên:" << hoTen << "\n"
-              << std::setw(15) << "Ngày Sinh:" << ngaySinh << "\n"
-              << std::setw(15) << "Địa Chỉ:" << diaChi << "\n"
-              << std::setw(15) << "Email:" << email << "\n"
-              << std::setw(15) << "Ngày Vào Làm:" << ngayVaoLam << "\n"
-              << std::setw(15) << "Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
-              << std::setw(15) << "Mã Phòng Ban:" << maPhongBan << "\n"
-              << std::setw(15) << "Mã Chức Danh:" << maChucDanh << "\n"
-              << std::setw(15) << "Loại NV:" << "Lương Cứng" << "\n"
-              << std::setw(15) << "Lương Cơ Bản:" << std::fixed << std::setprecision(0) << luongCoBan << " VND\n";
-    std::cout << "------------------------------------------\n";
+    cout << left << setw(15) << "Mã Nhân Viên:" << maNV << "\n"
+              << setw(15) << "Họ Tên:" << hoTen << "\n"
+              << setw(15) << "Ngày Sinh:" << ngaySinh << "\n"
+              << setw(15) << "Địa Chỉ:" << diaChi << "\n"
+              << setw(15) << "Email:" << email << "\n"
+              << setw(15) << "Ngày Vào Làm:" << ngayVaoLam << "\n"
+              << setw(15) << "Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
+              << setw(15) << "Mã Phòng Ban:" << maPhongBan << "\n"
+              << setw(15) << "Mã Chức Danh:" << maChucDanh << "\n"
+              << setw(15) << "Loại NV:" << "Lương Cứng" << "\n"
+              << setw(15) << "Lương Cơ Bản:" << fixed << setprecision(0) << luongCoBan << " VND\n";
+    cout << "------------------------------------------\n";
 }
 
 LoaiNhanVien NVLuongCung::getLoaiNV() const {
     return LoaiNhanVien::LUONG_CUNG;
 }
 
-void NVLuongCung::luuVaoFile(std::ostream& os) const {
+void NVLuongCung::luuVaoFile(ostream& os) const {
     // 1. Lưu loại nhân viên (QUAN TRỌNG)
     os << static_cast<int>(getLoaiNV()) << ",";
     
@@ -50,31 +51,31 @@ void NVLuongCung::luuVaoFile(std::ostream& os) const {
     os << luongCoBan << "\n"; // Kết thúc bằng newline
 }
 
-void NVLuongCung::docTuFile(std::istream& is) {
+void NVLuongCung::docTuFile(istream& is) {
     // Loại nhân viên đã được đọc ở lớp Database
     
     // 1. Gọi hàm của lớp cha (NhanVien)
     NhanVien::docTuFile(is);
 
     // 2. Đọc trường riêng
-    std::string luongStr;
-    std::getline(is, luongStr); // Đọc đến hết dòng
+    string luongStr;
+    getline(is, luongStr); // Đọc đến hết dòng
     try {
         if (!luongStr.empty()) {
             // Lệnh stod co a gay loi neu luongStr khong phai la so
-            luongCoBan = std::stod(luongStr); 
+            luongCoBan = stod(luongStr); 
         } else {
             luongCoBan = 0; // Neu chuoi rong
         }
-    } catch (const std::exception& e) {
+    } catch (const exception& e) {
         // Neu loi (vi du: chuoi la "abc"), dat mac dinh la 0
         luongCoBan = 0;
-        // std::cerr << "(!) Loi doc file: Luong co ban khong hop le cho NV " << getMaNV() << ". Dat mac dinh 0.\n";
+        // cerr << "(!) Loi doc file: Luong co ban khong hop le cho NV " << getMaNV() << ". Dat mac dinh 0.\n";
     }
 }
 
 void NVLuongCung::nhapThongTinRieng() {
-    std::cout << "--- Nhập Thông Tin Lương Cứng ---\n";
+    cout << "--- Nhập Thông Tin Lương Cứng ---\n";
     luongCoBan = Helper::nhapSoThuc(" - Nhập lương cơ bản (VND): ", 0);
 }
 

@@ -1,5 +1,5 @@
-#include "../include/QuanLyNhanSu.h"
-#include "../include/Helper.h"
+#include "include/QuanLyNhanSu.h"
+#include "include/Helper.h"
 #include <iostream>
 
 int main() {
@@ -9,5 +9,6 @@ int main() {
     QuanLyNhanSu heThongQLNS;
     heThongQLNS.chay(); // Bắt đầu chạy ứng dụng
 
+    
     return 0;
 }

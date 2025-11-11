@@ -2,11 +2,12 @@
 #include "../include/Helper.h"
 #include <iostream>
 #include <iomanip>
+using namespace std;
 
-NVTheoGio::NVTheoGio(std::string ma, std::string ten, std::string cccd,
-                     std::string dc, std::string sdt, std::string mail,
+NVTheoGio::NVTheoGio(string ma, string ten, string cccd,
+                     string dc, string sdt, string mail,
                      Date ns, Date nvl, TrangThaiLamViec tt,
-                     std::string pb, std::string cd, 
+                     string pb, string cd, 
                      double luongGio, double soGio)
     : NhanVien(ma, ten, cccd, dc, sdt, mail, ns, nvl, tt, pb, cd), 
       mucLuongGio(luongGio), soGioLamTrongThang(soGio) {}
@@ -21,52 +22,52 @@ double NVTheoGio::tinhLuong() const {
 }
 
 void NVTheoGio::hienThiThongTin() const {
-    std::cout << std::left << std::setw(15) << "Mã Nhân Viên:" << maNV << "\n"
-              << std::setw(15) << "Họ Tên:" << hoTen << "\n"
-              << std::setw(15) << "Ngày Sinh:" << ngaySinh << "\n"
-              << std::setw(15) << "Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
-              << std::setw(15) << "Mã Phòng Ban:" << maPhongBan << "\n"
-              << std::setw(15) << "Loại NV:" << "Theo Giờ" << "\n"
-              << std::setw(15) << "Mức Lương/Giờ:" << std::fixed << std::setprecision(0) << mucLuongGio << " VND\n"
-              << std::setw(15) << "Số Giờ Làm:" << std::fixed << std::setprecision(1) << soGioLamTrongThang << "\n";
-    std::cout << "------------------------------------------\n";
+    cout << left << setw(15) << "Mã Nhân Viên:" << maNV << "\n"
+              << setw(15) << "Họ Tên:" << hoTen << "\n"
+              << setw(15) << "Ngày Sinh:" << ngaySinh << "\n"
+              << setw(15) << "Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
+              << setw(15) << "Mã Phòng Ban:" << maPhongBan << "\n"
+              << setw(15) << "Loại NV:" << "Theo Giờ" << "\n"
+              << setw(15) << "Mức Lương/Giờ:" << fixed << setprecision(0) << mucLuongGio << " VND\n"
+              << setw(15) << "Số Giờ Làm:" << fixed << setprecision(1) << soGioLamTrongThang << "\n";
+    cout << "------------------------------------------\n";
 }
 
 LoaiNhanVien NVTheoGio::getLoaiNV() const {
     return LoaiNhanVien::THEO_GIO;
 }
 
-void NVTheoGio::luuVaoFile(std::ostream& os) const {
+void NVTheoGio::luuVaoFile(ostream& os) const {
     os << static_cast<int>(getLoaiNV()) << ",";
     NhanVien::luuVaoFile(os);
     os << mucLuongGio << ","
        << soGioLamTrongThang << "\n";
 }
 
-void NVTheoGio::docTuFile(std::istream& is) {
+void NVTheoGio::docTuFile(istream& is) {
     NhanVien::docTuFile(is);
-    std::string mucLuongStr, soGioStr;
+    string mucLuongStr, soGioStr;
     
-    std::getline(is, mucLuongStr, ',');
-    std::getline(is, soGioStr); // Đọc đến hết dòng
+    getline(is, mucLuongStr, ',');
+    getline(is, soGioStr); // Đọc đến hết dòng
 
     // === BỌC BẢO VỆ (7): MỨC LƯƠNG GIỜ ===
     try {
-        mucLuongGio = mucLuongStr.empty() ? 0.0 : std::stod(mucLuongStr);
-    } catch (const std::exception& e) {
+        mucLuongGio = mucLuongStr.empty() ? 0.0 : stod(mucLuongStr);
+    } catch (const exception& e) {
         mucLuongGio = 0.0; // Dat mac dinh neu loi
     }
 
     // === BỌC BẢO VỆ (8): SỐ GIỜ LÀM ===
     try {
-        soGioLamTrongThang = soGioStr.empty() ? 0.0 : std::stod(soGioStr);
-    } catch (const std::exception& e) {
+        soGioLamTrongThang = soGioStr.empty() ? 0.0 : stod(soGioStr);
+    } catch (const exception& e) {
         soGioLamTrongThang = 0.0; // Dat mac dinh neu loi
     }
 }
 
 void NVTheoGio::nhapThongTinRieng() {
-    std::cout << "--- Nhập Thông Tin Lương Theo Giờ ---\n";
+    cout << "--- Nhập Thông Tin Lương Theo Giờ ---\n";
     mucLuongGio = Helper::nhapSoThuc(" - Nhập mức lương theo giờ (VND): ", 0);
     soGioLamTrongThang = 0; // Ban đầu chưa có
 }

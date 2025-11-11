@@ -12,7 +12,9 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
-#include <iomanip> // for std::setw, std::setfill
+#include <iomanip> // for setw, setfill
+using namespace std;
+
 
 Database::Database() : autoIncrementMaNV(1) {
     // Constructor
@@ -32,45 +34,45 @@ Database::~Database() {
     dsNhanVien.clear();
 }
 
-std::string Database::taoMaNVMoi() {
+string Database::taoMaNVMoi() {
     // Tạo mã NV tăng dần, ví dụ: NV001, NV002
-    std::stringstream ss;
-    ss << "NV" << std::setfill('0') << std::setw(3) << autoIncrementMaNV++;
+    stringstream ss;
+    ss << "NV" << setfill('0') << setw(3) << autoIncrementMaNV++;
     return ss.str();
 }
 
 // ============== TẢI DỮ LIỆU (LOAD) ================
 
 void Database::taiDuLieuTuFile() {
-    std::cout << "Đang tải dữ liệu từ file...\n";
+    cout << "Đang tải dữ liệu từ file...\n";
     taiPhongBan();
     taiChucDanh();
     taiNhanVien(); 
     taiLichSu();
     taiPhucLoi();
     taiDangKyPhucLoi();
-    std::cout << "Tải dữ liệu thành công.\n";
+    cout << "Tải dữ liệu thành công.\n";
 }
 
 //... (Các hàm taiPhongBan, taiChucDanh, taoNhanVienTuLoai, taiNhanVien không đổi)...
 void Database::taiPhongBan() {
-    std::ifstream file(FILE_PHONGBAN);
+    ifstream file(FILE_PHONGBAN);
     if (!file.is_open()) {
-        std::cerr << " (!) Không tìm thấy file " << FILE_PHONGBAN << ", sẽ tạo file mới khi lưu.\n";
+        cerr << " (!) Không tìm thấy file " << FILE_PHONGBAN << ", sẽ tạo file mới khi lưu.\n";
         return;
     }
 
     dsPhongBan.clear();
-    std::string line;
-    std::getline(file, line); // Bỏ qua dòng header
+    string line;
+    getline(file, line); // Bỏ qua dòng header
 
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string maPB, tenPB, maTP;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string maPB, tenPB, maTP;
 
-        std::getline(ss, maPB, ',');
-        std::getline(ss, tenPB, ',');
-        std::getline(ss, maTP, ',');
+        getline(ss, maPB, ',');
+        getline(ss, tenPB, ',');
+        getline(ss, maTP, ',');
 
         if (!maPB.empty()) {
             dsPhongBan.push_back(PhongBan(maPB, tenPB, maTP));
@@ -80,27 +82,27 @@ void Database::taiPhongBan() {
 }
 
 void Database::taiChucDanh() {
-    std::ifstream file(FILE_CHUCDANH);
+    ifstream file(FILE_CHUCDANH);
     if (!file.is_open()) {
-        std::cerr << " (!) Không tìm thấy file " << FILE_CHUCDANH << ", sẽ tạo file mới khi lưu.\n";
+        cerr << " (!) Không tìm thấy file " << FILE_CHUCDANH << ", sẽ tạo file mới khi lưu.\n";
         return;
     }
 
     dsChucDanh.clear();
-    std::string line;
-    std::getline(file, line); 
+    string line;
+    getline(file, line); 
 
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string maCD, tenCD, luongCBStr;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string maCD, tenCD, luongCBStr;
         double luongCB = 0.0;
 
-        std::getline(ss, maCD, ',');
-        std::getline(ss, tenCD, ',');
-        std::getline(ss, luongCBStr, ',');
+        getline(ss, maCD, ',');
+        getline(ss, tenCD, ',');
+        getline(ss, luongCBStr, ',');
         
         try {
-            luongCB = std::stod(luongCBStr);
+            luongCB = stod(luongCBStr);
         } catch (...) {
             luongCB = 0.0;
         }
@@ -126,9 +128,9 @@ NhanVien* Database::taoNhanVienTuLoai(LoaiNhanVien loai) {
 }
 
 void Database::taiNhanVien() {
-    std::ifstream file(FILE_NHANVIEN);
+    ifstream file(FILE_NHANVIEN);
     if (!file.is_open()) {
-        std::cerr << " (!) Không tìm thấy file " << FILE_NHANVIEN << ", sẽ tạo file mới khi lưu.\n";
+        cerr << " (!) Không tìm thấy file " << FILE_NHANVIEN << ", sẽ tạo file mới khi lưu.\n";
         return;
     }
 
@@ -138,17 +140,17 @@ void Database::taiNhanVien() {
     }
     dsNhanVien.clear();
 
-    std::string line;
-    std::getline(file, line); // Bỏ qua header
+    string line;
+    getline(file, line); // Bỏ qua header
 
     int maxId = 0;
 
-    while (std::getline(file, line)) {
+    while (getline(file, line)) {
         if (line.empty()) continue;
 
-        std::stringstream ss(line);
-        std::string loaiNVStr;
-        std::getline(ss, loaiNVStr, ','); // Đọc trường đầu tiên: Loại NV
+        stringstream ss(line);
+        string loaiNVStr;
+        getline(ss, loaiNVStr, ','); // Đọc trường đầu tiên: Loại NV
 
         if (loaiNVStr.empty()) { 
             continue; 
@@ -157,9 +159,9 @@ void Database::taiNhanVien() {
         LoaiNhanVien loaiNV;
         
         try { 
-            loaiNV = static_cast<LoaiNhanVien>(std::stoi(loaiNVStr));
-        } catch (const std::exception& e) { 
-            std::cerr << " (!) Lỗi doc file: Loại NV không hợp lệ: " << loaiNVStr << ". Bỏ qua dòng.\n";
+            loaiNV = static_cast<LoaiNhanVien>(stoi(loaiNVStr));
+        } catch (const exception& e) { 
+            cerr << " (!) Lỗi doc file: Loại NV không hợp lệ: " << loaiNVStr << ". Bỏ qua dòng.\n";
             continue;
         }
         
@@ -170,7 +172,7 @@ void Database::taiNhanVien() {
             dsNhanVien.push_back(nv);
 
             try {
-                int currentId = std::stoi(nv->getMaNV().substr(2)); 
+                int currentId = stoi(nv->getMaNV().substr(2)); 
                 if (currentId > maxId) {
                     maxId = currentId;
                 }
@@ -185,34 +187,34 @@ void Database::taiNhanVien() {
 
 // HÀM MỚI
 void Database::taiLichSu() {
-    std::ifstream file(FILE_LICHSU);
+    ifstream file(FILE_LICHSU);
     if (!file.is_open()) {
-        std::cerr << " (!) Không tìm thấy file " << FILE_LICHSU << ", sẽ tạo file mới khi lưu.\n";
+        cerr << " (!) Không tìm thấy file " << FILE_LICHSU << ", sẽ tạo file mới khi lưu.\n";
         return;
     }
 
     dsLichSu.clear();
-    std::string line;
-    std::getline(file, line); // Bỏ qua header
+    string line;
+    getline(file, line); // Bỏ qua header
 
-    while (std::getline(file, line)) {
+    while (getline(file, line)) {
         if (line.empty()) continue;
 
-        std::stringstream ss(line);
-        std::string maNV, ngayStr, moTa, giaTriCu, giaTriMoi;
+        stringstream ss(line);
+        string maNV, ngayStr, moTa, giaTriCu, giaTriMoi;
 
-        std::getline(ss, maNV, ',');
-        std::getline(ss, ngayStr, ',');
-        std::getline(ss, moTa, ',');
-        std::getline(ss, giaTriCu, ',');
-        std::getline(ss, giaTriMoi, ',');
+        getline(ss, maNV, ',');
+        getline(ss, ngayStr, ',');
+        getline(ss, moTa, ',');
+        getline(ss, giaTriCu, ',');
+        getline(ss, giaTriMoi, ',');
 
         // Chuyển đổi chuỗi ngày thành đối tượng Date
         Date ngay; // Khởi tạo ngày mặc định
         try {
             int d, m, y;
             char slash1, slash2;
-            std::stringstream date_ss(ngayStr);
+            stringstream date_ss(ngayStr);
             date_ss >> d >> slash1 >> m >> slash2 >> y;
             
             if (date_ss.fail() || slash1 != '/' || slash2 != '/') {
@@ -220,7 +222,7 @@ void Database::taiLichSu() {
             } else {
                 ngay.setDate(d, m, y);
             }
-        } catch (const std::exception& e) {
+        } catch (const exception& e) {
             ngay.setDate(1, 1, 2000); // Ngày mặc định nếu lỗi
         }
         // Thêm vào map
@@ -233,21 +235,21 @@ void Database::taiLichSu() {
 // ============== LƯU DỮ LIỆU (SAVE) ================
 
 void Database::luuDuLieuVaoFile() {
-    std::cout << "\nĐang lưu dữ liệu ra file...\n";
+    cout << "\nĐang lưu dữ liệu ra file...\n";
     luuPhongBan();
     luuChucDanh();
     luuNhanVien();
     luuLichSu(); 
     luuPhucLoi();
     luuDangKyPhucLoi();
-    std::cout << "Lưu dữ liệu thành công.\n";
+    cout << "Lưu dữ liệu thành công.\n";
 }
 
 //... (Các hàm luuPhongBan, luuChucDanh, luuNhanVien không đổi)...
 void Database::luuPhongBan() const {
-    std::ofstream file(FILE_PHONGBAN);
+    ofstream file(FILE_PHONGBAN);
     if (!file.is_open()) {
-        std::cerr << " (!) Lỗi: Không thể mở file " << FILE_PHONGBAN << " để ghi.\n";
+        cerr << " (!) Lỗi: Không thể mở file " << FILE_PHONGBAN << " để ghi.\n";
         return;
     }
     file << "MaPB,TenPB,MaTruongPhong\n";
@@ -260,9 +262,9 @@ void Database::luuPhongBan() const {
 }
 
 void Database::luuChucDanh() const {
-    std::ofstream file(FILE_CHUCDANH);
+    ofstream file(FILE_CHUCDANH);
     if (!file.is_open()) {
-        std::cerr << " (!) Lỗi: Không thể mở file " << FILE_CHUCDANH << " để ghi.\n";
+        cerr << " (!) Lỗi: Không thể mở file " << FILE_CHUCDANH << " để ghi.\n";
         return;
     }
     file << "MaCD,TenCD,LuongCoBan\n";
@@ -275,9 +277,9 @@ void Database::luuChucDanh() const {
 }
 
 void Database::luuNhanVien() const {
-    std::ofstream file(FILE_NHANVIEN);
+    ofstream file(FILE_NHANVIEN);
     if (!file.is_open()) {
-        std::cerr << " (!) Lỗi: Không thể mở file " << FILE_NHANVIEN << " để ghi.\n";
+        cerr << " (!) Lỗi: Không thể mở file " << FILE_NHANVIEN << " để ghi.\n";
         return;
     }
 
@@ -291,15 +293,15 @@ void Database::luuNhanVien() const {
 
 // HÀM MỚI
 void Database::luuLichSu() const {
-    std::ofstream file(FILE_LICHSU);
+    ofstream file(FILE_LICHSU);
     if (!file.is_open()) {
-        std::cerr << " (!) Lỗi: Không thể mở file " << FILE_LICHSU << " để ghi.\n";
+        cerr << " (!) Lỗi: Không thể mở file " << FILE_LICHSU << " để ghi.\n";
         return;
     }
 
     file << "MaNV,Ngay,MoTa,GiaTriCu,GiaTriMoi\n";
     for (const auto& pair : dsLichSu) {
-        const std::string& maNV = pair.first;
+        const string& maNV = pair.first;
         const auto& lichSuVector = pair.second;
         for (const auto& ghiNhan : lichSuVector) {
             file << maNV << ","
@@ -318,10 +320,10 @@ void Database::luuLichSu() const {
 void Database::themNhanVien(NhanVien* nv) {
     nv->setMaNV(taoMaNVMoi());
     dsNhanVien.push_back(nv);
-    std::cout << " >> Đã thêm nhân viên mới với mã: " << nv->getMaNV() << "\n";
+    cout << " >> Đã thêm nhân viên mới với mã: " << nv->getMaNV() << "\n";
 }
 
-NhanVien* Database::timNhanVienTheoMa(const std::string& maNV) {
+NhanVien* Database::timNhanVienTheoMa(const string& maNV) {
     for (NhanVien* nv : dsNhanVien) {
         if (nv->getMaNV() == maNV) {
             return nv;
@@ -330,7 +332,7 @@ NhanVien* Database::timNhanVienTheoMa(const std::string& maNV) {
     return nullptr; 
 }
 
-bool Database::xoaNhanVienTheoMa(const std::string& maNV) {
+bool Database::xoaNhanVienTheoMa(const string& maNV) {
     for (auto it = dsNhanVien.begin(); it!= dsNhanVien.end(); ++it) {
         if ((*it)->getMaNV() == maNV) {
             delete *it; 
@@ -341,7 +343,7 @@ bool Database::xoaNhanVienTheoMa(const std::string& maNV) {
     return false; 
 }
 
-const std::vector<NhanVien*>& Database::getDSNhanVien() const {
+const vector<NhanVien*>& Database::getDSNhanVien() const {
     return dsNhanVien;
 }
 
@@ -349,7 +351,7 @@ void Database::themPhongBan(const PhongBan& pb) {
     dsPhongBan.push_back(pb);
 }
 
-PhongBan* Database::timPhongBanTheoMa(const std::string& maPB) {
+PhongBan* Database::timPhongBanTheoMa(const string& maPB) {
     for (PhongBan& pb : dsPhongBan) {
         if (pb.getMaPB() == maPB) {
             return &pb;
@@ -358,7 +360,7 @@ PhongBan* Database::timPhongBanTheoMa(const std::string& maPB) {
     return nullptr;
 }
 
-const std::vector<PhongBan>& Database::getDSPhongBan() const {
+const vector<PhongBan>& Database::getDSPhongBan() const {
     return dsPhongBan;
 }
 
@@ -366,7 +368,7 @@ void Database::themChucDanh(const ChucDanh& cd) {
     dsChucDanh.push_back(cd);
 }
 
-ChucDanh* Database::timChucDanhTheoMa(const std::string& maCD) {
+ChucDanh* Database::timChucDanhTheoMa(const string& maCD) {
     for (ChucDanh& cd : dsChucDanh) {
         if (cd.getMaChucDanh() == maCD) {
             return &cd;
@@ -375,18 +377,18 @@ ChucDanh* Database::timChucDanhTheoMa(const std::string& maCD) {
     return nullptr;
 }
 
-const std::vector<ChucDanh>& Database::getDSChucDanh() const {
+const vector<ChucDanh>& Database::getDSChucDanh() const {
     return dsChucDanh;
 }
 
 // ============== QUẢN LÝ LỊCH SỬ (CÁC HÀM MỚI) ================
 
-void Database::themGhiNhanLichSu(const std::string& maNV, const std::string& moTa, const std::string& giaTriCu, const std::string& giaTriMoi) {
+void Database::themGhiNhanLichSu(const string& maNV, const string& moTa, const string& giaTriCu, const string& giaTriMoi) {
     Date homNay = Date::layNgayHienTai();
     dsLichSu[maNV].emplace_back(homNay, moTa, giaTriCu, giaTriMoi);
 }
 
-const std::vector<LichSuThayDoi>* Database::layLichSuCuaNV(const std::string& maNV) const {
+const vector<LichSuThayDoi>* Database::layLichSuCuaNV(const string& maNV) const {
     auto it = dsLichSu.find(maNV);
     if (it!= dsLichSu.end()) {
         return &(it->second); // Trả về con trỏ tới vector lịch sử
@@ -399,26 +401,26 @@ const std::vector<LichSuThayDoi>* Database::layLichSuCuaNV(const std::string& ma
 // --- BẮT ĐẦU CÁC HÀM MỚI (PHÚC LỢI) MÀ BẠN CHƯA CÓ ---
 
 void Database::taiPhucLoi() {
-    std::ifstream file(FILE_PHUCLOI);
+    ifstream file(FILE_PHUCLOI);
     if (!file.is_open()) return;
     danhSachPhucLoi.clear();
-    std::string line;
-    while (std::getline(file, line)) {
+    string line;
+    while (getline(file, line)) {
         if (line.empty()) continue;
-        std::stringstream ss(line);
-        std::string maPL, tenPL, chiPhiStr;
-        std::getline(ss, maPL, ',');
-        std::getline(ss, tenPL, ',');
-        std::getline(ss, chiPhiStr, ',');
+        stringstream ss(line);
+        string maPL, tenPL, chiPhiStr;
+        getline(ss, maPL, ',');
+        getline(ss, tenPL, ',');
+        getline(ss, chiPhiStr, ',');
         try {
-            danhSachPhucLoi.push_back(PhucLoi(maPL, tenPL, std::stod(chiPhiStr)));
+            danhSachPhucLoi.push_back(PhucLoi(maPL, tenPL, stod(chiPhiStr)));
         } catch (...) { /* Bỏ qua dòng lỗi */ }
     }
     file.close();
 }
 
 void Database::luuPhucLoi() {
-    std::ofstream file(FILE_PHUCLOI);
+    ofstream file(FILE_PHUCLOI);
     for (const auto& pl : danhSachPhucLoi) {
         // Giả sử PhucLoi có hàm toStringCSV() giống ChucDanh
         // Nếu không, bạn cần triển khai nó:
@@ -428,26 +430,26 @@ void Database::luuPhucLoi() {
 }
 
 void Database::taiDangKyPhucLoi() {
-    std::ifstream file(FILE_DANGKY_PHUCLOI);
+    ifstream file(FILE_DANGKY_PHUCLOI);
     if (!file.is_open()) return;
     danhSachDangKyPhucLoi.clear();
-    std::string line;
-    while (std::getline(file, line)) {
+    string line;
+    while (getline(file, line)) {
         if (line.empty()) continue;
-        std::stringstream ss(line);
-        std::string maNV, maPL;
-        std::getline(ss, maNV, ',');
-        std::getline(ss, maPL, ',');
+        stringstream ss(line);
+        string maNV, maPL;
+        getline(ss, maNV, ',');
+        getline(ss, maPL, ',');
         danhSachDangKyPhucLoi[maNV].push_back(maPL);
     }
     file.close();
 }
 
 void Database::luuDangKyPhucLoi() {
-    std::ofstream file(FILE_DANGKY_PHUCLOI);
+    ofstream file(FILE_DANGKY_PHUCLOI);
     for (const auto& pair : danhSachDangKyPhucLoi) {
-        const std::string& maNV = pair.first;
-        for (const std::string& maPL : pair.second) {
+        const string& maNV = pair.first;
+        for (const string& maPL : pair.second) {
             file << maNV << "," << maPL << "\n";
         }
     }
@@ -458,11 +460,11 @@ void Database::luuDangKyPhucLoi() {
 // --- TRIEN KHAI CAC HAM LOGIC (PHÚC LỢI) ---
 // =======================================================
 
-const std::vector<PhucLoi>& Database::getDSPhucLoi() const {
+const vector<PhucLoi>& Database::getDSPhucLoi() const {
     return danhSachPhucLoi;
 }
 
-PhucLoi* Database::timPhucLoiTheoMa(const std::string& maPL) {
+PhucLoi* Database::timPhucLoiTheoMa(const string& maPL) {
     for (auto& pl : danhSachPhucLoi) {
         if (pl.getMaPhucLoi() == maPL) return &pl;
     }
@@ -475,27 +477,27 @@ void Database::themPhucLoi(const PhucLoi& pl) {
     }
 }
 
-void Database::xoaPhucLoi(const std::string& maPL) {
+void Database::xoaPhucLoi(const string& maPL) {
     // Xóa khỏi danh sách chính
     danhSachPhucLoi.erase(
-        std::remove_if(danhSachPhucLoi.begin(), danhSachPhucLoi.end(), 
+        remove_if(danhSachPhucLoi.begin(), danhSachPhucLoi.end(), 
             [&](const PhucLoi& pl) { return pl.getMaPhucLoi() == maPL; }),
         danhSachPhucLoi.end()
     );
     // Xóa khỏi tất cả các đăng ký
     for (auto& pair : danhSachDangKyPhucLoi) {
         pair.second.erase(
-            std::remove(pair.second.begin(), pair.second.end(), maPL),
+            remove(pair.second.begin(), pair.second.end(), maPL),
             pair.second.end()
         );
     }
 }
 
-std::vector<PhucLoi*> Database::getPhucLoiCuaNhanVien(const std::string& maNV) {
-    std::vector<PhucLoi*> ds;
+vector<PhucLoi*> Database::getPhucLoiCuaNhanVien(const string& maNV) {
+    vector<PhucLoi*> ds;
     auto it = danhSachDangKyPhucLoi.find(maNV);
     if (it != danhSachDangKyPhucLoi.end()) {
-        for (const std::string& maPL : it->second) {
+        for (const string& maPL : it->second) {
             PhucLoi* pl = timPhucLoiTheoMa(maPL);
             if (pl) ds.push_back(pl);
         }
@@ -503,18 +505,18 @@ std::vector<PhucLoi*> Database::getPhucLoiCuaNhanVien(const std::string& maNV) {
     return ds;
 }
 
-bool Database::ghiDanhPhucLoi(const std::string& maNV, const std::string& maPL) {
+bool Database::ghiDanhPhucLoi(const string& maNV, const string& maPL) {
     if (timNhanVienTheoMa(maNV) == nullptr) {
-        std::cout << " (!) Không tìm thấy Nhân Viên.\n"; return false;
+        cout << " (!) Không tìm thấy Nhân Viên.\n"; return false;
     }
     if (timPhucLoiTheoMa(maPL) == nullptr) {
-        std::cout << " (!) Không tìm thấy Phúc Lợi.\n"; return false;
+        cout << " (!) Không tìm thấy Phúc Lợi.\n"; return false;
     }
     // Kiểm tra đã đăng ký chưa
     auto& ds = danhSachDangKyPhucLoi[maNV];
-    for (const std::string& ma : ds) {
+    for (const string& ma : ds) {
         if (ma == maPL) {
-            std::cout << " (!) Nhân viên đã đăng ký gói này rồi.\n";
+            cout << " (!) Nhân viên đã đăng ký gói này rồi.\n";
             return false;
         }
     }
@@ -522,11 +524,11 @@ bool Database::ghiDanhPhucLoi(const std::string& maNV, const std::string& maPL) 
     return true;
 }
 
-bool Database::huyGhiDanhPhucLoi(const std::string& maNV, const std::string& maPL) {
+bool Database::huyGhiDanhPhucLoi(const string& maNV, const string& maPL) {
     auto it = danhSachDangKyPhucLoi.find(maNV);
     if (it != danhSachDangKyPhucLoi.end()) {
         auto& ds = it->second;
-        auto ds_it = std::find(ds.begin(), ds.end(), maPL);
+        auto ds_it = find(ds.begin(), ds.end(), maPL);
         if (ds_it != ds.end()) {
             ds.erase(ds_it);
             return true;

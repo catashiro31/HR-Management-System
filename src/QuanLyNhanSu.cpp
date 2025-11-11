@@ -60,43 +60,43 @@ void QuanLyNhanSu::hienThiMenuHoSo() {
     // (Giữ nguyên hàm này của bạn)
     Helper::xoaManHinh();
     std::cout << "--- [1] QUẢN LÝ HỒ SƠ NHÂN SỰ ---\n";
-    std::cout << " [1.1] Thêm nhân viên mới\n";
-    std::cout << " [1.2] Cập nhật thông tin nhân viên\n";
-    std::cout << " [1.3] Quản lý trạng thái\n";
-    std::cout << " [1.4] Xem lịch sử thay đổi của nhân viên\n";
-    std::cout << " [1.5] Xem danh sách (Tóm tắt)\n"; // Sửa lại
-    std::cout << " [1.6] Xem chi tiết / Tìm kiếm NV\n"; // Sửa lại
+    std::cout << " [1] Thêm nhân viên mới\n";
+    std::cout << " [2] Cập nhật thông tin nhân viên\n";
+    std::cout << " [3] Quản lý trạng thái\n";
+    std::cout << " [4] Xem lịch sử thay đổi của nhân viên\n";
+    std::cout << " [5] Xem danh sách (Tóm tắt)\n"; // Sửa lại
+    std::cout << " [6] Xem chi tiết / Tìm kiếm NV\n"; // Sửa lại
     std::cout << " --------------------------------\n";
-    std::cout << " [1.7] Trở về Menu Chính\n";
+    std::cout << " [7] Trở về Menu Chính\n";
     std::cout << "----------------------------------\n";
 }
 
 void QuanLyNhanSu::hienThiMenuToChuc() {
     Helper::xoaManHinh();
     std::cout << "--- [2] QUẢN LÝ TỔ CHỨC ---\n";
-    std::cout << " [2.1] Quản lý Phòng ban\n";
-    std::cout << " [2.2] Quản lý Chức danh & Bậc lương\n"; // <-- ĐÃ CÓ THỂ SỬ DỤNG
+    std::cout << " [1] Quản lý Phòng ban\n";
+    std::cout << " [2] Quản lý Chức danh & Bậc lương\n"; // <-- ĐÃ CÓ THỂ SỬ DỤNG
     std::cout << " ----------------------------------\n";
-    std::cout << " [2.3] Trở về Menu Chính\n";
+    std::cout << " [3] Trở về Menu Chính\n";
     std::cout << "----------------------------------\n";
 }
 
 void QuanLyNhanSu::hienThiMenuBangLuong() {
     Helper::xoaManHinh();
     std::cout << "--- [3] BẢNG LƯƠNG & PHÚC LỢI ---\n";
-    std::cout << " [3.1] Quản lý Phúc lợi\n"; // <-- ĐÃ CÓ THỂ SỬ DỤNG
-    std::cout << " [3.2] Quy trình Xử lý Lương\n";
+    std::cout << " [1] Quản lý Phúc lợi\n"; // <-- ĐÃ CÓ THỂ SỬ DỤNG
+    std::cout << " [2] Quy trình Xử lý Lương\n";
     std::cout << " ----------------------------------\n";
-    std::cout << " [3.3] Trở về Menu Chính\n";
+    std::cout << " [3] Trở về Menu Chính\n";
 }
 
 void QuanLyNhanSu::hienThiMenuBaoCao() {
     Helper::xoaManHinh();
     std::cout << "--- [4] BÁO CÁO & MỞ RỘNG ---\n"; // Đổi tên
-    std::cout << " [4.1] Báo cáo nhân sự theo phòng ban\n";
-    std::cout << " [4.2] Xuất danh sách nhân viên (CSV)\n"; // <-- Sắp làm
+    std::cout << " [1] Báo cáo nhân sự theo phòng ban\n";
+    std::cout << " [2] Xuất danh sách nhân viên (CSV)\n"; // <-- Sắp làm
     std::cout << " ----------------------------------\n";
-    std::cout << " [4.3] Trở về Menu Chính\n";
+    std::cout << " [3] Trở về Menu Chính\n";
 }
 
 
@@ -107,7 +107,7 @@ void QuanLyNhanSu::xuLyMenuHoSo() {
     bool troVe = false;
     while (!troVe) {
         hienThiMenuHoSo();
-        int luaChon = Helper::nhapSoNguyen(" >> Nhập lựa chọn (1.1 -> 1.7): ", 1, 7);
+        int luaChon = Helper::nhapSoNguyen(" >> Nhập lựa chọn (1 -> 7): ", 1, 7);
         
         switch (luaChon) {
             case 1: chucNang_ThemNhanVien(); break;
@@ -175,7 +175,7 @@ void QuanLyNhanSu::chucNang_ThemNhanVien() {
 // CẬP NHẬT HÀM NÀY ĐỂ GHI LẠI LỊCH SỬ
 void QuanLyNhanSu::chucNang_CapNhatNhanVien() {
     Helper::xoaManHinh();
-    std::cout << "--- [1.2] Cập Nhật Thông Tin Nhân Viên ---\n";
+    std::cout << "--- [2] Cập Nhật Thông Tin Nhân Viên ---\n";
     std::string maNV = Helper::nhapChuoi(" - Nhập Mã NV cần cập nhật: ");
 
     NhanVien* nv = db.timNhanVienTheoMa(maNV);
@@ -223,7 +223,7 @@ void QuanLyNhanSu::chucNang_CapNhatNhanVien() {
 // CẬP NHẬT HÀM NÀY ĐỂ GHI LẠI LỊCH SỬ
 void QuanLyNhanSu::chucNang_QuanLyTrangThai() {
     Helper::xoaManHinh();
-    std::cout << "--- [1.3] Quản Lý Trạng Thái Nhân Viên ---\n";
+    std::cout << "--- [3] Quản Lý Trạng Thái Nhân Viên ---\n";
     std::string maNV = Helper::nhapChuoi(" - Nhập Mã NV cần thay đổi trạng thái: ");
 
     NhanVien* nv = db.timNhanVienTheoMa(maNV);
@@ -280,7 +280,7 @@ void QuanLyNhanSu::chucNang_XemLichSuThayDoi() {
 
 void QuanLyNhanSu::chucNang_TimKiemNhanVien() {
     Helper::xoaManHinh();
-    std::cout << "--- [1.2] Tìm Kiếm Nhân Viên ---\n";
+    std::cout << "--- [2] Tìm Kiếm Nhân Viên ---\n";
     std::string maNV = Helper::nhapChuoi(" - Nhập Mã NV cần tìm: ");
 
     NhanVien* nv = db.timNhanVienTheoMa(maNV);
@@ -333,7 +333,7 @@ void QuanLyNhanSu::xuLyMenuToChuc() {
 // (Hàm chucNang_QuanLyPhongBan của bạn giữ nguyên)
 void QuanLyNhanSu::chucNang_QuanLyPhongBan() {
     Helper::xoaManHinh();
-    std::cout << "--- [2.1] Quản Lý Phòng Ban ---\n";
+    std::cout << "--- [2] Quản Lý Phòng Ban ---\n";
     std::cout << " [1] Thêm phòng ban mới\n";
     std::cout << " [2] Xem danh sách phòng ban\n";
     std::cout << " [3] Cập nhật trưởng phòng\n";
@@ -459,7 +459,7 @@ void QuanLyNhanSu::xuLyMenuBangLuong() {
 // --- HÀM MỚI [3.1] QUẢN LÝ PHÚC LỢI ---
 void QuanLyNhanSu::chucNang_QuanLyPhucLoi() {
     Helper::xoaManHinh();
-    std::cout << "--- [3.1] Quản Lý Phúc Lợi ---\n";
+    std::cout << "--- [3] Quản Lý Phúc Lợi ---\n";
     std::cout << " [1] Quản lý các gói phúc lợi (Thêm/Xóa)\n";
     std::cout << " [2] Ghi danh / ủy ghi danh cho Nhân Viên\n";
     std::cout << " [3] Quay lại\n";
@@ -585,7 +585,7 @@ void QuanLyNhanSu::chucNang_GhiDanhPhucLoi() {
 // Hàm này nằm trong file QuanLyNhanSu.cpp
 void QuanLyNhanSu::chucNang_ChayBangLuong() {
     Helper::xoaManHinh();
-    std::cout << "--- [2.2] Tính Lương Hàng Tháng ---\n"; // Giữ theo code của bạn
+    std::cout << "--- [2] Tính Lương Hàng Tháng ---\n"; // Giữ theo code của bạn
     std::cout << " (Chức năng này sẽ tính toán lương cho tất cả nhân viên)\n";
 
     // --- Phần 1: Nhập liệu (Giữ nguyên code của bạn) ---
