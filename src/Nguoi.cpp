@@ -10,12 +10,7 @@ Nguoi::Nguoi(string ten, string cccd, string dc,
 
 Nguoi::~Nguoi() {}
 
-// Định nghĩa các hàm ảo luuVaoFile và docTuFile
-// Sử dụng ký tự ',' làm phân cách (CSV-like)
 void Nguoi::luuVaoFile(ostream& os) const {
-    // Thay thế các dấu cách trong chuỗi bằng '_' để tránh lỗi khi đọc file
-    // (Một kỹ thuật đơn giản, dùng CSV chuẩn sẽ tốt hơn)
-    // Tạm thời giả định chuỗi không chứa ký tự ','
     os << hoTen << ","
        << cmnd_cccd << ","
        << diaChi << ","
@@ -25,46 +20,22 @@ void Nguoi::luuVaoFile(ostream& os) const {
 }
 
 void Nguoi::docTuFile(istream& is) {
-    string line;
     getline(is, hoTen, ',');
     getline(is, cmnd_cccd, ',');
     getline(is, diaChi, ',');
     getline(is, soDienThoai, ',');
     getline(is, email, ',');
-
     string ngaySinhStr;
     getline(is, ngaySinhStr, ',');
-
-    // === BỌC BẢO VỆ (0): XỬ LÝ ĐỌC NGÀY AN TOÀN ===
-    try {
-        
-        int d, m, y;
-        char slash1, slash2; // SUA LOI LOGIC: Can 2 bien
-        stringstream ss(ngaySinhStr);
-        ss >> d >> slash1 >> m >> slash2 >> y;
-        if (ss.fail() || slash1 != '/' || slash2 != '/') {
-            ngaySinh.setDate(1, 1, 1990); 
-        } else {
-            ngaySinh.setDate(d, m, y);
-        }
-    } catch (const exception& e) {
-        ngaySinh.setDate(1, 1, 1990); 
-    }
+    ngaySinh = Date::fromString(ngaySinhStr);
 }
 
-// Implement getters/setters
-void Nguoi::setHoTen(const string& ten) {
-    hoTen = ten;
-}
+// Getters/Setters
+void Nguoi::setHoTen(const string& ten) { hoTen = ten; }
+string Nguoi::getHoTen() const { return hoTen; }
+void Nguoi::setDiaChi(const string& dc) { diaChi = dc; }
+string Nguoi::getDiaChi() const { return diaChi; }
 
-string Nguoi::getHoTen() const {
-    return hoTen;
-}
-
-void Nguoi::setDiaChi(const string& dc) {
-    diaChi = dc;
-}
-
-string Nguoi::getDiaChi() const {
-    return diaChi;
-}
+// --- HÀM MỚI ---
+void Nguoi::setEmail(const string& mail) { email = mail; }
+Date Nguoi::getNgaySinh() const { return ngaySinh; }

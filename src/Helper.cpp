@@ -1,35 +1,39 @@
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN // Loại bỏ các header không cần thiết
+#include <windows.h> 
+#endif
 #include "../include/Helper.h"
 #include <iostream>
 #include <string>
 #include <limits>
 #include <cmath>
 #include <algorithm>
-#include <stdexcept> // Dùng cho stoi, stod
+#include <stdexcept> 
 #include "../include/GlobalConfig.h"
-#ifdef _WIN32
-#include <windows.h> // Dùng cho SetConsoleOutputCP
-#endif
+// (Block #include <windows.h> cũ đã được xóa khỏi đây)
 using namespace std;
 
 
 void Helper::setConsoleUTF8() {
+    #ifdef _WIN32
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
+    #endif
 }
 
 void Helper::xoaManHinh() {
+    #ifdef _WIN32
     system("cls");
+    #else
+    system("clear");
+    #endif
 }
 
 void Helper::dungManHinh() {
-
     cout << "\nNhấn Enter để tiếp tục...";
-    cin.clear(); // Xóa mọi cờ lỗi (nếu có)
-    
-    // Xóa bộ đệm đầu vào (xóa mọi ký tự '\n' còn sót lại từ lần nhapSoNguyen trước)
+    cin.clear(); 
     cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
-    
-    // Đợi người dùng gõ Enter MỚI
     cin.get();
 }
 
@@ -59,10 +63,8 @@ int Helper::nhapSoNguyen(const string& prompt, int min, int max) {
             } else {
                 cout << " (!) Giá trị phải trong khoảng [" << min << ", " << max << "]. Vui lòng nhập lại.\n";
             }
-        } catch (const invalid_argument&) {
+        } catch (...) {
             cout << " (!) Đầu vào không hợp lệ. Vui lòng nhập một số nguyên.\n";
-        } catch (const out_of_range&) {
-            cout << " (!) Số quá lớn hoặc quá nhỏ vui lòng nhập lại.\n";
         }
     }
 }
@@ -80,10 +82,8 @@ double Helper::nhapSoThuc(const string& prompt, double min) {
             } else {
                 cout << " (!) Giá trị lớn hơn hoặc bằng " << min << ". Vui lòng nhập lại.\n";
             }
-        } catch (const invalid_argument&) {
+        } catch (...) {
             cout << " (!) Đầu vào không hợp lệ. Vui lòng nhập một số thực.\n";
-        } catch (const out_of_range&) {
-            cout << " (!) Số quá lớn hoặc quá nhỏ. Vui lòng nhập lại.\n";
         }
     }
 }
@@ -104,42 +104,29 @@ TrangThaiLamViec Helper::stringToTrangThai(const string& str) {
     return TrangThaiLamViec::KHONG_XAC_DINH;
 }
 
+string Helper::toLower(const string& str) {
+    string result = str;
+    transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;
+}
 
 string Helper::formatCurrency(double value, bool showVND) {
-    // Làm tròn thành số nguyên (VND không dùng số lẻ)
     long long val = static_cast<long long>(round(value));
-
-    // Xử lý số 0
-    if (val == 0) {
-        return showVND ? "0 VND" : "0";
-    }
-
-    // Chuyển sang chuỗi
+    if (val == 0) { return showVND ? "0 VND" : "0"; }
     string s = to_string(abs(val));
     string result = "";
     int count = 0;
-
-    // Thêm dấu phẩy từ phải sang trái
     for (int i = s.length() - 1; i >= 0; i--) {
         result += s[i];
         count++;
         if (count == 3 && i != 0) {
-            result += ","; // Dùng dấu phẩy
+            result += ","; 
             count = 0;
         }
     }
-
-    // Đảo ngược chuỗi
     reverse(result.begin(), result.end());
-
-    // Thêm dấu âm nếu cần
-    if (val < 0) {
-        result = "-" + result;
-    }
-
-    if (showVND) {
-        result += " VND";
-    }
+    if (val < 0) { result = "-" + result; }
+    if (showVND) { result += " VND"; }
     return result;
 }
 
@@ -147,4 +134,44 @@ string Helper::taoMaTuDong(const string& tienTo, int soThuTu) {
     stringstream ss;
     ss << tienTo << setw(3) << setfill('0') << soThuTu;
     return ss.str();
+}
+
+// --- HÀM MỚI CHO BƯỚC 2 ---
+string Helper::chuanHoaTen(const string& hoTen) {
+    stringstream ss(hoTen);
+    string word;
+    string result = "";
+    while (ss >> word) {
+        word[0] = toupper(word[0]);
+        for (size_t i = 1; i < word.length(); ++i) {
+            word[i] = tolower(word[i]);
+        }
+        result += word;
+    }
+    return result;
+}
+
+string Helper::taoEmail(const string& tenChuanHoa, const Date& ngaySinh) {
+    // Tạm thời dùng logic: LeVanDung2006@gmail.com
+    // Nâng cao: Cần kiểm tra trùng lặp, nếu trùng thì dùng LeVanDung05022006@gmail.com
+    return tenChuanHoa + to_string(ngaySinh.getNam()) + "@gmail.com";
+}
+
+string Helper::taoPassword(const Date& ngaySinh) {
+    stringstream ss;
+    ss << setfill('0')
+       << setw(2) << ngaySinh.getNgay()
+       << setw(2) << ngaySinh.getThang()
+       << setw(4) << ngaySinh.getNam();
+    return ss.str();
+}
+
+string Helper::roleToString(Role role) {
+    switch (role) {
+        case Role::CHU_TICH: return "Chủ Tịch";
+        case Role::TRUONG_PHONG: return "Trưởng Phòng";
+        case Role::KE_TOAN: return "Kế Toán";
+        case Role::NHAN_VIEN: return "Nhân Viên";
+        default: return "Chưa phân loại";
+    }
 }

@@ -4,9 +4,9 @@
 
 int main() {
     Helper::setConsoleUTF8();
+    
     QuanLyNhanSu heThongQLNS;
-    heThongQLNS.chay();
-
+    heThongQLNS.khoiChay(); 
     
     return 0;
 }

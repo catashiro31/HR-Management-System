@@ -3,13 +3,11 @@
 
 using namespace std;
 
-
-// Lớp NhanVienHoaHong (Commission Employee)
 class NVHoaHong : public NhanVien {
 private:
-    double luongCoBan; // Lương cứng tối thiểu
-    double doanhSoBanHang; // Cập nhật hàng tháng
-    double tyLeHoaHong; // Ví dụ: 0.05 (5%)
+    double luongCoBan; 
+    double doanhSoBanHang; 
+    double tyLeHoaHong; 
 
 public:
     NVHoaHong(string ma = "", string ten = "", string cccd = "",
@@ -21,14 +19,12 @@ public:
     
     virtual ~NVHoaHong();
 
-    // Triển khai các hàm ảo
     virtual double tinhLuong() const override;
-    virtual void hienThiThongTin() const override;
+    virtual void hienThiThongTin(Role vaiTro) const override; // <-- THAY ĐỔI
     virtual LoaiNhanVien getLoaiNV() const override;
     virtual void luuVaoFile(ostream& os) const override;
     virtual void docTuFile(istream& is) override;
 
-    // Phương thức riêng
     void nhapThongTinRieng();
     void setDoanhSo(double doanhSo);
 };

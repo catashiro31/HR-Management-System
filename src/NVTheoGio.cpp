@@ -15,22 +15,29 @@ NVTheoGio::NVTheoGio(string ma, string ten, string cccd,
 NVTheoGio::~NVTheoGio() {}
 
 double NVTheoGio::tinhLuong() const {
-    // Giả định soGioLamTrongThang đã được cập nhật
-    double luong = mucLuongGio * soGioLamTrongThang;
-    // Có thể thêm logic tính OT (làm thêm giờ)
-    return luong;
+    return mucLuongGio * soGioLamTrongThang;
 }
 
-void NVTheoGio::hienThiThongTin() const {
-    cout << left << setw(15) << "Mã Nhân Viên:" << maNV << "\n"
-              << setw(15) << "Họ Tên:" << hoTen << "\n"
-              << setw(15) << "Ngày Sinh:" << ngaySinh << "\n"
-              << setw(15) << "Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
-              << setw(15) << "Mã Phòng Ban:" << maPhongBan << "\n"
-              << setw(15) << "Loại NV:" << "Theo Giờ" << "\n"
-              << setw(15) << "Mức Lương/Giờ:" << fixed << setprecision(0) << mucLuongGio << " VND\n"
-              << setw(15) << "Số Giờ Làm:" << fixed << setprecision(1) << soGioLamTrongThang << "\n";
+// --- HÀM ĐƯỢC VIẾT LẠI HOÀN TOÀN ---
+void NVTheoGio::hienThiThongTin(Role vaiTro) const {
     cout << "------------------------------------------\n";
+    cout << left << setw(18) << "  Mã Nhân Viên:" << maNV << "\n"
+              << setw(18) << "  Họ Tên:" << hoTen << "\n"
+              << setw(18) << "  Loại NV:" << "Theo Giờ" << "\n"
+              << setw(18) << "  Ngày Sinh:" << ngaySinh.toString() << "\n"
+              << setw(18) << "  Email:" << email << "\n"
+              << setw(18) << "  Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
+              << setw(18) << "  Phòng Ban:" << maPhongBan << "\n"
+              << setw(18) << "  Chức Danh:" << maChucDanh << "\n";
+
+    // --- LOGIC PHÂN QUYỀN ---
+    if (vaiTro == Role::CHU_TICH || vaiTro == Role::KE_TOAN) {
+        cout << setw(18) << "  Mức Lương/Giờ:" << Helper::formatCurrency(mucLuongGio, true) << "\n"
+             << setw(18) << "  Số Giờ Làm:" << soGioLamTrongThang << "\n";
+    } else {
+        cout << setw(18) << "  Mức Lương/Giờ:" << "[Bảo mật]" << "\n"
+             << setw(18) << "  Số Giờ Làm:" << "[Bảo mật]" << "\n";
+    }
 }
 
 LoaiNhanVien NVTheoGio::getLoaiNV() const {
@@ -43,34 +50,20 @@ void NVTheoGio::luuVaoFile(ostream& os) const {
     os << mucLuongGio << ","
        << soGioLamTrongThang << "\n";
 }
-
 void NVTheoGio::docTuFile(istream& is) {
     NhanVien::docTuFile(is);
     string mucLuongStr, soGioStr;
-    
     getline(is, mucLuongStr, ',');
-    getline(is, soGioStr); // Đọc đến hết dòng
-
-    // === BỌC BẢO VỆ (7): MỨC LƯƠNG GIỜ ===
-    try {
-        mucLuongGio = mucLuongStr.empty() ? 0.0 : stod(mucLuongStr);
-    } catch (const exception& e) {
-        mucLuongGio = 0.0; // Dat mac dinh neu loi
-    }
-
-    // === BỌC BẢO VỆ (8): SỐ GIỜ LÀM ===
-    try {
-        soGioLamTrongThang = soGioStr.empty() ? 0.0 : stod(soGioStr);
-    } catch (const exception& e) {
-        soGioLamTrongThang = 0.0; // Dat mac dinh neu loi
-    }
+    getline(is, soGioStr);
+    try { mucLuongGio = mucLuongStr.empty() ? 0.0 : stod(mucLuongStr); } 
+    catch (...) { mucLuongGio = 0.0; }
+    try { soGioLamTrongThang = soGioStr.empty() ? 0.0 : stod(soGioStr); } 
+    catch (...) { soGioLamTrongThang = 0.0; }
 }
-
 void NVTheoGio::nhapThongTinRieng() {
     cout << "--- Nhập Thông Tin Lương Theo Giờ ---\n";
     mucLuongGio = Helper::nhapSoThuc(" - Nhập mức lương theo giờ (VND): ", 0);
-    soGioLamTrongThang = 0; // Ban đầu chưa có
+    soGioLamTrongThang = 0;
 }
-
 void NVTheoGio::setMucLuongGio(double luong) { mucLuongGio = luong; }
 void NVTheoGio::setSoGioLam(double gio) { soGioLamTrongThang = gio; }

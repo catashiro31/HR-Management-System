@@ -2,61 +2,70 @@
 #define QUANLYNHANSU_H
 
 #include "Database.h"
+#include "Account.h" // <-- THÊM VÀO
 #include <map>
-
 
 class QuanLyNhanSu {
 private:
     Database db;
+    Account* currentUser; // <-- THAY ĐỔI: Lưu người dùng hiện tại
     bool dangChay;
 
-    // Hiển thị Menu
+    // === HÀM KHỞI CHẠY HỆ THỐNG ===
+    bool dangNhap();
     void hienThiMenuChinh();
-    void hienThiMenuHoSo();
-    void hienThiMenuToChuc();
-    void hienThiMenuBangLuong();
-    void hienThiMenuBaoCao();
-
-    // Xử lý Menu (Cấp 1)
-    void xuLyMenuHoSo();
-    void xuLyMenuToChuc();
-    void xuLyMenuBangLuong();
-    void xuLyMenuBaoCao();
     void thoatChuongTrinh();
 
-    // Chức năng [1]
+    // === MENU & XỬ LÝ THEO VAI TRÒ ===
+    // [1] CHỦ TỊCH (ADMIN)
+    void hienThiMenuChuTich();
+    void xuLyMenuChuTich(bool* dangXuat);
+    // [2] TRƯỞNG PHÒNG
+    void hienThiMenuTruongPhong();
+    void xuLyMenuTruongPhong(bool* dangXuat);
+    // [3] KẾ TOÁN
+    void hienThiMenuKeToan();
+    void xuLyMenuKeToan(bool* dangXuat);
+    // [4] NHÂN VIÊN
+    void hienThiMenuNhanVien();
+    void xuLyMenuNhanVien(bool* dangXuat);
+
+    // === CÁC CHỨC NĂNG (TÁI SỬ DỤNG) ===
+    
+    // Chức năng Hồ sơ
     void chucNang_ThemNhanVien();
     void chucNang_CapNhatNhanVien();
     void chucNang_QuanLyTrangThai();
-    void chucNang_XemLichSuThayDoi();
+
+    // Chức năng Xem
     void chucNang_XemDanhSach();
-    void chucNang_TimKiemNhanVien();
+    void chucNang_TimKiemNhanVien(string maNV = ""); // <-- Sửa
+    void chucNang_XemLichSuThayDoi();
 
-    // Chức năng [2]
+    // Chức năng Tổ chức
     void chucNang_QuanLyPhongBan();
-    void chucNang_QuanLyChucDanh(); // Hàm này ta sẽ làm
+    void chucNang_QuanLyChucDanh(); 
+    void chucNang_ThemChucDanh(); // Hàm con
+    void chucNang_XemChucDanh(); // Hàm con
 
-    // Chức năng [3]
-    void chucNang_QuanLyPhucLoi();  // Hàm này ta sẽ làm
+    // Chức năng Lương & Phúc lợi
+    void chucNang_QuanLyPhucLoi();
     void chucNang_ChayBangLuong();
+    void chucNang_QuanLyGoiPhucLoi(); // Hàm con
+    void chucNang_GhiDanhPhucLoi(); // Hàm con
+    void chucNang_XemGoiPhucLoi(); // Hàm con
+    void chucNang_ThemGoiPhucLoi(); // Hàm con
+    void chucNang_XoaGoiPhucLoi(); // Hàm con
 
-    // Chức năng [4]
+
+    // Chức năng Báo cáo
     void chucNang_BaoCaoNhanSuTheoPhongBan();
-    void chucNang_XuatDanhSachNhanVien(); // Hàm này ta sẽ làm
-
-    // Hàm nghiệp vụ cho [2] & [3] (Hàm con)
-    void chucNang_ThemChucDanh();
-    void chucNang_XemChucDanh();
-    void chucNang_QuanLyGoiPhucLoi();
-    void chucNang_GhiDanhPhucLoi();
-    void chucNang_XemGoiPhucLoi();
-    void chucNang_ThemGoiPhucLoi();
-    void chucNang_XoaGoiPhucLoi();
+    void chucNang_XuatDanhSachNhanVien();
 
 
 public:
     QuanLyNhanSu();
-    void chay();
+    void khoiChay(); // <-- THAY ĐỔI
 };
 
 #endif // QUANLYNHANSU_H

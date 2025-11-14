@@ -9,6 +9,7 @@ Date::Date(int d, int m, int y) {
 }
 
 void Date::setDate(int d, int m, int y) {
+    // Tạm thời bỏ qua logic kiểm tra ngày hợp lệ (ví dụ: tháng 2)
     nam = (y >= 1900) ? y : 1900;
     thang = (m >= 1 && m <= 12) ? m : 1;
     ngay = (d >= 1 && d <= 31) ? d : 1;
@@ -20,6 +21,12 @@ string Date::toString() const {
        << setw(2) << thang << "/" << nam;
     return ss.str();
 }
+
+// --- HÀM MỚI ---
+int Date::getNgay() const { return ngay; }
+int Date::getThang() const { return thang; }
+int Date::getNam() const { return nam; }
+// --- KẾT THÚC HÀM MỚI ---
 
 ostream& operator<<(ostream& os, const Date& dt) {
     os << dt.toString();
@@ -43,5 +50,8 @@ Date Date::fromString(const string& str) {
     char slash1, slash2;
     stringstream ss(str);
     ss >> d >> slash1 >> m >> slash2 >> y;
+    if (ss.fail()) {
+        return Date(1, 1, 1990); // Mặc định nếu lỗi
+    }
     return Date(d, m, y);
 }

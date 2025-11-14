@@ -1,7 +1,8 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#include "GlobalConfig.h" // Cần cho TrangThaiLamViec
+#include "GlobalConfig.h" 
+#include "Date.h" // <-- THÊM VÀO
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,12 +18,9 @@ public:
     static void xoaManHinh();
     static void dungManHinh();
 
-    // Sửa lại hàm nhapSoNguyen và nhapSoThuc để khớp với file của bạn
+    // Hàm nhập liệu
     static int nhapSoNguyen(const string& prompt, int min, int max);
     static double nhapSoThuc(const string& prompt, double min);
-
-    // Hàm nhập liệu gốc
-    static int nhapSoNguyen(); // Giữ lại hàm cũ của tôi nếu bạn chưa có
     static string nhapChuoi(const string& prompt, bool choPhepRong = false);
 
     // Chuyển đổi
@@ -30,10 +28,15 @@ public:
     static TrangThaiLamViec stringToTrangThai(const string& str);
     static string toLower(const string& str);
 
-    // --- HAM MOI CAN THEM ---
+    // --- HÀM CŨ ---
     static string formatCurrency(double value, bool showVND = false);
     static string taoMaTuDong(const string& tienTo, int soThuTu);
+    
+    // --- HÀM MỚI (Cho Bước 2) ---
+    static string chuanHoaTen(const string& hoTen);
+    static string taoEmail(const string& tenChuanHoa, const Date& ngaySinh);
+    static string taoPassword(const Date& ngaySinh);
+    static string roleToString(Role role);
 };
 
 #endif // HELPER_H
-

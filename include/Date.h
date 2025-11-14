@@ -19,6 +19,9 @@ public:
 
     // Getters
     string toString() const; // Chuyển thành chuỗi "dd/mm/yyyy"
+    int getNgay() const; // <-- HÀM MỚI
+    int getThang() const; // <-- HÀM MỚI
+    int getNam() const; // <-- HÀM MỚI
 
     // Các toán tử nạp chồng (overloading)
     friend ostream& operator<<(ostream& os, const Date& dt);
@@ -26,6 +29,5 @@ public:
 
     // Hàm static để lấy ngày hiện tại (đơn giản hóa)
     static Date layNgayHienTai();
-
     static Date fromString(const string& str);
 };

@@ -19,7 +19,7 @@ public:
 
     // Triển khai (implement) các hàm ảo thuần túy từ NhanVien
     virtual double tinhLuong() const override;
-    virtual void hienThiThongTin() const override;
+    virtual void hienThiThongTin(Role vaiTro) const override; // <-- THAY ĐỔI
     virtual LoaiNhanVien getLoaiNV() const override;
 
     // Ghi đè các hàm ảo đọc/ghi file

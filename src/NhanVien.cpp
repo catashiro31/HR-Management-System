@@ -14,58 +14,39 @@ NhanVien::NhanVien(string ma, string ten, string cccd,
 
 NhanVien::~NhanVien() {}
 
-// Ghi đè hàm luuVaoFile
+// Hàm tạm để giữ tương thích (sẽ bị xóa)
+void NhanVien::hienThiThongTin() const {
+    hienThiThongTin(Role::NHAN_VIEN); // Mặc định xem ở quyền thấp nhất
+}
+
 void NhanVien::luuVaoFile(ostream& os) const {
-    // 1. Gọi hàm của lớp cha (Nguoi) để lưu thông tin chung
     Nguoi::luuVaoFile(os);
-    
-    // 2. Lưu thông tin riêng của NhanVien
     os << maNV << ","
        << ngayVaoLam.toString() << ","
-       << static_cast<int>(trangThai) << "," // Lưu enum dưới dạng số
+       << static_cast<int>(trangThai) << ","
        << maPhongBan << ","
        << maChucDanh << ",";
 }
 
-// Ghi đè hàm docTuFile
 void NhanVien::docTuFile(istream& is) {
-    // 1. Gọi hàm của lớp cha (Nguoi) để đọc thông tin chung
     Nguoi::docTuFile(is);
-
-    // 2. Đọc thông tin riêng của NhanVien
     getline(is, maNV, ',');
-    
     string ngayVaoLamStr;
     getline(is, ngayVaoLamStr, ',');
-
-    try {
-        int d, m, y;
-        char slash1, slash2; // Sửa lỗi logic (cần 2 biến slash)
-        stringstream ss(ngayVaoLamStr);
-        ss >> d >> slash1 >> m >> slash2 >> y;
-        
-        // Nếu stream bị lỗi (ví dụ: chuỗi rỗng) hoặc không đúng định dạng
-        if (ss.fail() || slash1 != '/' || slash2 != '/') {
-            ngayVaoLam.setDate(1, 1, 2000); // Đặt ngày mặc định
-        } else {
-            ngayVaoLam.setDate(d, m, y);
-        }
-    } catch (const exception& e) {
-        ngayVaoLam.setDate(1, 1, 2000); // Đặt ngày mặc định nếu có lỗi
-    }
-
+    ngayVaoLam = Date::fromString(ngayVaoLamStr);
+    
     string trangThaiStr;
     getline(is, trangThaiStr, ',');
-
     try {
-        // Lệnh stoi(trangThaiStr) sẽ gây crash nếu trangThaiStr là rỗng ""
-        trangThai = static_cast<TrangThaiLamViec>(stoi(trangThaiStr));
-    } catch (const exception& e) {
-        // Nếu lỗi (do file hỏng hoặc dòng trống), đặt trạng thái mặc định
-        trangThai = TrangThaiLamViec::THU_VIEC; 
-        // cerr << "(!) Loi doc file: Trang thai khong hop le cho NV " << maNV << ". Dat mac dinh Thu Viec.\n";
+        if (trangThaiStr.empty()) {
+            trangThai = TrangThaiLamViec::KHONG_XAC_DINH;
+        } else {
+            trangThai = static_cast<TrangThaiLamViec>(stoi(trangThaiStr));
+        }
+    } catch (...) {
+        trangThai = TrangThaiLamViec::KHONG_XAC_DINH; 
     }
-
+    
     getline(is, maPhongBan, ',');
     getline(is, maChucDanh, ',');
 }
@@ -84,11 +65,12 @@ void NhanVien::setMaChucDanh(const string& maCD) { maChucDanh = maCD; }
 void NhanVien::nhapThongTinCoBan(const string& ma) {
     maNV = ma;
     cout << "--- Nhập Thông Tin Cơ Bản ---\n";
-    hoTen = Helper::nhapChuoi(" - Họ và tên: ");
+    hoTen = Helper::nhapChuoi(" - Họ và tên (Không dấu, VD: Le Van Dung): ");
     cmnd_cccd = Helper::nhapChuoi(" - Số CMND/CCCD: ");
     diaChi = Helper::nhapChuoi(" - Địa chỉ: ");
     soDienThoai = Helper::nhapChuoi(" - Số điện thoại: ");
-    email = Helper::nhapChuoi(" - Email: ");
+    
+    cout << " (Email sẽ được tạo tự động từ tên và ngày sinh)\n";
 
     // Nhập ngày sinh
     cout << " - Nhập ngày sinh (dd/mm/yyyy):\n";
@@ -107,6 +89,6 @@ void NhanVien::nhapThongTinCoBan(const string& ma) {
 
     maPhongBan = Helper::nhapChuoi(" - Mã phòng ban (ví dụ: PB01): ");
     maChucDanh = Helper::nhapChuoi(" - Mã chức danh (ví dụ: CD01): ");
-    trangThai = TrangThaiLamViec::THU_VIEC; // Mặc định là thử việc
+    trangThai = TrangThaiLamViec::THU_VIEC;
     cout << " - Trạng thái ban đầu: Thử việc\n";
 }
