@@ -2,16 +2,17 @@
 #define GLOBALCONFIG_H
 
 #include <string>
+using namespace std;
 
 // Cấu hình file
-const std::string FILE_NHANVIEN = "nhanvien.csv";
-const std::string FILE_PHONGBAN = "phongban.csv";
-const std::string FILE_LICHSU = "lichsu.csv";
+const string FILE_NHANVIEN = "nhanvien.csv";
+const string FILE_PHONGBAN = "phongban.csv";
+const string FILE_LICHSU = "lichsu.csv";
 
 // --- FILE MOI ---
-const std::string FILE_CHUCDANH = "chucdanh.csv";
-const std::string FILE_PHUCLOI = "phucloi.csv";
-const std::string FILE_DANGKY_PHUCLOI = "nhanvien_phucloi.csv";
+const string FILE_CHUCDANH = "chucdanh.csv";
+const string FILE_PHUCLOI = "phucloi.csv";
+const string FILE_DANGKY_PHUCLOI = "nhanvien_phucloi.csv";
 
 // Cấu hình hệ thống
 enum class LoaiNhanVien {

@@ -1,18 +1,19 @@
 #pragma once
 #include "NhanVien.h"
 
-// Lớp NhanVienLuongCung (Salaried Employee)
-// Kế thừa từ NhanVien
+using namespace std;
+
+
 class NVLuongCung : public NhanVien {
 private:
     double luongCoBan; // Lương cứng hàng tháng
 
 public:
-    NVLuongCung(std::string ma = "", std::string ten = "", std::string cccd = "",
-                std::string dc = "", std::string sdt = "", std::string mail = "",
+    NVLuongCung(string ma = "", string ten = "", string cccd = "",
+                string dc = "", string sdt = "", string mail = "",
                 Date ns = Date(), Date nvl = Date(),
                 TrangThaiLamViec tt = TrangThaiLamViec::THU_VIEC,
-                std::string pb = "", std::string cd = "", double luong = 0.0);
+                string pb = "", string cd = "", double luong = 0.0);
     
     virtual ~NVLuongCung();
 
@@ -22,8 +23,8 @@ public:
     virtual LoaiNhanVien getLoaiNV() const override;
 
     // Ghi đè các hàm ảo đọc/ghi file
-    virtual void luuVaoFile(std::ostream& os) const override;
-    virtual void docTuFile(std::istream& is) override;
+    virtual void luuVaoFile(ostream& os) const override;
+    virtual void docTuFile(istream& is) override;
 
     // Phương thức riêng
     void nhapThongTinRieng();

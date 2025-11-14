@@ -3,11 +3,9 @@
 #include <iostream>
 
 int main() {
-    // Thiết lập console để hỗ trợ tiếng Việt (chỉ hoạt động trên Windows)
     Helper::setConsoleUTF8();
-
     QuanLyNhanSu heThongQLNS;
-    heThongQLNS.chay(); // Bắt đầu chạy ứng dụng
+    heThongQLNS.chay();
 
     
     return 0;

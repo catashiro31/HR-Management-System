@@ -2,23 +2,24 @@
 #include <string>
 #include <fstream>
 #include "Date.h"
+using namespace std;
 
 // Lớp cơ sở trừu tượng "Nguoi" (Person)
 // Chứa các thông tin chung nhất
 // Thể hiện tính TRỪU TƯỢNG (Abstraction)
 class Nguoi {
 protected:
-    std::string hoTen;
-    std::string cmnd_cccd;
-    std::string diaChi;
-    std::string soDienThoai;
-    std::string email;
+    string hoTen;
+    string cmnd_cccd;
+    string diaChi;
+    string soDienThoai;
+    string email;
     Date ngaySinh;
 
 public:
     // Constructor
-    Nguoi(std::string ten = "", std::string cccd = "", std::string dc = "",
-          std::string sdt = "", std::string mail = "", Date ns = Date());
+    Nguoi(string ten = "", string cccd = "", string dc = "",
+          string sdt = "", string mail = "", Date ns = Date());
     
     // Destructor ảo - Bắt buộc phải có khi dùng kế thừa và đa hình
     virtual ~Nguoi();
@@ -30,13 +31,13 @@ public:
     // Các hàm ảo (virtual) cho phép đọc/ghi file
     // Cung cấp triển khai mặc định (ghi/đọc các trường chung)
     // Các lớp con sẽ gọi lại hàm này và ghi/đọc thêm phần riêng
-    virtual void luuVaoFile(std::ostream& os) const;
-    virtual void docTuFile(std::istream& is);
+    virtual void luuVaoFile(ostream& os) const;
+    virtual void docTuFile(istream& is);
 
     // Getters/Setters (Thể hiện tính ĐÓNG GÓI)
-    void setHoTen(const std::string& ten);
-    std::string getHoTen() const;
-    void setDiaChi(const std::string& dc);
-    std::string getDiaChi() const;
+    void setHoTen(const string& ten);
+    string getHoTen() const;
+    void setDiaChi(const string& dc);
+    string getDiaChi() const;
     // ... (Thêm các getters/setters khác nếu cần)
 };

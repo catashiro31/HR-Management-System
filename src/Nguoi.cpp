@@ -8,7 +8,6 @@ Nguoi::Nguoi(string ten, string cccd, string dc,
              string sdt, string mail, Date ns)
     : hoTen(ten), cmnd_cccd(cccd), diaChi(dc), soDienThoai(sdt), email(mail), ngaySinh(ns) {}
 
-// Destructor ảo không cần làm gì cụ thể ở lớp base này
 Nguoi::~Nguoi() {}
 
 // Định nghĩa các hàm ảo luuVaoFile và docTuFile
@@ -35,24 +34,21 @@ void Nguoi::docTuFile(istream& is) {
 
     string ngaySinhStr;
     getline(is, ngaySinhStr, ',');
-    // Chuyển đổi chuỗi "dd/mm/yyyy" sang đối tượng Date
+
     // === BỌC BẢO VỆ (0): XỬ LÝ ĐỌC NGÀY AN TOÀN ===
     try {
-        // Chuyển đổi chuỗi "dd/mm/yyyy" sang đối tượng Date
+        
         int d, m, y;
         char slash1, slash2; // SUA LOI LOGIC: Can 2 bien
         stringstream ss(ngaySinhStr);
         ss >> d >> slash1 >> m >> slash2 >> y;
-
-        // Kiem tra neu doc loi (chuoi rong/hong) hoac sai dinh dang
         if (ss.fail() || slash1 != '/' || slash2 != '/') {
-            ngaySinh.setDate(1, 1, 1990); // Dat ngay mac dinh
+            ngaySinh.setDate(1, 1, 1990); 
         } else {
             ngaySinh.setDate(d, m, y);
         }
     } catch (const exception& e) {
-        // Bat moi loi khac co the xay ra
-        ngaySinh.setDate(1, 1, 1990); // Dat ngay mac dinh
+        ngaySinh.setDate(1, 1, 1990); 
     }
 }
 

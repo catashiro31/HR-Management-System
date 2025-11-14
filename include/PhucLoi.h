@@ -4,28 +4,31 @@
 #include <string>
 #include <sstream>
 
+using namespace std;
+
+
 class PhucLoi {
 private:
-    std::string maPhucLoi;
-    std::string tenPhucLoi;
+    string maPhucLoi;
+    string tenPhucLoi;
     double chiPhiHangThang;
 
 public:
-    PhucLoi(const std::string& ma, const std::string& ten, double chiPhi);
+    PhucLoi(const string& ma, const string& ten, double chiPhi);
 
     // Getters
-    std::string getMaPhucLoi() const;
-    std::string getTenPhucLoi() const;
+    string getMaPhucLoi() const;
+    string getTenPhucLoi() const;
     double getChiPhiHangThang() const;
 
     // Setters
-    void setTenPhucLoi(const std::string& ten);
+    void setTenPhucLoi(const string& ten);
     void setChiPhiHangThang(double chiPhi);
 
     void hienThi() const;
 
     // Dùng cho lưu file CSV
-    std::string toStringCSV() const;
+    string toStringCSV() const;
 };
 
 #endif // PHUCLOI_H

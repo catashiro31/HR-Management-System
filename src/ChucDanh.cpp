@@ -1,5 +1,5 @@
 #include "../include/ChucDanh.h"
-#include "../include/Helper.h" // Sẽ dùng cho formatCurrency
+#include "../include/Helper.h" 
 #include <iostream>
 #include <iomanip>
 using namespace std;

@@ -456,9 +456,9 @@ void Database::luuDangKyPhucLoi() {
     file.close();
 }
 
-// =======================================================
+
 // --- TRIEN KHAI CAC HAM LOGIC (PHÚC LỢI) ---
-// =======================================================
+
 
 const vector<PhucLoi>& Database::getDSPhucLoi() const {
     return danhSachPhucLoi;

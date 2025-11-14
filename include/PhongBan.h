@@ -1,24 +1,23 @@
 #pragma once
 #include <string>
+using namespace std;
 
-// Lớp Phòng Ban (Department)
-// Thể hiện tính ĐÓNG GÓI
 class PhongBan {
 private:
-    std::string maPB;
-    std::string tenPB;
-    std::string maTruongPhong; // Chỉ lưu mã NV của trưởng phòng
+    string maPB;
+    string tenPB;
+    string maTruongPhong; // Chỉ lưu mã NV của trưởng phòng
 
 public:
-    PhongBan(std::string ma = "", std::string ten = "", std::string maTP = "");
+    PhongBan(string ma = "", string ten = "", string maTP = "");
     ~PhongBan();
 
     void hienThi() const;
 
     // Getters/Setters
-    std::string getMaPB() const;
-    std::string getTenPB() const;
-    void setTenPB(const std::string& ten);
-    std::string getMaTruongPhong() const;
-    void setMaTruongPhong(const std::string& maNV);
+    string getMaPB() const;
+    string getTenPB() const;
+    void setTenPB(const string& ten);
+    string getMaTruongPhong() const;
+    void setMaTruongPhong(const string& maNV);
 };

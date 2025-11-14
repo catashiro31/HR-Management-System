@@ -12,15 +12,9 @@ NVLuongCung::NVLuongCung(string ma, string ten, string cccd,
 
 NVLuongCung::~NVLuongCung() {}
 
-// Định nghĩa hàm tính lương
 double NVLuongCung::tinhLuong() const {
-    // Logic tính lương cứng (có thể phức tạp hơn)
-    // Ví dụ: Lương = luongCoBan - BHXH - Thue TNCN...
-    // Tạm thời trả về lương cơ bản
     return luongCoBan;
 }
-
-// Định nghĩa hàm hiển thị
 void NVLuongCung::hienThiThongTin() const {
     cout << left << setw(15) << "Mã Nhân Viên:" << maNV << "\n"
               << setw(15) << "Họ Tên:" << hoTen << "\n"
@@ -52,14 +46,9 @@ void NVLuongCung::luuVaoFile(ostream& os) const {
 }
 
 void NVLuongCung::docTuFile(istream& is) {
-    // Loại nhân viên đã được đọc ở lớp Database
-    
-    // 1. Gọi hàm của lớp cha (NhanVien)
     NhanVien::docTuFile(is);
-
-    // 2. Đọc trường riêng
     string luongStr;
-    getline(is, luongStr); // Đọc đến hết dòng
+    getline(is, luongStr); 
     try {
         if (!luongStr.empty()) {
             // Lệnh stod co a gay loi neu luongStr khong phai la so

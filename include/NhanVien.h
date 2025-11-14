@@ -4,6 +4,8 @@
 #include "PhongBan.h" // Cần forward declaration hoặc include
 #include "ChucDanh.h"
 
+using namespace std;
+
 // Forward declaration để tránh lỗi include vòng
 class PhongBan;
 class ChucDanh;
@@ -13,23 +15,23 @@ class ChucDanh;
 // Đây cũng là một lớp TRỪU TƯỢNG vì có hàm ảo thuần túy
 class NhanVien : public Nguoi {
 protected:
-    std::string maNV;
+    string maNV;
     Date ngayVaoLam;
     TrangThaiLamViec trangThai;
     
-    std::string maPhongBan; // Mã phòng ban
-    std::string maChucDanh; // Mã chức danh
+    string maPhongBan; // Mã phòng ban
+    string maChucDanh; // Mã chức danh
 
     // Con trỏ đến đối tượng, sẽ được liên kết bởi lớp Database
     // PhongBan* phongBan; 
     // ChucDanh* chucDanh;
 
 public:
-    NhanVien(std::string ma = "", std::string ten = "", std::string cccd = "",
-             std::string dc = "", std::string sdt = "", std::string mail = "",
+    NhanVien(string ma = "", string ten = "", string cccd = "",
+             string dc = "", string sdt = "", string mail = "",
              Date ns = Date(), Date nvl = Date(),
              TrangThaiLamViec tt = TrangThaiLamViec::THU_VIEC,
-             std::string pb = "", std::string cd = "");
+             string pb = "", string cd = "");
 
     virtual ~NhanVien();
 
@@ -41,23 +43,23 @@ public:
     virtual void hienThiThongTin() const = 0; 
 
     // Ghi đè (override) các hàm ảo từ lớp Nguoi
-    virtual void luuVaoFile(std::ostream& os) const override;
-    virtual void docTuFile(std::istream& is) override;
+    virtual void luuVaoFile(ostream& os) const override;
+    virtual void docTuFile(istream& is) override;
 
     // Hàm ảo để lấy loại nhân viên (cần cho việc lưu/tải file)
     virtual LoaiNhanVien getLoaiNV() const = 0;
 
     // Getters/Setters
-    std::string getMaNV() const;
-    void setMaNV(const std::string& ma);
+    string getMaNV() const;
+    void setMaNV(const string& ma);
     void setTrangThai(TrangThaiLamViec tt);
     TrangThaiLamViec getTrangThai() const;
-    std::string getMaPhongBan() const;
-    void setMaPhongBan(const std::string& maPB);
-    std::string getMaChucDanh() const;
-    void setMaChucDanh(const std::string& maCD);
+    string getMaPhongBan() const;
+    void setMaPhongBan(const string& maPB);
+    string getMaChucDanh() const;
+    void setMaChucDanh(const string& maCD);
 
     // Hàm tiện ích để nhập thông tin
     // Hàm này không ảo vì nó chung cho tất cả
-    void nhapThongTinCoBan(const std::string& maNV);
+    void nhapThongTinCoBan(const string& maNV);
 };
