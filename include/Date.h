@@ -3,7 +3,7 @@
 #include <iostream>
 
 // Lớp Date đơn giản để quản lý ngày tháng
-// Thể hiện tính đóng gói
+// Thể hiện tính đóng gói 
 class Date {
 private:
     int ngay;

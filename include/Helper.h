@@ -27,7 +27,7 @@ public:
     static TrangThaiLamViec stringToTrangThai(const std::string& str);
 
     // --- HAM MOI CAN THEM ---
-    static std::string formatCurrency(double value, bool showVND = false);
+    static std::string formatCurrency(double value, bool showVND = false); 
     static std::string taoMaTuDong(const std::string& tienTo, int soThuTu);
 };
 

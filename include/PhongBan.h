@@ -14,7 +14,7 @@ public:
     ~PhongBan();
 
     void hienThi() const;
-
+ 
     // Getters/Setters
     std::string getMaPB() const;
     std::string getTenPB() const;

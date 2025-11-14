@@ -16,7 +16,7 @@ public:
     std::string getMaChucDanh() const;
     std::string getTenChucDanh() const;
     double getLuongCoBan() const;
-
+ 
     // Setters
     void setTenChucDanh(const std::string& ten);
     void setLuongCoBan(double luong);

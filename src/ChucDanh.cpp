@@ -1,7 +1,7 @@
 #include "../include/ChucDanh.h"
 #include "../include/Helper.h" // Sẽ dùng cho formatCurrency
 #include <iostream>
-#include <iomanip>
+#include <iomanip> 
 
 ChucDanh::ChucDanh(const std::string& ma, const std::string& ten, double luong)
     : maChucDanh(ma), tenChucDanh(ten), luongCoBan(luong) {}
@@ -23,4 +23,4 @@ std::string ChucDanh::toStringCSV() const {
     std::stringstream ss;
     ss << maChucDanh << "," << tenChucDanh << "," << luongCoBan;
     return ss.str();
-}
+} 

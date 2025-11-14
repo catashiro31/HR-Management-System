@@ -9,7 +9,7 @@ Date::Date(int d, int m, int y) {
 
 void Date::setDate(int d, int m, int y) {
     // Tạm thời bỏ qua kiểm tra ngày hợp lệ phức tạp (ví dụ: tháng 2 có 28/29 ngày)
-    // Để đơn giản hóa ví dụ
+    // Để đơn giản hóa ví dụ 
     nam = (y >= 1900) ? y : 1900;
     thang = (m >= 1 && m <= 12) ? m : 1;
     ngay = (d >= 1 && d <= 31) ? d : 1; // Giả định đơn giản

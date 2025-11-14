@@ -19,3 +19,4 @@ std::string PhongBan::getTenPB() const { return tenPB; }
 void PhongBan::setTenPB(const std::string& ten) { tenPB = ten; }
 std::string PhongBan::getMaTruongPhong() const { return maTruongPhong; }
 void PhongBan::setMaTruongPhong(const std::string& maNV) { maTruongPhong = maNV; }
+ 

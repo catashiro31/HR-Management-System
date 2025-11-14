@@ -1,7 +1,7 @@
 #pragma once
 #include "Nguoi.h"
 #include "GlobalConfig.h"
-#include "PhongBan.h" // Cần forward declaration hoặc include
+#include "PhongBan.h" 
 #include "ChucDanh.h"
 
 // Forward declaration để tránh lỗi include vòng

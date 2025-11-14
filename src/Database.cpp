@@ -5,12 +5,12 @@
 #include "../include/NVTheoGio.h"
 #include "../include/ChucDanh.h"
 #include "../include/PhucLoi.h"
-#include "../include/Helper.h"       // Phải include Helper
-#include "../include/Date.h"         // Phải include Date
-#include "../include/LichSuThayDoi.h" // Phải include LichSuThayDoi
+#include "../include/Helper.h"      
+#include "../include/Date.h"         
+#include "../include/LichSuThayDoi.h" 
 #include <fstream>
 #include <sstream>
-#include <iostream>
+#include <iostream> 
 #include <algorithm>
 #include <iomanip> // for std::setw, std::setfill
 
@@ -20,7 +20,7 @@ Database::Database() : autoIncrementMaNV(1) {
     taiDuLieuTuFile();
 }
 
-Database::~Database() {
+Database::~Database() { 
     // Lưu dữ liệu trước khi thoát
     luuDuLieuVaoFile();
 
@@ -52,7 +52,6 @@ void Database::taiDuLieuTuFile() {
     std::cout << "Tải dữ liệu thành công.\n";
 }
 
-//... (Các hàm taiPhongBan, taiChucDanh, taoNhanVienTuLoai, taiNhanVien không đổi)...
 void Database::taiPhongBan() {
     std::ifstream file(FILE_PHONGBAN);
     if (!file.is_open()) {
@@ -269,7 +268,7 @@ void Database::luuChucDanh() const {
     for (const ChucDanh& cd : dsChucDanh) {
         file << cd.getMaChucDanh() << ","
              << cd.getTenChucDanh() << ","
-             << cd.getLuongCoBan() << "\n"; // <-- SỬA LỖI Ở ĐÂY (thay "0" bằng cd.getLuongCoBan())
+             << cd.getLuongCoBan() << "\n"; 
     }
     file.close();
 }
@@ -393,10 +392,7 @@ const std::vector<LichSuThayDoi>* Database::layLichSuCuaNV(const std::string& ma
     }
     return nullptr; // Không tìm thấy lịch sử cho NV này
 }
-
-
-// --- TẤT CẢ CÁC HÀM BỊ TRÙNG LẶP ĐÃ BỊ XÓA KHỎI ĐÂY ---
-// --- BẮT ĐẦU CÁC HÀM MỚI (PHÚC LỢI) MÀ BẠN CHƯA CÓ ---
+// ============== QUẢN LÝ PHÚC LỢI (CÁC HÀM MỚI) ================
 
 void Database::taiPhucLoi() {
     std::ifstream file(FILE_PHUCLOI);

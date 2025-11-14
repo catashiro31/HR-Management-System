@@ -79,7 +79,7 @@ void QuanLyNhanSu::hienThiMenuToChuc() {
     std::cout << " ----------------------------------\n";
     std::cout << " [2.3] Trở về Menu Chính\n";
     std::cout << "----------------------------------\n";
-}
+} 
 
 void QuanLyNhanSu::hienThiMenuBangLuong() {
     Helper::xoaManHinh();

@@ -33,15 +33,15 @@ private:
 
     // Chức năng [2]
     void chucNang_QuanLyPhongBan();
-    void chucNang_QuanLyChucDanh(); 
+    void chucNang_QuanLyChucDanh(); // Hàm này ta sẽ làm
 
     // Chức năng [3]
-    void chucNang_QuanLyPhucLoi(); 
+    void chucNang_QuanLyPhucLoi();  // Hàm này ta sẽ làm
     void chucNang_ChayBangLuong();
 
     // Chức năng [4]
     void chucNang_BaoCaoNhanSuTheoPhongBan();
-    void chucNang_XuatDanhSachNhanVien(); 
+    void chucNang_XuatDanhSachNhanVien(); // Hàm này ta sẽ làm
 
     // Hàm nghiệp vụ cho [2] & [3] (Hàm con)
     void chucNang_ThemChucDanh();

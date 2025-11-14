@@ -14,7 +14,7 @@ Nguoi::~Nguoi() {}
 // Sử dụng ký tự ',' làm phân cách (CSV-like)
 void Nguoi::luuVaoFile(std::ostream& os) const {
     // Thay thế các dấu cách trong chuỗi bằng '_' để tránh lỗi khi đọc file
-    // (Một kỹ thuật đơn giản, dùng CSV chuẩn sẽ tốt hơn)
+    // (Một kỹ thuật đơn giản, dùng CSV chuẩn sẽ tốt hơn) 
     // Tạm thời giả định chuỗi không chứa ký tự ','
     os << hoTen << ","
        << cmnd_cccd << ","

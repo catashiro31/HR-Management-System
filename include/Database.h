@@ -2,9 +2,9 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "NhanVien.h" // Giả sử chứa tất cả các lớp con
+#include "NhanVien.h" 
 #include "PhongBan.h"
-#include "ChucDanh.h"
+#include "ChucDanh.h" 
 #include "LichSuThayDoi.h"
 #include "PhucLoi.h" 
 
@@ -14,15 +14,14 @@ private:
     // === DỮ LIỆU ===
     std::vector<NhanVien*> dsNhanVien;
     std::vector<PhongBan> dsPhongBan;
-    std::vector<ChucDanh> dsChucDanh; // Chỉ 1 lần
+    std::vector<ChucDanh> dsChucDanh; 
     std::map<std::string, std::vector<LichSuThayDoi>> dsLichSu; 
     std::vector<PhucLoi> danhSachPhucLoi; // Đổi tên từ dsPhucLoi để khớp file .cpp
     std::map<std::string, std::vector<std::string>> danhSachDangKyPhucLoi;
 
     // === CẤU HÌNH FILE ===
-    // (Những hằng số này nên ở GlobalConfig.h, nhưng tôi giữ lại theo file của bạn)
     const std::string FILE_NHANVIEN = "../Stored/nhanvien.csv";
-    const std::string FILE_PHONGBAN = "../Stored/phongban.csv";
+    const std::string FILE_PHONGBAN = "../Stored/phongban.csv"; 
     const std::string FILE_CHUCDANH = "../Stored/chucdanh.csv";
     const std::string FILE_LICHSU = "../Stored/lichsu.csv"; 
     const std::string FILE_PHUCLOI = "../Stored/phucloi.csv";
@@ -39,14 +38,14 @@ private:
     void luuNhanVien() const;
     void taiPhongBan();
     void luuPhongBan() const;
-    void taiChucDanh(); // Chỉ 1 lần
-    void luuChucDanh() const; // Chỉ 1 lần
+    void taiChucDanh(); 
+    void luuChucDanh() const; 
     void taiLichSu();   
     void luuLichSu() const; 
-    void taiPhucLoi(); // Chỉ 1 lần
-    void luuPhucLoi(); // Chỉ 1 lần
-    void taiDangKyPhucLoi(); // Chỉ 1 lần
-    void luuDangKyPhucLoi(); // Chỉ 1 lần
+    void taiPhucLoi(); 
+    void luuPhucLoi(); 
+    void taiDangKyPhucLoi(); 
+    void luuDangKyPhucLoi(); 
 
 public:
     Database();
@@ -68,9 +67,9 @@ public:
     const std::vector<PhongBan>& getDSPhongBan() const;
     
     // --- Các hàm Quản lý Chức Danh ---
-    void themChucDanh(const ChucDanh& cd); // Chỉ 1 lần
-    ChucDanh* timChucDanhTheoMa(const std::string& maCD); // Chỉ 1 lần
-    const std::vector<ChucDanh>& getDSChucDanh() const; // Chỉ 1 lần
+    void themChucDanh(const ChucDanh& cd); 
+    ChucDanh* timChucDanhTheoMa(const std::string& maCD); 
+    const std::vector<ChucDanh>& getDSChucDanh() const; 
 
     // --- Các hàm Quản lý Lịch Sử --- 
     void themGhiNhanLichSu(const std::string& maNV, const std::string& moTa, const std::string& giaTriCu, const std::string& giaTriMoi);
