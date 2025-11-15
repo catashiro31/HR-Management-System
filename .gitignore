@@ -1,0 +1,4 @@
+*.exe
+*.csv
+.vscode
+build
