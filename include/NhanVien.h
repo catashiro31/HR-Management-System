@@ -27,7 +27,7 @@ public:
     virtual ~NhanVien();
 
     virtual double tinhLuong() const = 0; 
-    
+     
     // --- THAY ĐỔI ---
     virtual void hienThiThongTin(Role vaiTro) const = 0; 
 

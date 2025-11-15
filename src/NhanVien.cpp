@@ -65,7 +65,7 @@ void NhanVien::setMaChucDanh(const string& maCD) { maChucDanh = maCD; }
 void NhanVien::nhapThongTinCoBan(const string& ma) {
     maNV = ma;
     cout << "--- Nhập Thông Tin Cơ Bản ---\n";
-    hoTen = Helper::nhapChuoi(" - Họ và tên (Không dấu, VD: Le Van Dung): ");
+    Helper::inputName(hoTen);
     cmnd_cccd = Helper::nhapChuoi(" - Số CMND/CCCD: ");
     diaChi = Helper::nhapChuoi(" - Địa chỉ: ");
     soDienThoai = Helper::nhapChuoi(" - Số điện thoại: ");

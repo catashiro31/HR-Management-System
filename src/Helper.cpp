@@ -49,6 +49,26 @@ string Helper::nhapChuoi(const string& prompt, bool choPhepRong) {
         }
     }
 }
+bool Helper::isVietnamese(const string& str) {
+    for (char c : str) {
+        // Ký tự tiếng Việt có dấu thường có mã > 127 (nằm ngoài ASCII chuẩn)
+        if (static_cast<unsigned char>(c) > 127) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Helper::inputName(string& name) {
+    do {
+        cout << "Nhập họ tên (không dấu, VD: Le Van Dung): ";
+        getline(cin, name);
+        
+        if (Helper::isVietnamese(name)) {
+            cout << "Lỗi: Vui lòng nhập tên không dấu!\n";
+        }
+    } while (Helper::isVietnamese(name));
+}
 
 int Helper::nhapSoNguyen(const string& prompt, int min, int max) {
     int value;

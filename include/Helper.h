@@ -22,6 +22,8 @@ public:
     static int nhapSoNguyen(const string& prompt, int min, int max);
     static double nhapSoThuc(const string& prompt, double min);
     static string nhapChuoi(const string& prompt, bool choPhepRong = false);
+    static bool isVietnamese(const string& str);
+    static void inputName(string& name);
 
     // Chuyển đổi
     static string trangThaiToString(TrangThaiLamViec trangThai);
