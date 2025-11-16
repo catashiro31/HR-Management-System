@@ -16,9 +16,10 @@ void ChucDanh::setTenChucDanh(const string& ten) { tenChucDanh = ten; }
 void ChucDanh::setLuongCoBan(double luong) { luongCoBan = luong; }
 
 void ChucDanh::hienThi() const {
+    Helper helper; // <-- Phải tạo đối tượng
     cout << "| " << left << setw(10) << maChucDanh
               << " | " << setw(25) << tenChucDanh
-              << " | " << right << setw(15) << Helper::formatCurrency(luongCoBan) << " VND |\n";
+              << " | " << right << setw(15) << helper.formatCurrency(luongCoBan) << " VND |\n";
 }
 
 string ChucDanh::toStringCSV() const {

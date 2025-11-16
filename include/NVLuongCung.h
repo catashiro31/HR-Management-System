@@ -3,10 +3,9 @@
 
 using namespace std;
 
-
 class NVLuongCung : public NhanVien {
 private:
-    double luongCoBan; // Lương cứng hàng tháng
+    double luongCoBan; 
 
 public:
     NVLuongCung(string ma = "", string ten = "", string cccd = "",
@@ -17,16 +16,14 @@ public:
     
     virtual ~NVLuongCung();
 
-    // Triển khai (implement) các hàm ảo thuần túy từ NhanVien
     virtual double tinhLuong() const override;
-    virtual void hienThiThongTin(Role vaiTro) const override; // <-- THAY ĐỔI
+    virtual void hienThiThongTin(Role vaiTro) const override;
+    virtual void hienThiThongTinBang(Role vaiTro) const override; // <-- THÊM DÒNG NÀY
     virtual LoaiNhanVien getLoaiNV() const override;
 
-    // Ghi đè các hàm ảo đọc/ghi file
     virtual void luuVaoFile(ostream& os) const override;
     virtual void docTuFile(istream& is) override;
 
-    // Phương thức riêng
     void nhapThongTinRieng();
     void setLuongCoBan(double luong);
     double getLuongCoBan() const;

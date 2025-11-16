@@ -11,23 +11,21 @@ private:
     int nam;
 
 public:
-    // Constructor
     Date(int d = 1, int m = 1, int y = 2000);
 
     // Setters
     void setDate(int d, int m, int y);
 
     // Getters
-    string toString() const; // Chuyển thành chuỗi "dd/mm/yyyy"
-    int getNgay() const; // <-- HÀM MỚI
-    int getThang() const; // <-- HÀM MỚI
-    int getNam() const; // <-- HÀM MỚI
+    string toString() const;
+    int getNgay() const;
+    int getThang() const;
+    int getNam() const;
 
-    // Các toán tử nạp chồng (overloading)
     friend ostream& operator<<(ostream& os, const Date& dt);
     friend istream& operator>>(istream& is, Date& dt);
 
-    // Hàm static để lấy ngày hiện tại (đơn giản hóa)
-    static Date layNgayHienTai();
-    static Date fromString(const string& str);
+    // --- BỎ STATIC ---
+    Date layNgayHienTai();
+    Date fromString(const string& str);
 };

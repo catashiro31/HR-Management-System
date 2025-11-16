@@ -7,7 +7,7 @@
 #include "ChucDanh.h"
 #include "LichSuThayDoi.h"
 #include "PhucLoi.h" 
-#include "Account.h" // <-- THÊM VÀO
+#include "Account.h" 
 using namespace std;
 
 
@@ -20,24 +20,22 @@ private:
     map<string, vector<LichSuThayDoi>> dsLichSu; 
     vector<PhucLoi> danhSachPhucLoi;
     map<string, vector<string>> danhSachDangKyPhucLoi;
-    vector<Account*> dsTaiKhoan; // <-- THÊM VÀO
+    vector<Account*> dsTaiKhoan; 
 
     // === CẤU HÌNH FILE ===
-    // (Đã chuyển sang GlobalConfig.h, nhưng giữ lại theo file cũ của bạn)
     const string FILE_NHANVIEN = "nhanvien.csv";
     const string FILE_PHONGBAN = "phongban.csv";
     const string FILE_CHUCDANH = "chucdanh.csv";
     const string FILE_LICHSU = "lichsu.csv"; 
     const string FILE_PHUCLOI = "phucloi.csv";
     const string FILE_DANGKY_PHUCLOI = "nhanvien_phucloi.csv";
-    const string FILE_ACCOUNT = "accounts.csv"; // <-- THÊM VÀO
+    const string FILE_ACCOUNT = "accounts.csv"; 
 
     int autoIncrementMaNV; 
 
     // === HÀM HỖ TRỢ TẢI/LƯU ===
     NhanVien* taoNhanVienTuLoai(LoaiNhanVien loai);
     string taoMaNVMoi();
-
     void taiNhanVien();
     void luuNhanVien() const;
     void taiPhongBan();
@@ -50,10 +48,14 @@ private:
     void luuPhucLoi();
     void taiDangKyPhucLoi();
     void luuDangKyPhucLoi();
-    void taiTaiKhoan(); // <-- THÊM VÀO
-    void luuTaiKhoan() const; // <-- THÊM VÀO
+    void taiTaiKhoan(); 
+    void luuTaiKhoan() const; 
     
-    void kiemTraTaiKhoanChuTich(); // <-- THÊM VÀO
+    void kiemTraTaiKhoanChuTich();
+    
+    // --- THÊM DÒNG NÀY VÀO ---
+    bool tenEmailDaTonTai(const string& email) const;
+    // --- KẾT THÚC ---
 
 public:
     Database();
@@ -63,12 +65,12 @@ public:
     void taiDuLieuTuFile();
     void luuDuLieuVaoFile();
 
-    // --- Quản lý Tài khoản (Hàm mới) ---
+    // --- Quản lý Tài khoản ---
     Account* xacThucNguoiDung(const string& username, const string& password);
     void taoTaiKhoanTuDong(NhanVien* nv, Role role);
 
     // --- Các hàm Quản lý Nhân Viên (CRUD) ---
-    void themNhanVien(NhanVien* nv, Role role); // <-- SỬA LẠI
+    void themNhanVien(NhanVien* nv, Role role); 
     NhanVien* timNhanVienTheoMa(const string& maNV);
     bool xoaNhanVienTheoMa(const string& maNV);
     const vector<NhanVien*>& getDSNhanVien() const;
@@ -89,4 +91,6 @@ public:
     vector<PhucLoi*> getPhucLoiCuaNhanVien(const string& maNV);
     bool ghiDanhPhucLoi(const string& maNV, const string& maPL);
     bool huyGhiDanhPhucLoi(const string& maNV, const string& maPL);
+    Account* timTaiKhoanTheoMaNV(const string& maNV);
+    void capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi);
 };

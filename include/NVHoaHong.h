@@ -20,7 +20,8 @@ public:
     virtual ~NVHoaHong();
 
     virtual double tinhLuong() const override;
-    virtual void hienThiThongTin(Role vaiTro) const override; // <-- THAY ĐỔI
+    virtual void hienThiThongTin(Role vaiTro) const override;
+    virtual void hienThiThongTinBang(Role vaiTro) const override; // <-- THÊM DÒNG NÀY
     virtual LoaiNhanVien getLoaiNV() const override;
     virtual void luuVaoFile(ostream& os) const override;
     virtual void docTuFile(istream& is) override;

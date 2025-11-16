@@ -18,21 +18,21 @@ double NVTheoGio::tinhLuong() const {
     return mucLuongGio * soGioLamTrongThang;
 }
 
-// --- HÀM ĐƯỢC VIẾT LẠI HOÀN TOÀN ---
 void NVTheoGio::hienThiThongTin(Role vaiTro) const {
+    Helper helper; // <-- Phải tạo đối tượng
+
     cout << "------------------------------------------\n";
     cout << left << setw(18) << "  Mã Nhân Viên:" << maNV << "\n"
               << setw(18) << "  Họ Tên:" << hoTen << "\n"
               << setw(18) << "  Loại NV:" << "Theo Giờ" << "\n"
               << setw(18) << "  Ngày Sinh:" << ngaySinh.toString() << "\n"
               << setw(18) << "  Email:" << email << "\n"
-              << setw(18) << "  Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
+              << setw(18) << "  Trạng Thái:" << helper.trangThaiToString(trangThai) << "\n"
               << setw(18) << "  Phòng Ban:" << maPhongBan << "\n"
               << setw(18) << "  Chức Danh:" << maChucDanh << "\n";
 
-    // --- LOGIC PHÂN QUYỀN ---
     if (vaiTro == Role::CHU_TICH || vaiTro == Role::KE_TOAN) {
-        cout << setw(18) << "  Mức Lương/Giờ:" << Helper::formatCurrency(mucLuongGio, true) << "\n"
+        cout << setw(18) << "  Mức Lương/Giờ:" << helper.formatCurrency(mucLuongGio, true) << "\n"
              << setw(18) << "  Số Giờ Làm:" << soGioLamTrongThang << "\n";
     } else {
         cout << setw(18) << "  Mức Lương/Giờ:" << "[Bảo mật]" << "\n"
@@ -61,9 +61,20 @@ void NVTheoGio::docTuFile(istream& is) {
     catch (...) { soGioLamTrongThang = 0.0; }
 }
 void NVTheoGio::nhapThongTinRieng() {
+    Helper helper; // <-- Phải tạo đối tượng
     cout << "--- Nhập Thông Tin Lương Theo Giờ ---\n";
-    mucLuongGio = Helper::nhapSoThuc(" - Nhập mức lương theo giờ (VND): ", 0);
+    mucLuongGio = helper.nhapSoThuc(" - Nhập mức lương theo giờ (VND): ", 0);
     soGioLamTrongThang = 0;
 }
 void NVTheoGio::setMucLuongGio(double luong) { mucLuongGio = luong; }
 void NVTheoGio::setSoGioLam(double gio) { soGioLamTrongThang = gio; }
+void NVTheoGio::hienThiThongTinBang(Role vaiTro) const {
+    Helper helper;
+    cout << "| " << left << setw(8) << maNV
+         << " | " << setw(25) << hoTen
+         << " | " << setw(12) << "Theo Giờ"
+         << " | " << setw(30) << email
+         << " | " << setw(12) << helper.trangThaiToString(trangThai)
+         << " | " << setw(8) << maPhongBan
+         << " | " << setw(8) << maChucDanh << " |" << "\n";
+}

@@ -3,7 +3,9 @@
 #include <iostream>
 
 int main() {
-    Helper::setConsoleUTF8();
+   
+    Helper helper;
+    helper.setConsoleUTF8();
     
     QuanLyNhanSu heThongQLNS;
     heThongQLNS.khoiChay(); 

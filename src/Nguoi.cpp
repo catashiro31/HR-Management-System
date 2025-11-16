@@ -25,17 +25,37 @@ void Nguoi::docTuFile(istream& is) {
     getline(is, diaChi, ',');
     getline(is, soDienThoai, ',');
     getline(is, email, ',');
+
     string ngaySinhStr;
     getline(is, ngaySinhStr, ',');
-    ngaySinh = Date::fromString(ngaySinhStr);
+
+    // --- SỬA LỖI Ở ĐÂY ---
+    Date dateUtil; // <-- 1. Tạo một đối tượng Date
+    ngaySinh = dateUtil.fromString(ngaySinhStr); // <-- 2. Dùng đối tượng để gọi hàm
+    // --- KẾT THÚC SỬA ---
 }
 
-// Getters/Setters
-void Nguoi::setHoTen(const string& ten) { hoTen = ten; }
-string Nguoi::getHoTen() const { return hoTen; }
-void Nguoi::setDiaChi(const string& dc) { diaChi = dc; }
-string Nguoi::getDiaChi() const { return diaChi; }
+// Implement getters/setters
+void Nguoi::setHoTen(const string& ten) {
+    hoTen = ten;
+}
 
-// --- HÀM MỚI ---
-void Nguoi::setEmail(const string& mail) { email = mail; }
-Date Nguoi::getNgaySinh() const { return ngaySinh; }
+string Nguoi::getHoTen() const {
+    return hoTen;
+}
+
+void Nguoi::setDiaChi(const string& dc) {
+    diaChi = dc;
+}
+
+string Nguoi::getDiaChi() const {
+    return diaChi;
+}
+
+void Nguoi::setEmail(const string& mail) {
+    email = mail;
+}
+
+Date Nguoi::getNgaySinh() const {
+    return ngaySinh;
+}
