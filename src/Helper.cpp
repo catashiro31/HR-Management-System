@@ -50,6 +50,27 @@ string Helper::nhapChuoi(const string& prompt, bool choPhepRong) {
         }
     }
 }
+string Helper::nhapChuoiSo(const string& prompt, bool choPhepRong) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+
+        if (input.empty()) {
+            if (!choPhepRong) {
+                cout << " (!) Đầu vào không được để trống. Vui lòng nhập lại.\n";
+                continue;
+            } else {
+                return input; // Cho phép rỗng nếu choPhepRong = true
+            }
+        }
+        if (input.find_first_not_of("0123456789") == string::npos) {
+            return input; // Hợp lệ, chỉ chứa số
+        } else {
+            cout << " (!) Đầu vào chỉ được phép chứa số (0-9). Vui lòng nhập lại.\n";
+        }
+    }
+}
 
 int Helper::nhapSoNguyen(const string& prompt, int min, int max) {
     int value;

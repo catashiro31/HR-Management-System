@@ -10,10 +10,15 @@ private:
     int thang;
     int nam;
 
-public:
-    Date(int d = 1, int m = 1, int y = 2000);
+    // Hàm này chỉ dùng nội bộ, nên ở private là đúng
+    bool laNamNhuan(int nam) const;
 
-    // Setters
+public:
+    // --- HÀM NÀY PHẢI Ở PUBLIC ---
+    // (Vì NhanVien.cpp cần gọi nó)
+    int soNgayTrongThang(int thang, int nam) const;
+
+    Date(int d = 1, int m = 1, int y = 2000);
     void setDate(int d, int m, int y);
 
     // Getters
@@ -25,7 +30,10 @@ public:
     friend ostream& operator<<(ostream& os, const Date& dt);
     friend istream& operator>>(istream& is, Date& dt);
 
-    // --- BỎ STATIC ---
+    // So sánh
+    bool operator<=(const Date& other) const;
+
+    // Tiện ích
     Date layNgayHienTai();
     Date fromString(const string& str);
 };

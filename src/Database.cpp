@@ -18,7 +18,6 @@ using namespace std;
 
 
 Database::Database() : autoIncrementMaNV(1) {}
-
 Database::~Database() {
     for (NhanVien* nv : dsNhanVien) { delete nv; }
     dsNhanVien.clear();
@@ -509,7 +508,6 @@ Account* Database::timTaiKhoanTheoMaNV(const string& maNV) {
 }
 
 void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
-    Helper helper;
     Role vaiTroCu = acc->getRole();
     string maNV = nv->getMaNV();
     string maPB = nv->getMaPhongBan();
@@ -519,7 +517,7 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
         PhongBan* pb = timPhongBanTheoMa(maPB);
         if (pb != nullptr && pb->getMaTruongPhong() == maNV) {
             pb->setMaTruongPhong("Chưa bổ nhiệm");
-            cout << " >> Đã gỡ bỏ " << maNV << " khỏi vị trí Trưởng phòng " << maPB << ".\n";
+            cout << " >> (Hệ thống) Đã gỡ bỏ " << maNV << " khỏi vị trí Trưởng phòng " << maPB << ".\n";
         }
     }
 
@@ -528,25 +526,38 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
         PhongBan* pb = timPhongBanTheoMa(maPB);
         if (pb != nullptr) {
             if (pb->getMaTruongPhong() == "" || pb->getMaTruongPhong() == "Chưa bổ nhiệm") {
+                // Phòng trống, bổ nhiệm
                 pb->setMaTruongPhong(maNV);
-                cout << " >> Đã bổ nhiệm " << maNV << " làm Trưởng phòng " << pb->getMaPB() << ".\n";
+                cout << " >> (Hệ thống) Đã bổ nhiệm " << maNV << " làm Trưởng phòng " << pb->getMaPB() << ".\n";
             } else if (pb->getMaTruongPhong() == maNV) {
+                // Đã là trưởng phòng này rồi
                 cout << " (Nhân viên này đã là Trưởng phòng " << maPB << ".)\n";
             } else {
-                cout << " (!) Lỗi: Phòng " << maPB << " đã có Trưởng phòng (" << pb->getMaTruongPhong() << ").\n";
-                cout << "     Không thể thăng chức. Thao tác bị hủy.\n";
-                return; 
+                // Phòng đã có người khác -> Lỗi này đáng lẽ phải được xử lý ở QuanLyNhanSu.cpp
+                cout << " (!) Lỗi Database: Phòng " << maPB << " vẫn còn TP. Bổ nhiệm thất bại.\n";
+                return; // Hủy
             }
         } else {
-            cout << " (!) Lỗi: Phòng ban " << maPB << " không tồn tại. Không thể bổ nhiệm.\n";
-            return;
+            cout << " (!) Lỗi Database: Phòng ban " << maPB << " không tồn tại. Bổ nhiệm thất bại.\n";
+            return; // Hủy
         }
     }
 
-    // 3. Cập nhật vai trò (Bằng cách xóa và tạo lại)
-    dsTaiKhoan.erase(remove(dsTaiKhoan.begin(), dsTaiKhoan.end(), acc), dsTaiKhoan.end());
-    delete acc;
-    taoTaiKhoanTuDong(nv, vaiTroMoi); // Tạo lại với vai trò mới
+    // 3. Cập nhật vai trò (ĐÃ SỬA: Dùng setRole thay vì xóa/tạo lại)
+    acc->setRole(vaiTroMoi); 
+    
+    // 4. Cập nhật trạng thái
+    if ( (vaiTroMoi == Role::TRUONG_PHONG || vaiTroMoi == Role::KE_TOAN) && 
+         (nv->getTrangThai() == TrangThaiLamViec::THU_VIEC) ) {
+        nv->setTrangThai(TrangThaiLamViec::CHINH_THUC);
+        cout << " >> (Hệ thống) Đã tự động thăng cấp NV lên 'Chính thức'.\n";
+    }
+
+    // 5. Cập nhật phòng ban nếu là Kế toán
+    if (vaiTroMoi == Role::KE_TOAN) {
+        nv->setMaPhongBan("KETOAN");
+        cout << " >> (Hệ thống) Đã tự động gán phòng ban là 'KETOAN'.\n";
+    }
 
     cout << " >> Đã cập nhật vai trò của " << maNV << " thành công.\n";
 }

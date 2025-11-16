@@ -22,7 +22,7 @@ public:
     int nhapSoNguyen(const string& prompt, int min, int max);
     double nhapSoThuc(const string& prompt, double min);
     string nhapChuoi(const string& prompt, bool choPhepRong = false);
-
+    string nhapChuoiSo(const string& prompt, bool choPhepRong = false);
     string trangThaiToString(TrangThaiLamViec trangThai);
     TrangThaiLamViec stringToTrangThai(const string& str);
     string toLower(const string& str);

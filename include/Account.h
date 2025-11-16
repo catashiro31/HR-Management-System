@@ -18,7 +18,7 @@ public:
     string getUsername() const;
     Role getRole() const;
     string getMaNhanVien() const;
-
+    void setRole(Role newRole);
     // Check mật khẩu
     bool kiemTraMatKhau(const string& pass) const;
 
