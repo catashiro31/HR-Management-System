@@ -64,10 +64,9 @@ string NhanVien::getMaChucDanh() const { return maChucDanh; }
 void NhanVien::setMaChucDanh(const string& maCD) { maChucDanh = maCD; }
 
 // Hàm nhập thông tin chung
-void NhanVien::nhapThongTinCoBan(const string& ma) {
+void NhanVien::nhapThongTinCoBan(const string& ma,bool yeucauPhonBan) {
     Helper helper; // <-- Phải tạo đối tượng
     Date dateUtil; // <-- Phải tạo đối tượng
-
     maNV = ma;
     cout << "--- Nhập Thông Tin Cơ Bản ---\n";
     hoTen = helper.nhapChuoi(" - Họ và tên (Không dấu, VD: Le Van Dung): ");

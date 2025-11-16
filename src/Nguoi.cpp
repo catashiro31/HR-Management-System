@@ -29,10 +29,8 @@ void Nguoi::docTuFile(istream& is) {
     string ngaySinhStr;
     getline(is, ngaySinhStr, ',');
 
-    // --- SỬA LỖI Ở ĐÂY ---
-    Date dateUtil; // <-- 1. Tạo một đối tượng Date
-    ngaySinh = dateUtil.fromString(ngaySinhStr); // <-- 2. Dùng đối tượng để gọi hàm
-    // --- KẾT THÚC SỬA ---
+    Date dateUtil; 
+    ngaySinh = dateUtil.fromString(ngaySinhStr); 
 }
 
 // Implement getters/setters

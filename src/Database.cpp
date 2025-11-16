@@ -550,3 +550,11 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
 
     cout << " >> Đã cập nhật vai trò của " << maNV << " thành công.\n";
 }
+Account* Database::timTaiKhoanDauTienTheoVaiTro(Role role) {
+    for (Account* acc : dsTaiKhoan) {
+        if (acc->getRole() == role) {
+            return acc; // Trả về kế toán đầu tiên tìm thấy
+        }
+    }
+    return nullptr; // Không tìm thấy
+}

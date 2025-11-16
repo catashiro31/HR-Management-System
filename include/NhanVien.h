@@ -50,5 +50,5 @@ public:
     string getMaChucDanh() const;
     void setMaChucDanh(const string& maCD);
 
-    void nhapThongTinCoBan(const string& maNV);
+    void nhapThongTinCoBan(const string& maNV, bool yeuCauPhongBan = true);
 };

@@ -93,4 +93,5 @@ public:
     bool huyGhiDanhPhucLoi(const string& maNV, const string& maPL);
     Account* timTaiKhoanTheoMaNV(const string& maNV);
     void capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi);
+    Account* timTaiKhoanDauTienTheoVaiTro(Role role);
 };

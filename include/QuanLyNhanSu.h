@@ -37,6 +37,7 @@ private:
 
     // Chức năng Xem
     void chucNang_XemDanhSach();
+    void chucNang_XemDanhSach_Sort();
     void chucNang_TimKiemNhanVien(string maNV = ""); 
     void chucNang_XemLichSuThayDoi();
 
@@ -65,4 +66,4 @@ public:
     void khoiChay(); 
 };
 
-#endif // QUANLYNHANSU_H
+#endif
