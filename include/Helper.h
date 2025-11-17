@@ -35,6 +35,7 @@ public:
     string chuanHoaTen(const string& hoTen);
     string taoEmail(const string& tenChuanHoa, const Date& ngaySinh, const string& maNV, bool dungMaNV);
     string taoPassword(const Date& ngaySinh, const string& maNV, bool dungMaNV);
+    string removeVietnameseAccent(const string &s);
 };
 
 #endif // HELPER_H

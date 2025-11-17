@@ -16,9 +16,9 @@ void PhucLoi::setChiPhiHangThang(double chiPhi) { chiPhiHangThang = chiPhi; }
 
 void PhucLoi::hienThi() const {
     Helper helper; // <-- Phải tạo đối tượng
-    cout << "| " << left << setw(10) << maPhucLoi
-              << " | " << setw(30) << tenPhucLoi
-              << " | " << right << setw(15) << helper.formatCurrency(chiPhiHangThang) << " VND |\n";
+    cout << "| " << left << setw(10) << helper.removeVietnameseAccent(maPhucLoi)
+              << " | " << setw(32) << helper.removeVietnameseAccent(tenPhucLoi)
+              << " | " << right << setw(15) << helper.removeVietnameseAccent(helper.formatCurrency(chiPhiHangThang)) << " VND |\n";
 }
 
 string PhucLoi::toStringCSV() const {

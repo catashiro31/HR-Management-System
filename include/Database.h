@@ -23,13 +23,13 @@ private:
     vector<Account*> dsTaiKhoan; 
 
     // === CẤU HÌNH FILE ===
-    const string FILE_NHANVIEN = "nhanvien.csv";
-    const string FILE_PHONGBAN = "phongban.csv";
-    const string FILE_CHUCDANH = "chucdanh.csv";
-    const string FILE_LICHSU = "lichsu.csv"; 
-    const string FILE_PHUCLOI = "phucloi.csv";
-    const string FILE_DANGKY_PHUCLOI = "nhanvien_phucloi.csv";
-    const string FILE_ACCOUNT = "accounts.csv"; 
+    const string FILE_NHANVIEN = "data/nhanvien.csv";
+    const string FILE_PHONGBAN = "data/phongban.csv";
+    const string FILE_CHUCDANH = "data/chucdanh.csv";
+    const string FILE_LICHSU = "data/lichsu.csv"; 
+    const string FILE_PHUCLOI = "data/phucloi.csv";
+    const string FILE_DANGKY_PHUCLOI = "data/nhanvien_phucloi.csv";
+    const string FILE_ACCOUNT = "data/accounts.csv"; 
 
     int autoIncrementMaNV; 
 

@@ -1,4 +1,5 @@
 #include "../include/PhongBan.h"
+#include "../include/Helper.h"
 #include <iostream>
 #include <iomanip>
 using namespace std;
@@ -9,9 +10,10 @@ PhongBan::PhongBan(string ma, string ten, string maTP)
 PhongBan::~PhongBan() {}
 
 void PhongBan::hienThi() const {
-    cout << "| " << left << setw(10) << maPB
-              << "| " << setw(25) << tenPB
-              << "| " << setw(15) << maTruongPhong << "|\n";
+    Helper helper;
+    cout << "| " << left << setw(8) << helper.removeVietnameseAccent(maPB)
+              << " | " << setw(27) << helper.removeVietnameseAccent(tenPB)
+              << " | " << setw(15) << helper.removeVietnameseAccent(maTruongPhong) << " |\n";
 }
 
 // Getters/Setters
