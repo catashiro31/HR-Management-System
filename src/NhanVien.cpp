@@ -14,9 +14,8 @@ NhanVien::NhanVien(string ma, string ten, string cccd,
 
 NhanVien::~NhanVien() {}
 
-// Hàm tạm để giữ tương thích (sẽ bị xóa)
 void NhanVien::hienThiThongTin() const {
-    hienThiThongTin(Role::NHAN_VIEN); // Mặc định xem ở quyền thấp nhất
+    hienThiThongTin(Role::NHAN_VIEN);
 }
 
 void NhanVien::luuVaoFile(ostream& os) const {
@@ -30,10 +29,13 @@ void NhanVien::luuVaoFile(ostream& os) const {
 
 void NhanVien::docTuFile(istream& is) {
     Nguoi::docTuFile(is);
+    
     getline(is, maNV, ',');
+    
     string ngayVaoLamStr;
     getline(is, ngayVaoLamStr, ',');
-    ngayVaoLam = Date::fromString(ngayVaoLamStr);
+    Date dateUtil; // <-- Phải tạo đối tượng
+    ngayVaoLam = dateUtil.fromString(ngayVaoLamStr);
     
     string trangThaiStr;
     getline(is, trangThaiStr, ',');
@@ -62,33 +64,73 @@ string NhanVien::getMaChucDanh() const { return maChucDanh; }
 void NhanVien::setMaChucDanh(const string& maCD) { maChucDanh = maCD; }
 
 // Hàm nhập thông tin chung
-void NhanVien::nhapThongTinCoBan(const string& ma) {
+void NhanVien::nhapThongTinCoBan(const string& ma, bool yeuCauPhongBan) {
+    Helper helper; 
+    Date dateUtil; 
+
     maNV = ma;
     cout << "--- Nhập Thông Tin Cơ Bản ---\n";
-    hoTen = Helper::nhapChuoi(" - Họ và tên (VD: Lê Văn Dũng): ");
-    cmnd_cccd = Helper::nhapChuoi(" - Số CMND/CCCD: ");
-    diaChi = Helper::nhapChuoi(" - Địa chỉ: ");
-    soDienThoai = Helper::nhapChuoi(" - Số điện thoại: ");
+    
+    // 1. Dùng hàm nhapTen để chỉ nhận chữ cái
+    hoTen = helper.nhapTen(" - Họ và tên (Không dấu, VD: Le Van Dung): ");
+    
+    cmnd_cccd = helper.nhapChuoiSo(" - Số CMND/CCCD: ");
+    diaChi = helper.nhapChuoi(" - Địa chỉ: ");
+    soDienThoai = helper.nhapChuoiSo(" - Số điện thoại: ");
     
     cout << " (Email sẽ được tạo tự động từ tên và ngày sinh)\n";
 
     // Nhập ngày sinh
     cout << " - Nhập ngày sinh (dd/mm/yyyy):\n";
-    int d = Helper::nhapSoNguyen("   + Ngày: ", 1, 31);
-    int m = Helper::nhapSoNguyen("   + Tháng: ", 1, 12);
-    int y = Helper::nhapSoNguyen("   + Năm: ", 1920, 2010);
-    ngaySinh.setDate(d, m, y);
+    int d_ns = helper.nhapSoNguyen("   + Năm: ", 1950, 2010); 
+    int m_ns = helper.nhapSoNguyen("   + Tháng: ", 1, 12);
+    int maxDay_ns = dateUtil.soNgayTrongThang(m_ns, d_ns); 
+    int n_ns = helper.nhapSoNguyen("   + Ngày: ", 1, maxDay_ns);
+    ngaySinh.setDate(n_ns, m_ns, d_ns); 
 
-    // Nhập ngày vào làm
-    Date homNay = Date::layNgayHienTai();
-    cout << " - Nhập ngày vào làm (dd/mm/yyyy) [Hôm nay là " << homNay << "]:\n";
-    d = Helper::nhapSoNguyen("   + Ngày: ", 1, 31);
-    m = Helper::nhapSoNguyen("   + Tháng: ", 1, 12);
-    y = Helper::nhapSoNguyen("   + Năm: ", 2000, 2025);
+    // Nhập ngày vào làm (LOGIC MỚI: SAI ĐÂU SỬA ĐÓ)
+    Date homNay = dateUtil.layNgayHienTai();
+    cout << " - Nhập ngày vào làm (Phải <= " << homNay << "):\n";
+    
+    int y, m, d;
+    // Nhập Năm
+    while (true) {
+        y = helper.nhapSoNguyen("   + Năm: ", 2000, 2100);
+        if (y > homNay.getNam()) {
+            cout << " (!) Lỗi: Năm vào làm không được lớn hơn năm hiện tại.\n";
+        } else {
+            break;
+        }
+    }
+    // Nhập Tháng
+    while (true) {
+        m = helper.nhapSoNguyen("   + Tháng: ", 1, 12);
+        if (y == homNay.getNam() && m > homNay.getThang()) {
+            cout << " (!) Lỗi: Tháng vào làm không được lớn hơn tháng hiện tại.\n";
+        } else {
+            break;
+        }
+    }
+    // Nhập Ngày
+    while (true) {
+        int maxDay = dateUtil.soNgayTrongThang(m, y);
+        d = helper.nhapSoNguyen("   + Ngày: ", 1, maxDay);
+        if (y == homNay.getNam() && m == homNay.getThang() && d > homNay.getNgay()) {
+            cout << " (!) Lỗi: Ngày vào làm không được lớn hơn ngày hôm nay.\n";
+        } else {
+            break;
+        }
+    }
     ngayVaoLam.setDate(d, m, y);
 
-    maPhongBan = Helper::nhapChuoi(" - Mã phòng ban (ví dụ: PB01): ");
-    maChucDanh = Helper::nhapChuoi(" - Mã chức danh (ví dụ: CD01): ");
+    if (yeuCauPhongBan) {
+        maPhongBan = helper.nhapChuoi(" - Mã phòng ban (ví dụ: PB01): ");
+    } else {
+        maPhongBan = "KETOAN"; 
+        cout << " - Phòng ban: KETOAN (Mặc định)\n";
+    }
+
+    maChucDanh = helper.nhapChuoi(" - Mã chức danh (ví dụ: CD01): ");
     trangThai = TrangThaiLamViec::THU_VIEC;
     cout << " - Trạng thái ban đầu: Thử việc\n";
 }

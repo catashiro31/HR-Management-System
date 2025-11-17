@@ -1,20 +1,20 @@
-
+// FIX lỗi 'byte' ambiguous
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN // Loại bỏ các header không cần thiết
+#define WIN32_LEAN_AND_MEAN 
 #include <windows.h> 
 #endif
+#include<bits/stdc++.h>
 #include "../include/Helper.h"
 #include <iostream>
-#include <map>
 #include <string>
 #include <limits>
 #include <cmath>
 #include <algorithm>
 #include <stdexcept> 
 #include "../include/GlobalConfig.h"
-// (Block #include <windows.h> cũ đã được xóa khỏi đây)
 using namespace std;
 
+// --- BỎ TOÀN BỘ Helper:: ---
 
 void Helper::setConsoleUTF8() {
     #ifdef _WIN32
@@ -47,6 +47,53 @@ string Helper::nhapChuoi(const string& prompt, bool choPhepRong) {
             cout << " (!) Đầu vào không được để trống. Vui lòng nhập lại.\n";
         } else {
             return input;
+        }
+    }
+}
+string Helper::nhapChuoiSo(const string& prompt, bool choPhepRong) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+
+        if (input.empty()) {
+            if (!choPhepRong) {
+                cout << " (!) Đầu vào không được để trống. Vui lòng nhập lại.\n";
+                continue;
+            } else {
+                return input; // Cho phép rỗng nếu choPhepRong = true
+            }
+        }
+        if (input.find_first_not_of("0123456789") == string::npos) {
+            return input; // Hợp lệ, chỉ chứa số
+        } else {
+            cout << " (!) Đầu vào chỉ được phép chứa số (0-9). Vui lòng nhập lại.\n";
+        }
+    }
+}
+
+string Helper::nhapTen(const string& prompt) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        if (input.empty()) {
+            cout << " (!) Tên không được để trống.\n";
+            continue;
+        }
+        
+        bool hopLe = true;
+        for (char c : input) {
+            if (!isalpha(c) && !isspace(c)) {
+                hopLe = false;
+                break;
+            }
+        }
+        
+        if (hopLe) {
+            return input;
+        } else {
+            cout << " (!) Tên chỉ được chứa chữ cái và khoảng trắng (Không số, không ký tự đặc biệt).\n";
         }
     }
 }
@@ -137,17 +184,11 @@ string Helper::taoMaTuDong(const string& tienTo, int soThuTu) {
     return ss.str();
 }
 
-// --- HÀM MỚI CHO BƯỚC 2 ---
 string Helper::chuanHoaTen(const string& hoTen) {
-    // Bỏ dấu trước
-    string tenKhongDau = boDauTiengViet(hoTen);
-    
-    stringstream ss(tenKhongDau);
+    stringstream ss(hoTen);
     string word;
     string result = "";
-    
     while (ss >> word) {
-        // Viết hoa chữ cái đầu, viết thường phần còn lại
         word[0] = toupper(word[0]);
         for (size_t i = 1; i < word.length(); ++i) {
             word[i] = tolower(word[i]);
@@ -156,79 +197,26 @@ string Helper::chuanHoaTen(const string& hoTen) {
     }
     return result;
 }
-string Helper::taoEmail(const string& tenChuanHoa, const Date& ngaySinh) {
-    // Tạm thời dùng logic: LeVanDung2006@gmail.com
-    // Nâng cao: Cần kiểm tra trùng lặp, nếu trùng thì dùng LeVanDung05022006@gmail.com
-    return tenChuanHoa + to_string(ngaySinh.getNam()) + "@gmail.com";
-}
-string Helper::boDauTiengViet(const string& str) {
-    // Map các ký tự tiếng Việt có dấu sang không dấu
-    map <string, string> bangChuyenDoi = {
-        // Chữ thường
-        {"à", "a"}, {"á", "a"}, {"ạ", "a"}, {"ả", "a"}, {"ã", "a"},
-        {"â", "a"}, {"ầ", "a"}, {"ấ", "a"}, {"ậ", "a"}, {"ẩ", "a"}, {"ẫ", "a"},
-        {"ă", "a"}, {"ằ", "a"}, {"ắ", "a"}, {"ặ", "a"}, {"ẳ", "a"}, {"ẵ", "a"},
-        {"è", "e"}, {"é", "e"}, {"ẹ", "e"}, {"ẻ", "e"}, {"ẽ", "e"},
-        {"ê", "e"}, {"ề", "e"}, {"ế", "e"}, {"ệ", "e"}, {"ể", "e"}, {"ễ", "e"},
-        {"ì", "i"}, {"í", "i"}, {"ị", "i"}, {"ỉ", "i"}, {"ĩ", "i"},
-        {"ò", "o"}, {"ó", "o"}, {"ọ", "o"}, {"ỏ", "o"}, {"õ", "o"},
-        {"ô", "o"}, {"ồ", "o"}, {"ố", "o"}, {"ộ", "o"}, {"ổ", "o"}, {"ỗ", "o"},
-        {"ơ", "o"}, {"ờ", "o"}, {"ớ", "o"}, {"ợ", "o"}, {"ở", "o"}, {"ỡ", "o"},
-        {"ù", "u"}, {"ú", "u"}, {"ụ", "u"}, {"ủ", "u"}, {"ũ", "u"},
-        {"ư", "u"}, {"ừ", "u"}, {"ứ", "u"}, {"ự", "u"}, {"ử", "u"}, {"ữ", "u"},
-        {"ỳ", "y"}, {"ý", "y"}, {"ỵ", "y"}, {"ỷ", "y"}, {"ỹ", "y"},
-        {"đ", "d"},
-        // Chữ hoa
-        {"À", "A"}, {"Á", "A"}, {"Ạ", "A"}, {"Ả", "A"}, {"Ã", "A"},
-        {"Â", "A"}, {"Ầ", "A"}, {"Ấ", "A"}, {"Ậ", "A"}, {"Ẩ", "A"}, {"Ẫ", "A"},
-        {"Ă", "A"}, {"Ằ", "A"}, {"Ắ", "A"}, {"Ặ", "A"}, {"Ẳ", "A"}, {"Ẵ", "A"},
-        {"È", "E"}, {"É", "E"}, {"Ẹ", "E"}, {"Ẻ", "E"}, {"Ẽ", "E"},
-        {"Ê", "E"}, {"Ề", "E"}, {"Ế", "E"}, {"Ệ", "E"}, {"Ể", "E"}, {"Ễ", "E"},
-        {"Ì", "I"}, {"Í", "I"}, {"Ị", "I"}, {"Ỉ", "I"}, {"Ĩ", "I"},
-        {"Ò", "O"}, {"Ó", "O"}, {"Ọ", "O"}, {"Ỏ", "O"}, {"Õ", "O"},
-        {"Ô", "O"}, {"Ồ", "O"}, {"Ố", "O"}, {"Ộ", "O"}, {"Ổ", "O"}, {"Ỗ", "O"},
-        {"Ơ", "O"}, {"Ờ", "O"}, {"Ớ", "O"}, {"Ợ", "O"}, {"Ở", "O"}, {"Ỡ", "O"},
-        {"Ù", "U"}, {"Ú", "U"}, {"Ụ", "U"}, {"Ủ", "U"}, {"Ũ", "U"},
-        {"Ư", "U"}, {"Ừ", "U"}, {"Ứ", "U"}, {"Ự", "U"}, {"Ử", "U"}, {"Ữ", "U"},
-        {"Ỳ", "Y"}, {"Ý", "Y"}, {"Ỵ", "Y"}, {"Ỷ", "Y"}, {"Ỹ", "Y"},
-        {"Đ", "D"}
-    };
-    
-    string result = "";
-    size_t i = 0;
-    
-    while (i < str.length()) {
-        bool found = false;
-        
-        // Thử match 2-3 bytes (ký tự UTF-8 tiếng Việt)
-        for (int len = 3; len >= 2; len--) {
-            if (i + len <= str.length()) {
-                string sub = str.substr(i, len);
-                if (bangChuyenDoi.find(sub) != bangChuyenDoi.end()) {
-                    result += bangChuyenDoi[sub];
-                    i += len;
-                    found = true;
-                    break;
-                }
-            }
-        }
-        
-        // Nếu không phải ký tự đặc biệt, giữ nguyên
-        if (!found) {
-            result += str[i];
-            i++;
-        }
+
+string Helper::taoEmail(const string& tenChuanHoa, const Date& ngaySinh, const string& maNV, bool dungMaNV) {
+    string base = tenChuanHoa + to_string(ngaySinh.getNam());
+    if (dungMaNV) {
+        base += maNV;
     }
-    
-    return result;
+    return base + "@team4.group";
 }
-string Helper::taoPassword(const Date& ngaySinh) {
+
+string Helper::taoPassword(const Date& ngaySinh, const string& maNV, bool dungMaNV) {
     stringstream ss;
     ss << setfill('0')
        << setw(2) << ngaySinh.getNgay()
        << setw(2) << ngaySinh.getThang()
        << setw(4) << ngaySinh.getNam();
-    return ss.str();
+    string base = ss.str();
+    if (dungMaNV) {
+        base += maNV;
+    }
+    return base;
 }
 
 string Helper::roleToString(Role role) {
@@ -239,4 +227,60 @@ string Helper::roleToString(Role role) {
         case Role::NHAN_VIEN: return "Nhân Viên";
         default: return "Chưa phân loại";
     }
+}
+
+string Helper::removeVietnameseAccent(const string &s) {
+    static const unordered_map<string, string> mp = {
+        {"á","a"},{"à","a"},{"ả","a"},{"ã","a"},{"ạ","a"},
+        {"ă","a"},{"ắ","a"},{"ằ","a"},{"ẳ","a"},{"ẵ","a"},{"ặ","a"},
+        {"â","a"},{"ấ","a"},{"ầ","a"},{"ẩ","a"},{"ẫ","a"},{"ậ","a"},
+        {"đ","d"},
+
+        {"é","e"},{"è","e"},{"ẻ","e"},{"ẽ","e"},{"ẹ","e"},
+        {"ê","e"},{"ế","e"},{"ề","e"},{"ể","e"},{"ễ","e"},{"ệ","e"},
+
+        {"í","i"},{"ì","i"},{"ỉ","i"},{"ĩ","i"},{"ị","i"},
+
+        {"ó","o"},{"ò","o"},{"ỏ","o"},{"õ","o"},{"ọ","o"},
+        {"ô","o"},{"ố","o"},{"ồ","o"},{"ổ","o"},{"ỗ","o"},{"ộ","o"},
+        {"ơ","o"},{"ớ","o"},{"ờ","o"},{"ở","o"},{"ỡ","o"},{"ợ","o"},
+
+        {"ú","u"},{"ù","u"},{"ủ","u"},{"ũ","u"},{"ụ","u"},
+        {"ư","u"},{"ứ","u"},{"ừ","u"},{"ử","u"},{"ữ","u"},{"ự","u"},
+
+        {"ý","y"},{"ỳ","y"},{"ỷ","y"},{"ỹ","y"},{"ỵ","y"},
+
+        // CHỮ HOA
+        {"Á","A"},{"À","A"},{"Ả","A"},{"Ã","A"},{"Ạ","A"},
+        {"Ă","A"},{"Ắ","A"},{"Ằ","A"},{"Ẳ","A"},{"Ẵ","A"},{"Ặ","A"},
+        {"Â","A"},{"Ấ","A"},{"Ầ","A"},{"Ẩ","A"},{"Ẫ","A"},{"Ậ","A"},
+        {"Đ","D"},
+        {"É","E"},{"È","E"},{"Ẻ","E"},{"Ẽ","E"},{"Ẹ","E"},
+        {"Ê","E"},{"Ế","E"},{"Ề","E"},{"Ể","E"},{"Ễ","E"},{"Ệ","E"},
+        {"Í","I"},{"Ì","I"},{"Ỉ","I"},{"Ĩ","I"},{"Ị","I"},
+        {"Ó","O"},{"Ò","O"},{"Ỏ","O"},{"Õ","O"},{"Ọ","O"},
+        {"Ô","O"},{"Ố","O"},{"Ồ","O"},{"Ổ","O"},{"Ỗ","O"},{"Ộ","O"},
+        {"Ơ","O"},{"Ớ","O"},{"Ờ","O"},{"Ở","O"},{"Ỡ","O"},{"Ợ","O"},
+        {"Ú","U"},{"Ù","U"},{"Ủ","U"},{"Ũ","U"},{"Ụ","U"},
+        {"Ư","U"},{"Ứ","U"},{"Ừ","U"},{"Ử","U"},{"Ữ","U"},{"Ự","U"},
+        {"Ý","Y"},{"Ỳ","Y"},{"Ỷ","Y"},{"Ỹ","Y"},{"Ỵ","Y"}
+    };
+
+    string res;
+    int i = 0;
+    while (i < s.size()) {
+        // Lấy đúng 1 ký tự UTF-8
+        unsigned char c = s[i];
+        int len = 1;
+        if (c >= 0xC0 && c <= 0xDF) len = 2;     // 2-byte UTF-8
+        else if (c >= 0xE0 && c <= 0xEF) len = 3; // 3-byte UTF-8
+
+        string ch = s.substr(i, len);
+
+        if (mp.count(ch)) res += mp.at(ch);
+        else res += ch;
+
+        i += len;
+    }
+    return res;
 }

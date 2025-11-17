@@ -8,6 +8,10 @@ string Account::getUsername() const { return username; }
 Role Account::getRole() const { return role; }
 string Account::getMaNhanVien() const { return maNhanVien; }
 
+void Account::setRole(Role newRole) {
+    this->role = newRole;
+}
+
 bool Account::kiemTraMatKhau(const string& pass) const {
     return this->password == pass;
 }

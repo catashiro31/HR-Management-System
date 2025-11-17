@@ -16,24 +16,23 @@ double NVLuongCung::tinhLuong() const {
     return luongCoBan;
 }
 
-// --- HÀM ĐƯỢC VIẾT LẠI HOÀN TOÀN ---
 void NVLuongCung::hienThiThongTin(Role vaiTro) const {
-    cout << "------------------------------------------\n";
-    cout << left << setw(18) << "  Mã Nhân Viên:" << maNV << "\n"
-              << setw(18) << "  Họ Tên:" << hoTen << "\n"
-              << setw(18) << "  Loại NV:" << "Lương Cứng" << "\n"
-              << setw(18) << "  Ngày Sinh:" << ngaySinh.toString() << "\n"
-              << setw(18) << "  Email:" << email << "\n"
-              << setw(18) << "  Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
-              << setw(18) << "  Phòng Ban:" << maPhongBan << "\n"
-              << setw(18) << "  Chức Danh:" << maChucDanh << "\n";
+    Helper helper; // <-- Phải tạo đối tượng
 
-    // --- LOGIC PHÂN QUYỀN ---
-    // Chỉ Chủ Tịch và Kế Toán mới thấy lương
+    cout << "------------------------------------------\n";
+    cout << left << setw(18) << helper.removeVietnameseAccent("  Mã Nhân Viên:") << helper.removeVietnameseAccent(maNV) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Họ Tên:") << helper.removeVietnameseAccent(hoTen) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Loại NV:") << helper.removeVietnameseAccent("Theo Giờ") << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Ngày Sinh:") << helper.removeVietnameseAccent(ngaySinh.toString()) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Email:") << helper.removeVietnameseAccent(email) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Trạng Thái:") << helper.removeVietnameseAccent(helper.trangThaiToString(trangThai)) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Phòng Ban:") << helper.removeVietnameseAccent(maPhongBan) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Chức Danh:") << helper.removeVietnameseAccent(maChucDanh) << "\n";
+
     if (vaiTro == Role::CHU_TICH || vaiTro == Role::KE_TOAN) {
-        cout << setw(18) << "  Lương Cơ Bản:" << Helper::formatCurrency(luongCoBan, true) << "\n";
+        cout << setw(18) << helper.removeVietnameseAccent("  Lương Cơ Bản: ") << helper.formatCurrency(luongCoBan, true) << "\n";
     } else {
-        cout << setw(18) << "  Lương Cơ Bản:" << "[Bảo mật]" << "\n";
+        cout << setw(18) << helper.removeVietnameseAccent("  Lương Cơ Bản:") << helper.removeVietnameseAccent("[Bảo mật]") << "\n";
     }
 }
 
@@ -59,9 +58,20 @@ void NVLuongCung::docTuFile(istream& is) {
 }
 
 void NVLuongCung::nhapThongTinRieng() {
+    Helper helper; // <-- Phải tạo đối tượng
     cout << "--- Nhập Thông Tin Lương Cứng ---\n";
-    luongCoBan = Helper::nhapSoThuc(" - Nhập lương cơ bản (VND): ", 0);
+    luongCoBan = helper.nhapSoThuc(" - Nhập lương cơ bản (VND): ", 0);
 }
 
 void NVLuongCung::setLuongCoBan(double luong) { luongCoBan = luong; }
 double NVLuongCung::getLuongCoBan() const { return luongCoBan; }
+void NVLuongCung::hienThiThongTinBang(Role vaiTro) const {
+    Helper helper;
+    cout << "| " << left << setw(10) << helper.removeVietnameseAccent(maNV)
+         << " | "<< left  << setw(30) << helper.removeVietnameseAccent(hoTen)
+         << " | "<< left<< setw(15) << helper.removeVietnameseAccent("Lương Cứng")
+         << " | "<< left<< setw(40) << helper.removeVietnameseAccent(email)
+         << " | "<< left<< setw(15) << helper.removeVietnameseAccent(helper.trangThaiToString(trangThai))
+         << " | "<< left<< setw(10) << helper.removeVietnameseAccent(maPhongBan)
+         << " | "<< left << setw(10) << helper.removeVietnameseAccent(maChucDanh) << " |" << "\n";
+} 

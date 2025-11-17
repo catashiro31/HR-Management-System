@@ -5,7 +5,7 @@
 #include "../include/NVTheoGio.h"
 #include "../include/ChucDanh.h"
 #include "../include/PhucLoi.h"
-#include "../include/Account.h" // <-- THÊM VÀO
+#include "../include/Account.h" 
 #include "../include/Helper.h"
 #include "../include/Date.h"
 #include "../include/LichSuThayDoi.h" 
@@ -17,15 +17,11 @@
 using namespace std;
 
 
-Database::Database() : autoIncrementMaNV(1) {
-    // Không tải ở đây nữa
-}
-
+Database::Database() : autoIncrementMaNV(1) {}
 Database::~Database() {
-    // Dọn dẹp bộ nhớ
     for (NhanVien* nv : dsNhanVien) { delete nv; }
     dsNhanVien.clear();
-    for (Account* acc : dsTaiKhoan) { delete acc; } // <-- THÊM VÀO
+    for (Account* acc : dsTaiKhoan) { delete acc; } 
     dsTaiKhoan.clear();
 }
 
@@ -45,8 +41,8 @@ void Database::taiDuLieuTuFile() {
     taiLichSu();
     taiPhucLoi();
     taiDangKyPhucLoi();
-    taiTaiKhoan(); // <-- THÊM VÀO
-    kiemTraTaiKhoanChuTich(); // <-- THÊM VÀO
+    taiTaiKhoan(); 
+    kiemTraTaiKhoanChuTich(); 
     cout << "Tải dữ liệu thành công.\n";
 }
 
@@ -146,7 +142,9 @@ void Database::taiLichSu() {
         getline(ss, moTa, ',');
         getline(ss, giaTriCu, ',');
         getline(ss, giaTriMoi, ',');
-        Date ngay = Date::fromString(ngayStr);
+        
+        Date dateUtil; 
+        Date ngay = dateUtil.fromString(ngayStr);
         dsLichSu[maNV].emplace_back(ngay, moTa, giaTriCu, giaTriMoi);
     }
     file.close();
@@ -217,7 +215,7 @@ void Database::luuDuLieuVaoFile() {
     luuLichSu(); 
     luuPhucLoi();
     luuDangKyPhucLoi();
-    luuTaiKhoan(); // <-- THÊM VÀO
+    luuTaiKhoan(); 
     cout << "Lưu dữ liệu thành công.\n";
 }
 
@@ -297,7 +295,7 @@ void Database::luuTaiKhoan() const {
     file.close();
 }
 
-// ============== QUẢN LÝ TÀI KHOẢN (HÀM MỚI) ================
+// ============== QUẢN LÝ TÀI KHOẢN ================
 
 Account* Database::xacThucNguoiDung(const string& username, const string& password) {
     for (Account* acc : dsTaiKhoan) {
@@ -308,33 +306,75 @@ Account* Database::xacThucNguoiDung(const string& username, const string& passwo
     return nullptr; 
 }
 
+bool Database::tenEmailDaTonTai(const string& email) const {
+    for (const Account* acc : dsTaiKhoan) {
+        if (acc->getUsername() == email) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// --- HÀM ĐƯỢC CẬP NHẬT (FIX LỖI) ---
 void Database::taoTaiKhoanTuDong(NhanVien* nv, Role role) {
+    Helper helper; 
+    
     string hoTen = nv->getHoTen();
     Date ngaySinh = nv->getNgaySinh();
-    string tenChuanHoa = Helper::chuanHoaTen(hoTen);
-    string email = Helper::taoEmail(tenChuanHoa, ngaySinh);
-    string password = Helper::taoPassword(ngaySinh);
+    string tenChuanHoa = helper.chuanHoaTen(hoTen);
+    string maNV = nv->getMaNV(); // Lấy MaNV
+
+    // 1. Tạo email và pass cơ bản (dungMaNV = false)
+    string email = helper.taoEmail(tenChuanHoa, ngaySinh, maNV, false);
+    string password = helper.taoPassword(ngaySinh, maNV, false);
+
+    // 2. Kiểm tra trùng lặp
+    if (tenEmailDaTonTai(email)) {
+        cout << " (!) Email cơ bản bị trùng. Đang thêm Mã NV...\n";
+        // Nếu trùng, tạo email và pass duy nhất (dungMaNV = true)
+        email = helper.taoEmail(tenChuanHoa, ngaySinh, maNV, true);
+        password = helper.taoPassword(ngaySinh, maNV, true);
+    }
+    
+    // --- LOGIC TRƯỞNG PHÒNG ĐÃ SỬA LỖI (FIX REQ 2) ---
+    if (role == Role::TRUONG_PHONG) {
+        PhongBan* pb = timPhongBanTheoMa(nv->getMaPhongBan());
+        if (pb != nullptr) {
+            if (pb->getMaTruongPhong() == "" || pb->getMaTruongPhong() == "Chưa bổ nhiệm") {
+                // Phòng trống, bổ nhiệm
+                pb->setMaTruongPhong(maNV);
+                cout << " >> Đã bổ nhiệm " << maNV << " làm Trưởng phòng " << pb->getMaPB() << ".\n";
+            } else if (pb->getMaTruongPhong() != maNV) {
+                // Phòng đã có người khác -> Vẫn giữ vai trò Trưởng Phòng
+                cout << " (!) Cảnh báo: Phòng " << pb->getMaPB() << " đã có Trưởng phòng (" << pb->getMaTruongPhong() << ").\n";
+                cout << "     Nhân viên này vẫn sẽ có vai trò Trưởng Phòng, nhưng không được gán làm quản lý phòng ban này.\n";
+                // --- KHÔNG GIÁNG CẤP (Đã xóa dòng role = Role::NHAN_VIEN;) ---
+            }
+        } 
+    }
+    // --- KẾT THÚC LOGIC MỚI ---
 
     cout << " >> Đang tạo tài khoản tự động...\n";
     cout << "    - Tên đăng nhập (Email): " << email << "\n";
-    cout << "    - Mật khẩu (Ngày sinh): " << password << "\n";
+    cout << "    - Mật khẩu: " << password << "\n";
     
     nv->setEmail(email);
-    Account* accMoi = new Account(email, password, role, nv->getMaNV());
+    Account* accMoi = new Account(email, password, role, maNV);
     dsTaiKhoan.push_back(accMoi);
 }
 
 void Database::kiemTraTaiKhoanChuTich() {
     bool daCo = false;
     for (Account* acc : dsTaiKhoan) {
-        if (acc->getUsername() == "thanhchutich1604") {
+        // Sửa lại tên đăng nhập của chủ tịch để khớp với logic email mới
+        if (acc->getUsername() == "thanhchutich1604@team4.group") {
             daCo = true;
             break;
         }
     }
     if (!daCo) {
         cout << " (!) Phát hiện chưa có tài khoản Chủ Tịch. Đang tạo tài khoản mặc định...\n";
-        Account* chuTich = new Account("thanhchutich1604", "16042006", Role::CHU_TICH, "NV000");
+        Account* chuTich = new Account("thanhchutich1604@team4.group", "16042006", Role::CHU_TICH, "NV000");
         dsTaiKhoan.push_back(chuTich);
     }
 }
@@ -342,10 +382,12 @@ void Database::kiemTraTaiKhoanChuTich() {
 // ============== QUẢN LÝ NHÂN VIÊN ================
 
 void Database::themNhanVien(NhanVien* nv, Role role) {
-    nv->setMaNV(taoMaNVMoi());
+    nv->setMaNV(taoMaNVMoi()); 
     dsNhanVien.push_back(nv);
     cout << " >> Đã thêm nhân viên mới với mã: " << nv->getMaNV() << "\n";
-    taoTaiKhoanTuDong(nv, role);
+    
+    // Chỉ gọi hàm tạo tài khoản 1 lần DUY NHẤT ở đây
+    taoTaiKhoanTuDong(nv, role); 
 }
 
 NhanVien* Database::timNhanVienTheoMa(const string& maNV) {
@@ -384,9 +426,12 @@ ChucDanh* Database::timChucDanhTheoMa(const string& maCD) {
     return nullptr;
 }
 const vector<ChucDanh>& Database::getDSChucDanh() const { return dsChucDanh; }
+
 void Database::themGhiNhanLichSu(const string& maNV, const string& moTa, const string& giaTriCu, const string& giaTriMoi) {
-    dsLichSu[maNV].emplace_back(Date::layNgayHienTai(), moTa, giaTriCu, giaTriMoi);
+    Date dateUtil; 
+    dsLichSu[maNV].emplace_back(dateUtil.layNgayHienTai(), moTa, giaTriCu, giaTriMoi);
 }
+
 const vector<LichSuThayDoi>* Database::layLichSuCuaNV(const string& maNV) const {
     auto it = dsLichSu.find(maNV);
     if (it!= dsLichSu.end()) return &(it->second);
@@ -449,4 +494,78 @@ bool Database::huyGhiDanhPhucLoi(const string& maNV, const string& maPL) {
         }
     }
     return false;
+}
+
+
+// --- HÀM MỚI CHO LOGIC THĂNG CHỨC ---
+Account* Database::timTaiKhoanTheoMaNV(const string& maNV) {
+    for (Account* acc : dsTaiKhoan) {
+        if (acc->getMaNhanVien() == maNV) {
+            return acc;
+        }
+    }
+    return nullptr;
+}
+
+void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
+    Role vaiTroCu = acc->getRole();
+    string maNV = nv->getMaNV();
+    string maPB = nv->getMaPhongBan();
+
+    // 1. Xử lý nếu GIÁNG CHỨC từ Trưởng phòng
+    if (vaiTroCu == Role::TRUONG_PHONG && vaiTroMoi != Role::TRUONG_PHONG) {
+        PhongBan* pb = timPhongBanTheoMa(maPB);
+        if (pb != nullptr && pb->getMaTruongPhong() == maNV) {
+            pb->setMaTruongPhong("Chưa bổ nhiệm");
+            cout << " >> (Hệ thống) Đã gỡ bỏ " << maNV << " khỏi vị trí Trưởng phòng " << maPB << ".\n";
+        }
+    }
+
+    // 2. Xử lý nếu BỔ NHIỆM/THĂNG CHỨC lên Trưởng phòng
+    if (vaiTroMoi == Role::TRUONG_PHONG) {
+        PhongBan* pb = timPhongBanTheoMa(maPB);
+        if (pb != nullptr) {
+            if (pb->getMaTruongPhong() == "" || pb->getMaTruongPhong() == "Chưa bổ nhiệm") {
+                // Phòng trống, bổ nhiệm
+                pb->setMaTruongPhong(maNV);
+                cout << " >> (Hệ thống) Đã bổ nhiệm " << maNV << " làm Trưởng phòng " << pb->getMaPB() << ".\n";
+            } else if (pb->getMaTruongPhong() == maNV) {
+                // Đã là trưởng phòng này rồi
+                cout << " (Nhân viên này đã là Trưởng phòng " << maPB << ".)\n";
+            } else {
+                // Phòng đã có người khác -> Lỗi này đáng lẽ phải được xử lý ở QuanLyNhanSu.cpp
+                cout << " (!) Lỗi Database: Phòng " << maPB << " vẫn còn TP. Bổ nhiệm thất bại.\n";
+                return; // Hủy
+            }
+        } else {
+            cout << " (!) Lỗi Database: Phòng ban " << maPB << " không tồn tại. Bổ nhiệm thất bại.\n";
+            return; // Hủy
+        }
+    }
+
+    // 3. Cập nhật vai trò (ĐÃ SỬA: Dùng setRole thay vì xóa/tạo lại)
+    acc->setRole(vaiTroMoi); 
+    
+    // 4. Cập nhật trạng thái
+    if ( (vaiTroMoi == Role::TRUONG_PHONG || vaiTroMoi == Role::KE_TOAN) && 
+         (nv->getTrangThai() == TrangThaiLamViec::THU_VIEC) ) {
+        nv->setTrangThai(TrangThaiLamViec::CHINH_THUC);
+        cout << " >> (Hệ thống) Đã tự động thăng cấp NV lên 'Chính thức'.\n";
+    }
+
+    // 5. Cập nhật phòng ban nếu là Kế toán
+    if (vaiTroMoi == Role::KE_TOAN) {
+        nv->setMaPhongBan("KETOAN");
+        cout << " >> (Hệ thống) Đã tự động gán phòng ban là 'KETOAN'.\n";
+    }
+
+    cout << " >> Đã cập nhật vai trò của " << maNV << " thành công.\n";
+}
+Account* Database::timTaiKhoanDauTienTheoVaiTro(Role role) {
+    for (Account* acc : dsTaiKhoan) {
+        if (acc->getRole() == role) {
+            return acc; // Trả về kế toán đầu tiên tìm thấy
+        }
+    }
+    return nullptr; // Không tìm thấy
 }

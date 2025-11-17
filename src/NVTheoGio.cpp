@@ -18,25 +18,25 @@ double NVTheoGio::tinhLuong() const {
     return mucLuongGio * soGioLamTrongThang;
 }
 
-// --- HÀM ĐƯỢC VIẾT LẠI HOÀN TOÀN ---
 void NVTheoGio::hienThiThongTin(Role vaiTro) const {
-    cout << "------------------------------------------\n";
-    cout << left << setw(18) << "  Mã Nhân Viên:" << maNV << "\n"
-              << setw(18) << "  Họ Tên:" << hoTen << "\n"
-              << setw(18) << "  Loại NV:" << "Theo Giờ" << "\n"
-              << setw(18) << "  Ngày Sinh:" << ngaySinh.toString() << "\n"
-              << setw(18) << "  Email:" << email << "\n"
-              << setw(18) << "  Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
-              << setw(18) << "  Phòng Ban:" << maPhongBan << "\n"
-              << setw(18) << "  Chức Danh:" << maChucDanh << "\n";
+    Helper helper; // <-- Phải tạo đối tượng
 
-    // --- LOGIC PHÂN QUYỀN ---
+    cout << "------------------------------------------\n";
+    cout << left << setw(18) << helper.removeVietnameseAccent("  Mã Nhân Viên:") << helper.removeVietnameseAccent(maNV) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Họ Tên:") << helper.removeVietnameseAccent(hoTen) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Loại NV:") << helper.removeVietnameseAccent("Theo Giờ") << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Ngày Sinh:") << helper.removeVietnameseAccent(ngaySinh.toString()) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Email:") << helper.removeVietnameseAccent(email) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Trạng Thái:") << helper.removeVietnameseAccent(helper.trangThaiToString(trangThai)) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Phòng Ban:") << helper.removeVietnameseAccent(maPhongBan) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Chức Danh:") << helper.removeVietnameseAccent(maChucDanh) << "\n";
+
     if (vaiTro == Role::CHU_TICH || vaiTro == Role::KE_TOAN) {
-        cout << setw(18) << "  Mức Lương/Giờ:" << Helper::formatCurrency(mucLuongGio, true) << "\n"
-             << setw(18) << "  Số Giờ Làm:" << soGioLamTrongThang << "\n";
+        cout << left << setw(18) << helper.removeVietnameseAccent("  Mức Lương/Giờ:") << helper.formatCurrency(mucLuongGio, true) << "\n"
+             << left << setw(18) << helper.removeVietnameseAccent("  Số Giờ Làm:") << soGioLamTrongThang << "\n";
     } else {
-        cout << setw(18) << "  Mức Lương/Giờ:" << "[Bảo mật]" << "\n"
-             << setw(18) << "  Số Giờ Làm:" << "[Bảo mật]" << "\n";
+        cout << left << setw(18) << helper.removeVietnameseAccent("  Mức Lương/Giờ:") << helper.removeVietnameseAccent("[Bảo mật]") << "\n"
+             << left << setw(18) << helper.removeVietnameseAccent("  Số Giờ Làm:") << helper.removeVietnameseAccent("[Bảo mật]") << "\n";
     }
 }
 
@@ -61,9 +61,20 @@ void NVTheoGio::docTuFile(istream& is) {
     catch (...) { soGioLamTrongThang = 0.0; }
 }
 void NVTheoGio::nhapThongTinRieng() {
+    Helper helper; // <-- Phải tạo đối tượng
     cout << "--- Nhập Thông Tin Lương Theo Giờ ---\n";
-    mucLuongGio = Helper::nhapSoThuc(" - Nhập mức lương theo giờ (VND): ", 0);
+    mucLuongGio = helper.nhapSoThuc(" - Nhập mức lương theo giờ (VND): ", 0);
     soGioLamTrongThang = 0;
 }
 void NVTheoGio::setMucLuongGio(double luong) { mucLuongGio = luong; }
 void NVTheoGio::setSoGioLam(double gio) { soGioLamTrongThang = gio; }
+void NVTheoGio::hienThiThongTinBang(Role vaiTro) const {
+    Helper helper;
+    cout << "| " << left << setw(10) << helper.removeVietnameseAccent(maNV)
+         << " | " << setw(30) << helper.removeVietnameseAccent(hoTen)
+         << " | " << setw(15) << helper.removeVietnameseAccent("Theo Giờ")
+         << " | " << setw(40) << helper.removeVietnameseAccent(email)
+         << " | " << setw(15) << helper.removeVietnameseAccent(helper.trangThaiToString(trangThai))
+         << " | " << setw(10) << helper.removeVietnameseAccent(maPhongBan)
+         << " | " << setw(10) << helper.removeVietnameseAccent(maChucDanh) << " |" << "\n";
+}

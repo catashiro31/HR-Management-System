@@ -10,24 +10,30 @@ private:
     int thang;
     int nam;
 
-public:
-    // Constructor
-    Date(int d = 1, int m = 1, int y = 2000);
+    // Hàm này chỉ dùng nội bộ, nên ở private là đúng
+    bool laNamNhuan(int nam) const;
 
-    // Setters
+public:
+    // --- HÀM NÀY PHẢI Ở PUBLIC ---
+    // (Vì NhanVien.cpp cần gọi nó)
+    int soNgayTrongThang(int thang, int nam) const;
+
+    Date(int d = 1, int m = 1, int y = 2000);
     void setDate(int d, int m, int y);
 
     // Getters
-    string toString() const; // Chuyển thành chuỗi "dd/mm/yyyy"
-    int getNgay() const; // <-- HÀM MỚI
-    int getThang() const; // <-- HÀM MỚI
-    int getNam() const; // <-- HÀM MỚI
+    string toString() const;
+    int getNgay() const;
+    int getThang() const;
+    int getNam() const;
 
-    // Các toán tử nạp chồng (overloading)
     friend ostream& operator<<(ostream& os, const Date& dt);
     friend istream& operator>>(istream& is, Date& dt);
 
-    // Hàm static để lấy ngày hiện tại (đơn giản hóa)
-    static Date layNgayHienTai();
-    static Date fromString(const string& str);
+    // So sánh
+    bool operator<=(const Date& other) const;
+
+    // Tiện ích
+    Date layNgayHienTai();
+    Date fromString(const string& str);
 };

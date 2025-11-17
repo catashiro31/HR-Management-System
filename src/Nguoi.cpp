@@ -25,17 +25,35 @@ void Nguoi::docTuFile(istream& is) {
     getline(is, diaChi, ',');
     getline(is, soDienThoai, ',');
     getline(is, email, ',');
+
     string ngaySinhStr;
     getline(is, ngaySinhStr, ',');
-    ngaySinh = Date::fromString(ngaySinhStr);
+
+    Date dateUtil; 
+    ngaySinh = dateUtil.fromString(ngaySinhStr); 
 }
 
-// Getters/Setters
-void Nguoi::setHoTen(const string& ten) { hoTen = ten; }
-string Nguoi::getHoTen() const { return hoTen; }
-void Nguoi::setDiaChi(const string& dc) { diaChi = dc; }
-string Nguoi::getDiaChi() const { return diaChi; }
+// Implement getters/setters
+void Nguoi::setHoTen(const string& ten) {
+    hoTen = ten;
+}
 
-// --- HÀM MỚI ---
-void Nguoi::setEmail(const string& mail) { email = mail; }
-Date Nguoi::getNgaySinh() const { return ngaySinh; }
+string Nguoi::getHoTen() const {
+    return hoTen;
+}
+
+void Nguoi::setDiaChi(const string& dc) {
+    diaChi = dc;
+}
+
+string Nguoi::getDiaChi() const {
+    return diaChi;
+}
+
+void Nguoi::setEmail(const string& mail) {
+    email = mail;
+}
+
+Date Nguoi::getNgaySinh() const {
+    return ngaySinh;
+}

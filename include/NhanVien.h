@@ -1,12 +1,11 @@
 #pragma once
 #include "Nguoi.h"
-#include "GlobalConfig.h" // <-- Cần cho Role
+#include "GlobalConfig.h" 
 #include "PhongBan.h" 
 #include "ChucDanh.h"
 
 using namespace std;
 
-// Forward declaration
 class PhongBan;
 class ChucDanh;
 
@@ -27,12 +26,15 @@ public:
     virtual ~NhanVien();
 
     virtual double tinhLuong() const = 0; 
-     
-    // --- THAY ĐỔI ---
+    
+    // Hàm xem chi tiết (dạng dọc)
     virtual void hienThiThongTin(Role vaiTro) const = 0; 
+    
+    // --- HÀM MỚI (dạng bảng) ---
+    virtual void hienThiThongTinBang(Role vaiTro) const = 0; 
 
-    // Ghi đè (override) các hàm ảo từ lớp Nguoi
-    virtual void hienThiThongTin() const override; // <-- Giữ tương thích
+    // Ghi đè (override)
+    virtual void hienThiThongTin() const override; 
     virtual void luuVaoFile(ostream& os) const override;
     virtual void docTuFile(istream& is) override;
 
@@ -48,5 +50,5 @@ public:
     string getMaChucDanh() const;
     void setMaChucDanh(const string& maCD);
 
-    void nhapThongTinCoBan(const string& maNV);
+    void nhapThongTinCoBan(const string& maNV, bool yeuCauPhongBan = true);
 };

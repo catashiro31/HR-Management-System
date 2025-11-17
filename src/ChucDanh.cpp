@@ -4,7 +4,6 @@
 #include <iomanip>
 using namespace std;
 
-
 ChucDanh::ChucDanh(const string& ma, const string& ten, double luong)
     : maChucDanh(ma), tenChucDanh(ten), luongCoBan(luong) {}
 
@@ -16,9 +15,10 @@ void ChucDanh::setTenChucDanh(const string& ten) { tenChucDanh = ten; }
 void ChucDanh::setLuongCoBan(double luong) { luongCoBan = luong; }
 
 void ChucDanh::hienThi() const {
-    cout << "| " << left << setw(10) << maChucDanh
-              << " | " << setw(25) << tenChucDanh
-              << " | " << right << setw(15) << Helper::formatCurrency(luongCoBan) << " VND |\n";
+    Helper helper; // <-- Phải tạo đối tượng
+    cout << "| " << left << setw(8) << helper.removeVietnameseAccent(maChucDanh)
+              << " | " << setw(25) << helper.removeVietnameseAccent(tenChucDanh)
+              << " | " << right << setw(15) << helper.removeVietnameseAccent(helper.formatCurrency(luongCoBan)) << " VND |\n";
 }
 
 string ChucDanh::toStringCSV() const {

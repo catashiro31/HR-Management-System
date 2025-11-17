@@ -18,27 +18,27 @@ double NVHoaHong::tinhLuong() const {
     return luongCoBan + (doanhSoBanHang * tyLeHoaHong);
 }
 
-// --- HÀM ĐƯỢC VIẾT LẠI HOÀN TOÀN ---
 void NVHoaHong::hienThiThongTin(Role vaiTro) const {
-    cout << "------------------------------------------\n";
-    cout << left << setw(18) << "  Mã Nhân Viên:" << maNV << "\n"
-              << setw(18) << "  Họ Tên:" << hoTen << "\n"
-              << setw(18) << "  Loại NV:" << "Hoa Hồng" << "\n"
-              << setw(18) << "  Ngày Sinh:" << ngaySinh.toString() << "\n"
-              << setw(18) << "  Email:" << email << "\n"
-              << setw(18) << "  Trạng Thái:" << Helper::trangThaiToString(trangThai) << "\n"
-              << setw(18) << "  Phòng Ban:" << maPhongBan << "\n"
-              << setw(18) << "  Chức Danh:" << maChucDanh << "\n";
+    Helper helper; // <-- Phải tạo đối tượng
 
-    // --- LOGIC PHÂN QUYỀN ---
+    cout << "------------------------------------------\n";
+    cout << left << setw(18) << helper.removeVietnameseAccent("  Mã Nhân Viên:") << helper.removeVietnameseAccent(maNV) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Họ Tên:") << helper.removeVietnameseAccent(hoTen) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Loại NV:") << helper.removeVietnameseAccent("Theo Giờ") << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Ngày Sinh:") << helper.removeVietnameseAccent(ngaySinh.toString()) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Email:") << helper.removeVietnameseAccent(email) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Trạng Thái:") << helper.removeVietnameseAccent(helper.trangThaiToString(trangThai)) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Phòng Ban:") << helper.removeVietnameseAccent(maPhongBan) << "\n"
+         << left << setw(18) << helper.removeVietnameseAccent("  Chức Danh:") << helper.removeVietnameseAccent(maChucDanh) << "\n";
+
     if (vaiTro == Role::CHU_TICH || vaiTro == Role::KE_TOAN) {
-        cout << setw(18) << "  Lương Cơ Bản:" << Helper::formatCurrency(luongCoBan, true) << "\n"
-             << setw(18) << "  Tỷ Lệ HH:" << fixed << setprecision(2) << (tyLeHoaHong * 100) << "%\n"
-             << setw(18) << "  Doanh Số:" << Helper::formatCurrency(doanhSoBanHang, true) << "\n";
+        cout << left << setw(18) << helper.removeVietnameseAccent("  Lương Cơ Bản: ") << helper.formatCurrency(luongCoBan, true) << "\n"
+             << left << setw(18) << helper.removeVietnameseAccent("  Tỷ Lệ HH: ") << fixed << setprecision(2) << (tyLeHoaHong * 100) << "%\n"
+            << left << setw(18) << helper.removeVietnameseAccent("  Doanh Số: ") << helper.formatCurrency(doanhSoBanHang, true) << "\n";
     } else {
-        cout << setw(18) << "  Lương Cơ Bản:" << "[Bảo mật]" << "\n"
-             << setw(18) << "  Tỷ Lệ HH:" << "[Bảo mật]" << "\n"
-             << setw(18) << "  Doanh Số:" << "[Bảo mật]" << "\n";
+        cout << left << setw(18) << helper.removeVietnameseAccent("  Lương Cơ Bản: ") << helper.removeVietnameseAccent("[Bảo mật]") << "\n"
+             << left << setw(18) << helper.removeVietnameseAccent("  Tỷ Lệ HH: ") << helper.removeVietnameseAccent("[Bảo mật]") << "\n"
+             << left << setw(18) << helper.removeVietnameseAccent("  Doanh Số: ") << helper.removeVietnameseAccent("[Bảo mật]") << "\n";
     }
 }
 
@@ -67,9 +67,20 @@ void NVHoaHong::docTuFile(istream& is) {
     catch (...) { tyLeHoaHong = 0.0; }
 }
 void NVHoaHong::nhapThongTinRieng() {
+    Helper helper; // <-- Phải tạo đối tượng
     cout << "--- Nhập Thông Tin Lương Hoa Hồng ---\n";
-    luongCoBan = Helper::nhapSoThuc(" - Nhập lương cơ bản (VND): ", 0);
-    tyLeHoaHong = Helper::nhapSoThuc(" - Nhập tỷ lệ hoa hồng (ví dụ: 0.05 cho 5%): ", 0.0);
+    luongCoBan = helper.nhapSoThuc(" - Nhập lương cơ bản (VND): ", 0);
+    tyLeHoaHong = helper.nhapSoThuc(" - Nhập tỷ lệ hoa hồng (ví dụ: 0.05 cho 5%): ", 0.0);
     doanhSoBanHang = 0;
 }
-void NVHoaHong::setDoanhSo(double doanhSo) { doanhSoBanHang = doanhSo; }
+void NVHoaHong::setDoanhSo(double doanhSo) { doanhSoBanHang = doanhSo;}
+void NVHoaHong::hienThiThongTinBang(Role vaiTro) const {
+    Helper helper;
+    cout << "| " << left << setw(10) << helper.removeVietnameseAccent(maNV)
+         << " | " << setw(30) << helper.removeVietnameseAccent(hoTen)
+         << " | " << setw(15) << helper.removeVietnameseAccent("Hoa Hồng")
+         << " | " << setw(40) << helper.removeVietnameseAccent(email)
+         << " | " << setw(15) << helper.removeVietnameseAccent(helper.trangThaiToString(trangThai))
+         << " | " << setw(10) << helper.removeVietnameseAccent(maPhongBan)
+         << " | " << setw(10) << helper.removeVietnameseAccent(maChucDanh) << " |" << "\n";
+}
