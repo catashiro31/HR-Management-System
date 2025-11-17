@@ -5,12 +5,10 @@
 #include <stdexcept> 
 using namespace std;
 
-// --- HÀM MỚI ---
 bool Date::laNamNhuan(int nam) const {
     return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
 }
 
-// --- HÀM MỚI (Hàm bạn đang gọi bị lỗi) ---
 int Date::soNgayTrongThang(int thang, int nam) const {
     if (thang == 2) {
         return laNamNhuan(nam) ? 29 : 28;
@@ -25,15 +23,11 @@ Date::Date(int d, int m, int y) {
     setDate(d, m, y); 
 }
 
-// --- HÀM ĐÃ CẬP NHẬT (Để validate ngày) ---
 void Date::setDate(int d, int m, int y) {
     if (y < 1900 || y > 2100) y = 1990; 
     if (m < 1 || m > 12) m = 1; 
-
     this->nam = y;
     this->thang = m;
-
-    // Validate ngày dựa trên tháng và năm
     int maxDay = soNgayTrongThang(m, y);
     if (d < 1 || d > maxDay) {
         this->ngay = 1; 
@@ -64,14 +58,13 @@ istream& operator>>(istream& is, Date& dt) {
     return is;
 }
 
-// --- HÀM ĐÃ BỎ STATIC ---
 Date Date::layNgayHienTai() {
     time_t t = time(nullptr);
     tm* now = localtime(&t);
     return Date(now->tm_mday, now->tm_mon + 1, now->tm_year + 1900);
 }
 
-// --- HÀM ĐÃ BỎ STATIC ---
+
 Date Date::fromString(const string& str) {
     int d, m, y;
     char slash1, slash2;

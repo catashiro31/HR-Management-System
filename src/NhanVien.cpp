@@ -66,11 +66,14 @@ void NhanVien::setMaChucDanh(const string& maCD) { maChucDanh = maCD; }
 // Hàm nhập thông tin chung
 void NhanVien::nhapThongTinCoBan(const string& ma, bool yeuCauPhongBan) {
     Helper helper; 
-    Date dateUtil; // <-- BẠN BỊ THIẾU DÒNG NÀY
+    Date dateUtil; 
 
     maNV = ma;
     cout << "--- Nhập Thông Tin Cơ Bản ---\n";
-    hoTen = helper.nhapChuoi(" - Họ và tên (Không dấu, VD: Le Van Dung): ");
+    
+    // 1. Dùng hàm nhapTen để chỉ nhận chữ cái
+    hoTen = helper.nhapTen(" - Họ và tên (Không dấu, VD: Le Van Dung): ");
+    
     cmnd_cccd = helper.nhapChuoiSo(" - Số CMND/CCCD: ");
     diaChi = helper.nhapChuoi(" - Địa chỉ: ");
     soDienThoai = helper.nhapChuoiSo(" - Số điện thoại: ");
@@ -81,29 +84,44 @@ void NhanVien::nhapThongTinCoBan(const string& ma, bool yeuCauPhongBan) {
     cout << " - Nhập ngày sinh (dd/mm/yyyy):\n";
     int d_ns = helper.nhapSoNguyen("   + Năm: ", 1950, 2010); 
     int m_ns = helper.nhapSoNguyen("   + Tháng: ", 1, 12);
-    int maxDay_ns = dateUtil.soNgayTrongThang(m_ns, d_ns); // <-- Lỗi sẽ hết
+    int maxDay_ns = dateUtil.soNgayTrongThang(m_ns, d_ns); 
     int n_ns = helper.nhapSoNguyen("   + Ngày: ", 1, maxDay_ns);
     ngaySinh.setDate(n_ns, m_ns, d_ns); 
 
-    // Nhập ngày vào làm
-    Date homNay = dateUtil.layNgayHienTai(); // <-- Lỗi sẽ hết
-    cout << " - Nhập ngày vào làm (dd/mm/yyyy) [Hôm nay là " << homNay << "]:\n";
+    // Nhập ngày vào làm (LOGIC MỚI: SAI ĐÂU SỬA ĐÓ)
+    Date homNay = dateUtil.layNgayHienTai();
+    cout << " - Nhập ngày vào làm (Phải <= " << homNay << "):\n";
     
+    int y, m, d;
+    // Nhập Năm
     while (true) {
-        int y = helper.nhapSoNguyen("   + Năm: ", 2000, 2100); 
-        int m = helper.nhapSoNguyen("   + Tháng: ", 1, 12);
-        int maxDay = dateUtil.soNgayTrongThang(m, y); // <-- Lỗi sẽ hết
-        int d = helper.nhapSoNguyen("   + Ngày: ", 1, maxDay); 
-
-        Date ngayNhap(d, m, y); 
-
-        if (ngayNhap <= homNay) {
-            ngayVaoLam.setDate(d, m, y); 
-            break; 
+        y = helper.nhapSoNguyen("   + Năm: ", 2000, 2100);
+        if (y > homNay.getNam()) {
+            cout << " (!) Lỗi: Năm vào làm không được lớn hơn năm hiện tại.\n";
         } else {
-            cout << " (!) Lỗi: Ngày vào làm không được sau ngày hôm nay (" << homNay << "). Vui lòng nhập lại.\n";
+            break;
         }
     }
+    // Nhập Tháng
+    while (true) {
+        m = helper.nhapSoNguyen("   + Tháng: ", 1, 12);
+        if (y == homNay.getNam() && m > homNay.getThang()) {
+            cout << " (!) Lỗi: Tháng vào làm không được lớn hơn tháng hiện tại.\n";
+        } else {
+            break;
+        }
+    }
+    // Nhập Ngày
+    while (true) {
+        int maxDay = dateUtil.soNgayTrongThang(m, y);
+        d = helper.nhapSoNguyen("   + Ngày: ", 1, maxDay);
+        if (y == homNay.getNam() && m == homNay.getThang() && d > homNay.getNgay()) {
+            cout << " (!) Lỗi: Ngày vào làm không được lớn hơn ngày hôm nay.\n";
+        } else {
+            break;
+        }
+    }
+    ngayVaoLam.setDate(d, m, y);
 
     if (yeuCauPhongBan) {
         maPhongBan = helper.nhapChuoi(" - Mã phòng ban (ví dụ: PB01): ");

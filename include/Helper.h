@@ -23,6 +23,7 @@ public:
     double nhapSoThuc(const string& prompt, double min);
     string nhapChuoi(const string& prompt, bool choPhepRong = false);
     string nhapChuoiSo(const string& prompt, bool choPhepRong = false);
+    string nhapTen(const string& prompt);
     string trangThaiToString(TrangThaiLamViec trangThai);
     TrangThaiLamViec stringToTrangThai(const string& str);
     string toLower(const string& str);

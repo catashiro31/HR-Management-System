@@ -76,11 +76,11 @@ void NVHoaHong::nhapThongTinRieng() {
 void NVHoaHong::setDoanhSo(double doanhSo) { doanhSoBanHang = doanhSo;}
 void NVHoaHong::hienThiThongTinBang(Role vaiTro) const {
     Helper helper;
-    cout << "| " << left << setw(8) << maNV
-         << " | " << setw(25) << hoTen
-         << " | " << setw(12) << "Hoa Hồng"
-         << " | " << setw(30) << email
-         << " | " << setw(12) << helper.trangThaiToString(trangThai)
-         << " | " << setw(8) << maPhongBan
-         << " | " << setw(8) << maChucDanh << " |" << "\n";
+    cout << "| " << left << setw(10) << maNV
+         << " | " << setw(30) << hoTen
+         << " | " << setw(15) << "Hoa Hồng"
+         << " | " << setw(40) << email
+         << " | " << setw(15) << helper.trangThaiToString(trangThai)
+         << " | " << setw(10) << maPhongBan
+         << " | " << setw(10) << maChucDanh << " |" << "\n";
 }

@@ -67,11 +67,11 @@ void NVLuongCung::setLuongCoBan(double luong) { luongCoBan = luong; }
 double NVLuongCung::getLuongCoBan() const { return luongCoBan; }
 void NVLuongCung::hienThiThongTinBang(Role vaiTro) const {
     Helper helper;
-    cout << "| " << left << setw(8) << maNV
-         << " | " << setw(25) << hoTen
-         << " | " << setw(12) << "Lương Cứng"
-         << " | " << setw(30) << email
-         << " | " << setw(12) << helper.trangThaiToString(trangThai)
-         << " | " << setw(8) << maPhongBan
-         << " | " << setw(8) << maChucDanh << " |" << "\n";
-}
+    cout << "| " << left << setw(10) << maNV
+         << " | "<< left  << setw(25) << hoTen
+         << " | "<< left<< setw(20) << "Lương Cứng"
+         << " | "<< left<< setw(40) << email
+         << " | "<< left<< setw(20) << helper.trangThaiToString(trangThai)
+         << " | "<< left<< setw(10) << maPhongBan
+         << " | "<< left << setw(10) << maChucDanh << " |" << "\n";
+} 

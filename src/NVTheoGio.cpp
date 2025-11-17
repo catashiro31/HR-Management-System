@@ -70,11 +70,11 @@ void NVTheoGio::setMucLuongGio(double luong) { mucLuongGio = luong; }
 void NVTheoGio::setSoGioLam(double gio) { soGioLamTrongThang = gio; }
 void NVTheoGio::hienThiThongTinBang(Role vaiTro) const {
     Helper helper;
-    cout << "| " << left << setw(8) << maNV
-         << " | " << setw(25) << hoTen
-         << " | " << setw(12) << "Theo Giờ"
-         << " | " << setw(30) << email
-         << " | " << setw(12) << helper.trangThaiToString(trangThai)
-         << " | " << setw(8) << maPhongBan
-         << " | " << setw(8) << maChucDanh << " |" << "\n";
+    cout << "| " << left << setw(10) << maNV
+         << " | " << setw(30) << hoTen
+         << " | " << setw(15) << "Theo Giờ"
+         << " | " << setw(40) << email
+         << " | " << setw(15) << helper.trangThaiToString(trangThai)
+         << " | " << setw(10) << maPhongBan
+         << " | " << setw(10) << maChucDanh << " |" << "\n";
 }

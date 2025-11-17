@@ -72,6 +72,32 @@ string Helper::nhapChuoiSo(const string& prompt, bool choPhepRong) {
     }
 }
 
+string Helper::nhapTen(const string& prompt) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        if (input.empty()) {
+            cout << " (!) Tên không được để trống.\n";
+            continue;
+        }
+        
+        bool hopLe = true;
+        for (char c : input) {
+            if (!isalpha(c) && !isspace(c)) {
+                hopLe = false;
+                break;
+            }
+        }
+        
+        if (hopLe) {
+            return input;
+        } else {
+            cout << " (!) Tên chỉ được chứa chữ cái và khoảng trắng (Không số, không ký tự đặc biệt).\n";
+        }
+    }
+}
+
 int Helper::nhapSoNguyen(const string& prompt, int min, int max) {
     int value;
     string input;
