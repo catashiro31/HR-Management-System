@@ -602,8 +602,6 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
             cout << " >> (Hệ thống) Đã gỡ " << maNV << " khỏi vị trí Trưởng phòng " << maPB << ".\n";
         }
     }
-
-    // 2. LOGIC BỔ NHIỆM (Khi lên làm TP)
     if (vaiTroMoi == Role::TRUONG_PHONG) {
         PhongBan* pb = timPhongBanTheoMa(maPB);
         
@@ -611,41 +609,27 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
             cout << " (!) Lỗi: Phòng ban " << maPB << " không tồn tại. Bổ nhiệm thất bại.\n";
             return; 
         }
-
         string maTPHienTai = pb->getMaTruongPhong();
-
-        // Trường hợp 1: Phòng chưa có ai -> Bổ nhiệm luôn
         if (maTPHienTai == "" || maTPHienTai == "Chưa bổ nhiệm" || maTPHienTai == "Chua bo nhiem") {
             pb->setMaTruongPhong(maNV);
             cout << " >> (Hệ thống) Đã bổ nhiệm " << maNV << " làm Trưởng phòng " << maPB << ".\n";
         } 
-        // Trường hợp 2: Đang là chính mình -> Không làm gì
         else if (maTPHienTai == maNV) {
             cout << " (Nhân viên này đã là Trưởng phòng " << maPB << ".)\n";
         }
-        // Trường hợp 3: ĐÃ CÓ NGƯỜI KHÁC -> THAY THẾ (Logic bạn yêu cầu)
         else {
             cout << " [!] Phòng " << maPB << " đang có Trưởng phòng là: " << maTPHienTai << ".\n";
             cout << "     Đang tiến hành thay thế...\n";
-
-            // Tìm Trưởng phòng cũ
             NhanVien* nvCu = timNhanVienTheoMa(maTPHienTai);
             Account* accCu = timTaiKhoanTheoMaNV(maTPHienTai);
 
             if (nvCu && accCu) {
-                // Đệ quy: Giáng chức người cũ xuống Nhân Viên
-                // Hàm này sẽ tự động chạy vào mục 1 (Logic Giáng Chức) để set lại "Chưa bổ nhiệm"
                 capNhatVaiTro(nvCu, accCu, Role::NHAN_VIEN); 
-                
-                // Đảm bảo người cũ vẫn là nhân viên chính thức
                 nvCu->setTrangThai(TrangThaiLamViec::CHINH_THUC);
                 cout << " >> Đã chuyển " << maTPHienTai << " xuống làm Nhân viên chính thức.\n";
             } else {
-                // Nếu không tìm thấy người cũ (dữ liệu lỗi), cứ ghi đè luôn
                 cout << " (!) Không tìm thấy hồ sơ Trưởng phòng cũ. Cưỡng chế ghi đè.\n";
             }
-
-            // Sau khi dọn dẹp người cũ, bổ nhiệm người mới
             pb->setMaTruongPhong(maNV);
             cout << " >> Đã bổ nhiệm TÂN TRƯỞNG PHÒNG: " << maNV << ".\n";
         }
@@ -664,10 +648,10 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
 Account* Database::timTaiKhoanDauTienTheoVaiTro(Role role) {
     for (Account* acc : dsTaiKhoan) {
         if (acc->getRole() == role) {
-            return acc; // Trả về kế toán đầu tiên tìm thấy
+            return acc;
         }
     }
-    return nullptr; // Không tìm thấy
+    return nullptr; 
 }
 void Database::xoaTaiKhoan(const string& maNV) {
     auto it = remove_if(dsTaiKhoan.begin(), dsTaiKhoan.end(), [&](Account* acc) {
