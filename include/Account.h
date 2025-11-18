@@ -16,6 +16,7 @@ public:
     
     // Getters
     string getUsername() const;
+    string getPassword() const;
     Role getRole() const;
     string getMaNhanVien() const;
     void setRole(Role newRole);
