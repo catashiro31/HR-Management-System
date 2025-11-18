@@ -428,6 +428,31 @@ void QuanLyNhanSu::chucNang_CapNhatNhanVien() {
     }
     cout << " >> Đã cập nhật thông tin.\n";
 }
+void QuanLyNhanSu::chuyenDoiSangLuongCung(NhanVien*& nv) {
+    Helper helper;
+    if (nv->getLoaiNV() == LoaiNhanVien::LUONG_CUNG) return;
+
+    cout << "\n [!] THÔNG BÁO: Nhân viên này đang là loại '" 
+         << (nv->getLoaiNV() == LoaiNhanVien::THEO_GIO ? "Theo Giờ" : "Hoa Hồng") 
+         << "'.\n";
+    cout << "     Do được lên CHÍNH THỨC, cần chuyển sang chế độ LƯƠNG CỐ ĐỊNH.\n";
+    
+    double luongMoi = helper.nhapSoThuc(" - Nhập mức lương cơ bản mới (VND): ", 0);
+    Date dateUtil; 
+    NVLuongCung* nvMoi = new NVLuongCung(
+        nv->getMaNV(), nv->getHoTen(), nv->getCCCD(), nv->getDiaChi(), 
+        nv->getSoDienThoai(), nv->getEmail(), nv->getNgaySinh(), 
+        dateUtil.layNgayHienTai(), // <--- ĐÃ SỬA Ở ĐÂY
+        TrangThaiLamViec::CHINH_THUC, 
+        nv->getMaPhongBan(), nv->getMaChucDanh(), 
+        luongMoi
+    );
+
+    db.thayTheNhanVien(nvMoi);
+    nv = nvMoi;
+
+    cout << " >> Đã chuyển đổi loại nhân viên thành công.\n";
+}
 
 void QuanLyNhanSu::chucNang_QuanLyTrangThai() {
     Helper helper; 
@@ -474,8 +499,12 @@ void QuanLyNhanSu::chucNang_QuanLyTrangThai() {
         db.themGhiNhanLichSu(maNV, "Thay đổi trạng thái", giaTriCu, giaTriMoi);
         cout << " >> Đã cập nhật trạng thái.\n";
         
-        if (trangThaiMoi == TrangThaiLamViec::DA_NGHI) {
-            cout << " (!) Đã chuyển sang 'Đã nghỉ'. Cần vô hiệu hóa tài khoản (Chức năng chưa làm).\n";
+       if (trangThaiMoi == TrangThaiLamViec::DA_NGHI) {
+            cout << " [!] Nhân viên đã chuyển sang trạng thái 'Đã Nghỉ'.\n";
+            cout << "     Đang tiến hành xóa thông tin truy cập...\n";
+            db.xoaTaiKhoan(maNV);
+            nv->setEmail(""); 
+            cout << " >> Đã xóa Email liên lạc khỏi hồ sơ.\n";
         }
     } 
     else if (chon == 2 && laChuTich) { 

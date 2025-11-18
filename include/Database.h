@@ -21,8 +21,6 @@ private:
     vector<PhucLoi> danhSachPhucLoi;
     map<string, vector<string>> danhSachDangKyPhucLoi;
     vector<Account*> dsTaiKhoan; 
-
-    // === CẤU HÌNH FILE ===
     const string FILE_NHANVIEN = "data/nhanvien.csv";
     const string FILE_PHONGBAN = "data/phongban.csv";
     const string FILE_CHUCDANH = "data/chucdanh.csv";
@@ -33,7 +31,6 @@ private:
 
     int autoIncrementMaNV; 
 
-    // === HÀM HỖ TRỢ TẢI/LƯU ===
     NhanVien* taoNhanVienTuLoai(LoaiNhanVien loai);
     string taoMaNVMoi();
     void taiNhanVien();
@@ -50,12 +47,8 @@ private:
     void luuDangKyPhucLoi();
     void taiTaiKhoan(); 
     void luuTaiKhoan() const; 
-    
     void kiemTraTaiKhoanChuTich();
-    
-    // --- THÊM DÒNG NÀY VÀO ---
     bool tenEmailDaTonTai(const string& email) const;
-    // --- KẾT THÚC ---
 
 public:
     Database();
@@ -73,6 +66,7 @@ public:
     void themNhanVien(NhanVien* nv, Role role); 
     NhanVien* timNhanVienTheoMa(const string& maNV);
     bool xoaNhanVienTheoMa(const string& maNV);
+    void thayTheNhanVien(NhanVien* nvMoi);
     const vector<NhanVien*>& getDSNhanVien() const;
 
     // ... (Các hàm khác giữ nguyên) ...
@@ -94,4 +88,5 @@ public:
     Account* timTaiKhoanTheoMaNV(const string& maNV);
     void capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi);
     Account* timTaiKhoanDauTienTheoVaiTro(Role role);
+    void xoaTaiKhoan(const string& maNV);
 };

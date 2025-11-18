@@ -409,6 +409,19 @@ bool Database::xoaNhanVienTheoMa(const string& maNV) {
     return false; 
 }
 
+void Database::thayTheNhanVien(NhanVien* nvMoi) {
+    for (size_t i = 0; i < dsNhanVien.size(); ++i) {
+        if (dsNhanVien[i]->getMaNV() == nvMoi->getMaNV()) {
+            // Xóa đối tượng cũ
+            delete dsNhanVien[i];
+            // Thay thế bằng đối tượng mới (cùng mã NV)
+            dsNhanVien[i] = nvMoi;
+            return;
+        }
+    }
+}
+
+
 const vector<NhanVien*>& Database::getDSNhanVien() const { return dsNhanVien; }
 void Database::themPhongBan(const PhongBan& pb) { dsPhongBan.push_back(pb); }
 PhongBan* Database::timPhongBanTheoMa(const string& maPB) {
@@ -568,4 +581,20 @@ Account* Database::timTaiKhoanDauTienTheoVaiTro(Role role) {
         }
     }
     return nullptr; // Không tìm thấy
+}
+void Database::xoaTaiKhoan(const string& maNV) {
+    auto it = remove_if(dsTaiKhoan.begin(), dsTaiKhoan.end(), [&](Account* acc) {
+        if (acc->getMaNhanVien() == maNV) {
+            delete acc;
+            return true; 
+        }
+        return false;
+    });
+
+    if (it != dsTaiKhoan.end()) {
+        dsTaiKhoan.erase(it, dsTaiKhoan.end());
+        cout << " >> (Hệ thống) Đã xóa tài khoản đăng nhập của nhân viên " << maNV << ".\n";
+    } else {
+        cout << " >> (Hệ thống) Không tìm thấy tài khoản để xóa (có thể đã xóa trước đó).\n";
+    }
 }

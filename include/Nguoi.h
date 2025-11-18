@@ -25,10 +25,16 @@ public:
     // Getters/Setters
     void setHoTen(const string& ten);
     string getHoTen() const;
+    
     void setDiaChi(const string& dc);
     string getDiaChi() const;
     
-    // --- HÀM MỚI ---
+    // --- CÁC HÀM GET CÒN THIẾU ĐÃ ĐƯỢC THÊM ---
     void setEmail(const string& mail);
+    string getEmail() const; 
+    
     Date getNgaySinh() const;
+    
+    string getCCCD() const; 
+    string getSoDienThoai() const; 
 };

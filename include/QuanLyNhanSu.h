@@ -33,7 +33,8 @@ private:
     void chucNang_CapNhatNhanVien();
     void chucNang_QuanLyTrangThai();
     // --- DÒNG CẦN SỬA LÀ ĐÂY ---
-    void chucNang_ThayDoiVaiTro(NhanVien* nv); // Phải có (NhanVien* nv)
+    void chucNang_ThayDoiVaiTro(NhanVien* nv); 
+    void chuyenDoiSangLuongCung(NhanVien*& nv);
 
     // Chức năng Xem
     void chucNang_XemDanhSach();

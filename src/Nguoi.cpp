@@ -53,7 +53,11 @@ string Nguoi::getDiaChi() const {
 void Nguoi::setEmail(const string& mail) {
     email = mail;
 }
-
+string Nguoi::getEmail() const { 
+    return email;
+}
 Date Nguoi::getNgaySinh() const {
     return ngaySinh;
 }
+string Nguoi::getCCCD() const { return cmnd_cccd; }
+string Nguoi::getSoDienThoai() const { return soDienThoai; }
