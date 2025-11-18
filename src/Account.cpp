@@ -5,6 +5,7 @@ Account::Account(string user, string pass, Role r, string maNV)
     : username(user), password(pass), role(r), maNhanVien(maNV) {}
 
 string Account::getUsername() const { return username; }
+string Account::getPassword() const { return password; }
 Role Account::getRole() const { return role; }
 string Account::getMaNhanVien() const { return maNhanVien; }
 

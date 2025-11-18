@@ -41,6 +41,7 @@ private:
     void chucNang_XemDanhSach_Sort();
     void chucNang_TimKiemNhanVien(string maNV = ""); 
     void chucNang_XemLichSuThayDoi();
+    void chucNang_XemDanhSachTaiKhoan();
 
     // Chức năng Tổ chức
     void chucNang_QuanLyPhongBan();

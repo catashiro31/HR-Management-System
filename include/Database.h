@@ -57,6 +57,7 @@ public:
     // --- Tải và Lưu file ---
     void taiDuLieuTuFile();
     void luuDuLieuVaoFile();
+    void importNhanVienTuFile(const string& tenFile);
 
     // --- Quản lý Tài khoản ---
     Account* xacThucNguoiDung(const string& username, const string& password);
@@ -88,5 +89,6 @@ public:
     Account* timTaiKhoanTheoMaNV(const string& maNV);
     void capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi);
     Account* timTaiKhoanDauTienTheoVaiTro(Role role);
+    const vector<Account*>& getDSTaiKhoan() const;
     void xoaTaiKhoan(const string& maNV);
 };
