@@ -727,10 +727,10 @@ void QuanLyNhanSu::chucNang_XemDanhSachTaiKhoan() {
         }
 
         if (hienThi) {
-            cout << "| " << left << setw(40) << acc->getUsername()
-                 << " | " << setw(20) << acc->getPassword() 
-                 << " | " << setw(20) << helper.roleToString(acc->getRole())
-                 << " | " << setw(10) << acc->getMaNhanVien() << " |\n";
+            cout << "| " << left << setw(40) << helper.removeVietnameseAccent(acc->getUsername())
+                 << " | " << setw(20) << helper.removeVietnameseAccent(acc->getPassword())
+                 << " | " << setw(20) << helper.removeVietnameseAccent(helper.roleToString(acc->getRole()))
+                 << " | " << setw(10) << helper.removeVietnameseAccent(acc->getMaNhanVien()) << " |\n";
         }
     }
     cout << keNgang << "\n";
@@ -1145,7 +1145,7 @@ void QuanLyNhanSu::chucNang_ChayBangLuong() {
                   << " | " << setw(15) << helper.formatCurrency(luongThucLinh) << " |\n";
     }
     cout << ke << "\n";
-    cout << "| " << left << setw(87) << "TONG CHI PHI LUONG" 
+    cout << "| " << left << setw(88) << "TONG CHI PHI LUONG" 
               << " | " << right << setw(15) << helper.formatCurrency(tongChiPhiLuong) << " |\n";
     cout << ke << "\n";
     helper.dungManHinh();
