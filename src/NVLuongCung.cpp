@@ -17,7 +17,7 @@ double NVLuongCung::tinhLuong() const {
 }
 
 void NVLuongCung::hienThiThongTin(Role vaiTro) const {
-    Helper helper; // <-- Phải tạo đối tượng
+    Helper helper; 
 
     cout << "------------------------------------------\n";
     cout << left << setw(18) << helper.removeVietnameseAccent("  Mã Nhân Viên:") << helper.removeVietnameseAccent(maNV) << "\n"
@@ -58,7 +58,7 @@ void NVLuongCung::docTuFile(istream& is) {
 }
 
 void NVLuongCung::nhapThongTinRieng() {
-    Helper helper; // <-- Phải tạo đối tượng
+    Helper helper;
     cout << "--- Nhập Thông Tin Lương Cứng ---\n";
     luongCoBan = helper.nhapSoThuc(" - Nhập lương cơ bản (VND): ", 0);
 }

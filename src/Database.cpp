@@ -30,9 +30,6 @@ string Database::taoMaNVMoi() {
     ss << "NV" << setfill('0') << setw(3) << autoIncrementMaNV++;
     return ss.str();
 }
-
-// ============== TẢI DỮ LIỆU (LOAD) ================
-
 void Database::taiDuLieuTuFile() {
     cout << "Đang tải dữ liệu từ file...\n";
     taiPhongBan();
@@ -241,34 +238,31 @@ void Database::importNhanVienTuFile(const string& tenFile) {
             string dc = row[3];
             string sdt = row[4];
             string nsStr = row[5];
-            string maPB = row[6]; // <-- Lấy mã phòng ban
+            string maPB = row[6];
             string maCD = row[7];
-            
-            // --- LOGIC MỚI: TỰ ĐỘNG TẠO PHÒNG BAN NẾU CHƯA CÓ ---
+        
             if (timPhongBanTheoMa(maPB) == nullptr) {
                 string tenPBMoi = "Phong " + maPB;
                 PhongBan pb(maPB, tenPBMoi, "Chua bo nhiem");
                 themPhongBan(pb);
                 cout << " >> (Auto) Đã tạo mới phòng ban: " << maPB << "\n";
             }
-            // -----------------------------------------------------
-            
             Date dateUtil;
             Date ns = dateUtil.fromString(nsStr);
             Date nvl = dateUtil.layNgayHienTai(); 
 
             NhanVien* nv = nullptr;
 
-            if (loai == 1) { // Lương cứng -> Chính thức
+            if (loai == 1) {
                 double luong = stod(row[8]);
                 nv = new NVLuongCung("", ten, cccd, dc, sdt, "", ns, nvl, TrangThaiLamViec::CHINH_THUC, maPB, maCD, luong);
             } 
-            else if (loai == 2) { // Theo giờ
+            else if (loai == 2) { 
                 double luongGio = stod(row[8]);
                 double soGio = (row.size() > 9) ? stod(row[9]) : 0; 
                 nv = new NVTheoGio("", ten, cccd, dc, sdt, "", ns, nvl, TrangThaiLamViec::THU_VIEC, maPB, maCD, luongGio, soGio);
             } 
-            else if (loai == 3) { // Hoa hồng
+            else if (loai == 3) {
                 double luongCB = stod(row[8]);
                 double doanhSo = (row.size() > 9) ? stod(row[9]) : 0;
                 double tyLe = (row.size() > 10) ? stod(row[10]) : 0.0;
@@ -380,45 +374,35 @@ bool Database::tenEmailDaTonTai(const string& email) const {
     }
     return false;
 }
-
-// --- HÀM ĐƯỢC CẬP NHẬT (FIX LỖI) ---
 void Database::taoTaiKhoanTuDong(NhanVien* nv, Role role) {
     Helper helper; 
     
     string hoTen = nv->getHoTen();
     Date ngaySinh = nv->getNgaySinh();
     string tenChuanHoa = helper.chuanHoaTen(hoTen);
-    string maNV = nv->getMaNV(); // Lấy MaNV
-
-    // 1. Tạo email và pass cơ bản (dungMaNV = false)
+    string maNV = nv->getMaNV();
     string email = helper.taoEmail(tenChuanHoa, ngaySinh, maNV, false);
     string password = helper.taoPassword(ngaySinh, maNV, false);
 
     // 2. Kiểm tra trùng lặp
     if (tenEmailDaTonTai(email)) {
         cout << " (!) Email cơ bản bị trùng. Đang thêm Mã NV...\n";
-        // Nếu trùng, tạo email và pass duy nhất (dungMaNV = true)
         email = helper.taoEmail(tenChuanHoa, ngaySinh, maNV, true);
         password = helper.taoPassword(ngaySinh, maNV, true);
     }
     
-    // --- LOGIC TRƯỞNG PHÒNG ĐÃ SỬA LỖI (FIX REQ 2) ---
     if (role == Role::TRUONG_PHONG) {
         PhongBan* pb = timPhongBanTheoMa(nv->getMaPhongBan());
         if (pb != nullptr) {
             if (pb->getMaTruongPhong() == "" || pb->getMaTruongPhong() == "Chưa bổ nhiệm") {
-                // Phòng trống, bổ nhiệm
                 pb->setMaTruongPhong(maNV);
                 cout << " >> Đã bổ nhiệm " << maNV << " làm Trưởng phòng " << pb->getMaPB() << ".\n";
             } else if (pb->getMaTruongPhong() != maNV) {
-                // Phòng đã có người khác -> Vẫn giữ vai trò Trưởng Phòng
                 cout << " (!) Cảnh báo: Phòng " << pb->getMaPB() << " đã có Trưởng phòng (" << pb->getMaTruongPhong() << ").\n";
                 cout << "     Nhân viên này vẫn sẽ có vai trò Trưởng Phòng, nhưng không được gán làm quản lý phòng ban này.\n";
-                // --- KHÔNG GIÁNG CẤP (Đã xóa dòng role = Role::NHAN_VIEN;) ---
             }
         } 
     }
-    // --- KẾT THÚC LOGIC MỚI ---
 
     cout << " >> Đang tạo tài khoản tự động...\n";
     cout << "    - Tên đăng nhập (Email): " << email << "\n";
@@ -432,7 +416,6 @@ void Database::taoTaiKhoanTuDong(NhanVien* nv, Role role) {
 void Database::kiemTraTaiKhoanChuTich() {
     bool daCo = false;
     for (Account* acc : dsTaiKhoan) {
-        // Sửa lại tên đăng nhập của chủ tịch để khớp với logic email mới
         if (acc->getUsername() == "thanhchutich1604@team4.group") {
             daCo = true;
             break;
@@ -445,14 +428,10 @@ void Database::kiemTraTaiKhoanChuTich() {
     }
 }
 
-// ============== QUẢN LÝ NHÂN VIÊN ================
-
 void Database::themNhanVien(NhanVien* nv, Role role) {
     nv->setMaNV(taoMaNVMoi()); 
     dsNhanVien.push_back(nv);
     cout << " >> Đã thêm nhân viên mới với mã: " << nv->getMaNV() << "\n";
-    
-    // Chỉ gọi hàm tạo tài khoản 1 lần DUY NHẤT ở đây
     taoTaiKhoanTuDong(nv, role); 
 }
 
@@ -464,7 +443,6 @@ NhanVien* Database::timNhanVienTheoMa(const string& maNV) {
 }
 
 bool Database::xoaNhanVienTheoMa(const string& maNV) {
-    // TODO: Cần xóa tài khoản liên kết
     for (auto it = dsNhanVien.begin(); it!= dsNhanVien.end(); ++it) {
         if ((*it)->getMaNV() == maNV) {
             delete *it; 
@@ -478,9 +456,7 @@ bool Database::xoaNhanVienTheoMa(const string& maNV) {
 void Database::thayTheNhanVien(NhanVien* nvMoi) {
     for (size_t i = 0; i < dsNhanVien.size(); ++i) {
         if (dsNhanVien[i]->getMaNV() == nvMoi->getMaNV()) {
-            // Xóa đối tượng cũ
             delete dsNhanVien[i];
-            // Thay thế bằng đối tượng mới (cùng mã NV)
             dsNhanVien[i] = nvMoi;
             return;
         }
@@ -574,9 +550,6 @@ bool Database::huyGhiDanhPhucLoi(const string& maNV, const string& maPL) {
     }
     return false;
 }
-
-
-// --- HÀM MỚI CHO LOGIC THĂNG CHỨC ---
 Account* Database::timTaiKhoanTheoMaNV(const string& maNV) {
     for (Account* acc : dsTaiKhoan) {
         if (acc->getMaNhanVien() == maNV) {
@@ -591,12 +564,8 @@ void Database::capNhatVaiTro(NhanVien* nv, Account* acc, Role vaiTroMoi) {
     Role vaiTroCu = acc->getRole();
     string maNV = nv->getMaNV();
     string maPB = nv->getMaPhongBan();
-
-    // 1. LOGIC GIÁNG CHỨC (Khi từ TP xuống NV)
-    // Tự động gỡ tên khỏi chức vụ Trưởng phòng trong Phòng ban
     if (vaiTroCu == Role::TRUONG_PHONG && vaiTroMoi != Role::TRUONG_PHONG) {
         PhongBan* pb = timPhongBanTheoMa(maPB);
-        // Chỉ gỡ nếu người này đang đứng tên Trưởng phòng
         if (pb != nullptr && pb->getMaTruongPhong() == maNV) {
             pb->setMaTruongPhong("Chưa bổ nhiệm");
             cout << " >> (Hệ thống) Đã gỡ " << maNV << " khỏi vị trí Trưởng phòng " << maPB << ".\n";
