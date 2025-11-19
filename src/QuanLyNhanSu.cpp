@@ -38,6 +38,7 @@ void QuanLyNhanSu::khoiChay() {
 
 bool QuanLyNhanSu::dangNhap() {
     Helper helper; 
+    helper.xoaManHinh();
     cout << "=============================================\n";
     cout << "      HỆ THỐNG QUẢN LÝ NHÂN SỰ (HRM) \n";
     cout << "=============================================\n";
@@ -120,12 +121,12 @@ void QuanLyNhanSu::hienThiMenuChuTich() {
     cout << " [3] Quản lý trạng thái & Vai trò\n"; 
     cout << " [4] Quản lý Phòng ban\n";
     cout << " [5] Quản lý Chức danh\n";
-    cout << " [6] Quản lý Phúc lợi (Thưởng)\n"; 
+    cout << " [6] Quản lý Phúc lợi\n"; 
     cout << " [7] Chạy Bảng lương\n";
-    cout << " [8] Báo cáo & Xuất file\n";
-    cout << " [9] Xem danh sách nhân viên (Bảng)\n"; 
-    cout << " [10] Xem DS Sắp Xếp (Lương/Chức vụ)\n"; 
-    cout << " [11] Xem chi tiết nhân viên (Dọc)\n"; 
+    cout << " [8] Báo cáo nhân sự\n";
+    cout << " [9] Xem danh sách nhân viên\n";
+    cout << " [10] Xem danh sách sắp xếp\n";
+    cout << " [11] Xem chi tiết nhân viên\n"; 
     cout << " [12] Xem lịch sử thay đổi NV\n";
     cout << " [13] Xem danh sách Tài khoản\n";
     cout << " -------------------------------------------\n";
@@ -159,12 +160,12 @@ void QuanLyNhanSu::hienThiMenuTruongPhong() {
     Helper helper; 
     helper.xoaManHinh();
     cout << "--- MENU TRƯỞNG PHÒNG ---\n";
-    cout << " [1] Thêm nhân viên mới (vào phòng)\n";
-    cout << " [2] Quản lý trạng thái NV (Thử việc/Nghỉ)\n";
-    cout << " [3] Xem danh sách nhân viên (Phòng mình)\n";
-    cout << " [4] Xem DS Sắp Xếp (Phòng mình)\n"; 
-    cout << " [5] Gửi tin nhắn xin nghỉ (Chưa làm)\n";
-    cout << " [6] Xem danh sách Tài khoản (Phòng mình)\n";
+    cout << " [1] Thêm nhân viên mới\n";
+    cout << " [2] Quản lý trạng thái nhân viên\n";
+    cout << " [3] Xem danh sách nhân viên\n";
+    cout << " [4] Xem danh sách sắp xếp\n"; 
+    cout << " [5] Gửi tin nhắn xin nghỉ (tính năng chưa ra mắt)\n";
+    cout << " [6] Xem danh sách tài khoản theo phòng\n";
     cout << " -------------------------------------------\n";
     cout << " [0] Đăng xuất\n";
     cout << "=============================================\n";
@@ -188,11 +189,11 @@ void QuanLyNhanSu::hienThiMenuKeToan() {
     Helper helper; 
     helper.xoaManHinh();
     cout << "--- MENU KẾ TOÁN ---\n";
-    cout << " [1] Chạy bảng lương (Tính & Cập nhật)\n";
-    cout << " [2] Quản lý phúc lợi (Thêm/Xóa/Ghi danh)\n";
-    cout << " [3] Xem danh sách nhân viên (Full lương)\n";
-    cout << " [4] Xem DS Sắp Xếp (Lương/Chức vụ)\n"; 
-    cout << " [5] Báo cáo nhân sự (Theo phòng ban)\n";
+    cout << " [1] Chạy bảng lương\n";
+    cout << " [2] Quản lý phúc lợi\n";
+    cout << " [3] Xem danh sách nhân viên\n";
+    cout << " [4] Xem danh sách sắp xếp\n"; 
+    cout << " [5] Báo cáo nhân sự theo phòng ban\n";
     cout << " [6] Xuất file CSV\n";
     cout << " -------------------------------------------\n";
     cout << " [0] Đăng xuất\n";
@@ -217,10 +218,10 @@ void QuanLyNhanSu::hienThiMenuNhanVien() {
     Helper helper; 
     helper.xoaManHinh();
     cout << "--- MENU NHÂN VIÊN ---\n";
-    cout << " [1] Xem thông tin cá nhân (Chi tiết)\n";
-    cout << " [2] Xem danh sách nhân viên (Bảng)\n";
-    cout << " [3] Chấm công (Chưa làm)\n";
-    cout << " [4] Gửi tin nhắn xin nghỉ phép (Chưa làm)\n";
+    cout << " [1] Xem thông tin cá nhân\n";
+    cout << " [2] Xem danh sách nhân viên\n";
+    cout << " [3] Chấm công\n";
+    cout << " [4] Gửi tin nhắn xin nghỉ phép\n";
     cout << " -------------------------------------------\n";
     cout << " [0] Đăng xuất\n";
     cout << "=============================================\n";
@@ -244,7 +245,7 @@ void QuanLyNhanSu::xuLyMenuNhanVien(bool* dangXuat) {
 void QuanLyNhanSu::chucNang_ThemNhanVien() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [1.1] Thêm Nhân Viên Mới ---\n";
+    cout << "--- Thêm Nhân Viên Mới ---\n";
     
     bool laChuTich = (currentUser->getRole() == Role::CHU_TICH);
     string maPB_CuaTruongPhong = "";
@@ -403,7 +404,7 @@ void QuanLyNhanSu::chucNang_ThemNhanVien() {
 void QuanLyNhanSu::chucNang_CapNhatNhanVien() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [2] Cập Nhật Thông Tin Nhân Viên ---\n";
+    cout << "--- Cập Nhật Thông Tin Nhân Viên ---\n";
     string maNV = helper.nhapChuoi(" - Nhập Mã NV cần cập nhật: ");
     NhanVien* nv = db.timNhanVienTheoMa(maNV);
     if (nv == nullptr) {
@@ -481,7 +482,7 @@ void QuanLyNhanSu::chuyenDoiSangLuongCung(NhanVien*& nv) {
 void QuanLyNhanSu::chucNang_QuanLyTrangThai() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [3] Quản Lý Trạng Thái & Vai Trò ---\n";
+    cout << "--- Quản Lý Trạng Thái & Vai Trò ---\n";
     string maNV = helper.nhapChuoi(" - Nhập Mã NV: ");
     NhanVien* nv = db.timNhanVienTheoMa(maNV);
     if (nv == nullptr) {
@@ -622,7 +623,7 @@ void QuanLyNhanSu::chucNang_ThayDoiVaiTro(NhanVien* nv) {
 void QuanLyNhanSu::chucNang_XemLichSuThayDoi() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [1.4] Xem Lịch Sử Thay Đổi Của Nhân Viên ---\n";
+    cout << "--- Xem Lịch Sử Thay Đổi Của Nhân Viên ---\n";
     string maNV = helper.nhapChuoi(" - Nhập Mã NV cần xem: ");
     const vector<LichSuThayDoi>* lichSu = db.layLichSuCuaNV(maNV);
     if (lichSu == nullptr || lichSu->empty()) {
@@ -633,12 +634,13 @@ void QuanLyNhanSu::chucNang_XemLichSuThayDoi() {
     cout << "| Ngày Thay Đổi  | Mô Tả                   | Giá Trị Cũ              | Giá Trị Mới             |\n";
     cout << "+----------------+-------------------------+-------------------------+-------------------------+\n";
     for (const auto& ghiNhan : *lichSu) {
-        cout << "| " << left << setw(14) << ghiNhan.ngayThayDoi.toString()
-                  << " | " << setw(23) << ghiNhan.moTa
-                  << " | " << setw(23) << ghiNhan.giaTriCu
-                  << " | " << setw(23) << ghiNhan.giaTriMoi << " |\n";
+        cout << "| " << left << setw(14) << helper.removeVietnameseAccent(ghiNhan.ngayThayDoi.toString())
+                  << " | " << setw(23) << helper.removeVietnameseAccent(ghiNhan.moTa)
+                  << " | " << setw(25) << helper.removeVietnameseAccent(ghiNhan.giaTriCu)
+                  << " | " << setw(23) << helper.removeVietnameseAccent(ghiNhan.giaTriMoi) << " |\n";
     }
     cout << "+----------------+-------------------------+-------------------------+-------------------------+\n";
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_XemDanhSach() {
@@ -689,6 +691,7 @@ void QuanLyNhanSu::chucNang_XemDanhSach() {
     }
     
     cout << keNgang << "\n";
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_XemDanhSachTaiKhoan() {
@@ -734,7 +737,7 @@ void QuanLyNhanSu::chucNang_XemDanhSachTaiKhoan() {
         }
     }
     cout << keNgang << "\n";
-    helper.dungManHinh();
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_TimKiemNhanVien(string maNV) {
@@ -781,6 +784,7 @@ void QuanLyNhanSu::chucNang_TimKiemNhanVien(string maNV) {
     }
     
     nv->hienThiThongTin(vaiTroXem);
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_XemDanhSach_Sort() {
@@ -849,13 +853,14 @@ void QuanLyNhanSu::chucNang_XemDanhSach_Sort() {
     }
     
     cout << keNgang << "\n";
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_QuanLyPhongBan() {
     Helper helper; 
     while (true) {
         helper.xoaManHinh();
-        cout << "--- [2] Quản Lý Phòng Ban ---\n";
+        cout << "--- Quản Lý Phòng Ban ---\n";
         cout << " [1] Thêm phòng ban mới\n";
         cout << " [2] Xem danh sách phòng ban\n";
         cout << " [3] Bổ nhiệm Trưởng phòng (Có xem DS nhân viên)\n";
@@ -942,7 +947,7 @@ void QuanLyNhanSu::chucNang_QuanLyChucDanh() {
     Helper helper; 
     while (true) {
         helper.xoaManHinh();
-        cout << "--- [2.2] Quản Lý Chức Danh & Bậc Lương ---\n";
+        cout << "--- Quản Lý Chức Danh & Bậc Lương ---\n";
         cout << " [1] Thêm chức danh mới\n [2] Xem danh sách\n [3] Quay lại\n";
         int chon = helper.nhapSoNguyen(" >> Nhập lựa chọn: ", 1, 3);
         switch (chon) {
@@ -984,7 +989,7 @@ void QuanLyNhanSu::chucNang_QuanLyPhucLoi() {
     Helper helper; 
     while (true) {
         helper.xoaManHinh();
-        cout << "--- [3] Quản Lý Phúc Lợi (Thưởng) ---\n";
+        cout << "--- Quản Lý Thưởng ---\n";
         cout << " [1] Quản lý các gói thưởng (Thêm/Xóa)\n [2] Ghi danh thưởng cho NV\n [3] Quay lại\n";
         int chon = helper.nhapSoNguyen(" >> Nhập lựa chọn: ", 1, 3);
         switch (chon) {
@@ -1084,7 +1089,7 @@ void QuanLyNhanSu::chucNang_GhiDanhPhucLoi() {
 void QuanLyNhanSu::chucNang_ChayBangLuong() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [2] Tính Lương Hàng Tháng ---\n";
+    cout << "--- Tính Lương Hàng Tháng ---\n";
 
     string choice = helper.nhapChuoi(" - Bạn có muốn cập nhật Giờ làm/Doanh số mới cho nhân viên không? (Y/N): ");
     
@@ -1148,13 +1153,13 @@ void QuanLyNhanSu::chucNang_ChayBangLuong() {
     cout << "| " << left << setw(88) << "TONG CHI PHI LUONG" 
               << " | " << right << setw(15) << helper.formatCurrency(tongChiPhiLuong) << " |\n";
     cout << ke << "\n";
-    helper.dungManHinh();
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_BaoCaoNhanSuTheoPhongBan() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [4.1] Báo Cáo Nhân Sự Theo Phòng Ban ---\n";
+    cout << "--- Báo Cáo Nhân Sự Theo Phòng Ban ---\n";
     const auto& dsPhongBan = db.getDSPhongBan();
     const auto& dsNhanVien = db.getDSNhanVien();
     if (dsPhongBan.empty()) { cout << " (Chưa có phòng ban nào)\n"; return; }
@@ -1164,26 +1169,26 @@ void QuanLyNhanSu::chucNang_BaoCaoNhanSuTheoPhongBan() {
             soLuongNV[nv->getMaPhongBan()]++;
         }
     }
-    string ke = "+------------+-----------------------------+-------------+";
+    string ke = "+-----------------+-----------------------------+-------------+";
     cout << ke << "\n";
-    cout << "| " << left << setw(10) << "Ma PB" << " | " << setw(27) << "Ten Phong Ban" << " | " << setw(11) << "So Luong NV" << " |\n";
+    cout << "| " << left << setw(15) << "Ma PB" << " | " << setw(27) << "Ten Phong Ban" << " | " << setw(11) << "So Luong NV" << " |\n";
     cout << ke << "\n";
     for (const PhongBan& pb : dsPhongBan) {
-        cout << "| " << left << setw(10) << pb.getMaPB()
+        cout << "| " << left << setw(15) << pb.getMaPB()
                   << " | " << setw(27) << pb.getTenPB()
                   << " | " << right << setw(11) << soLuongNV[pb.getMaPB()] << " |\n";
     }
-    cout << "| " << left << setw(10) << "Chua phan bo"
+    cout << "| " << left << setw(15) << "Chua phan bo"
               << " | " << setw(27) << "(Chua co phong ban)"
               << " | " << right << setw(11) << soLuongNV[""] << " |\n";
     cout << ke << "\n";
-    helper.dungManHinh();
+    // helper.dungManHinh();
 }
 
 void QuanLyNhanSu::chucNang_XuatDanhSachNhanVien() {
     Helper helper; 
     helper.xoaManHinh();
-    cout << "--- [4.2] Xuất Danh Sách Nhân Viên (CSV) ---\n";
+    cout << "--- Xuất Danh Sách Nhân Viên (CSV) ---\n";
     string tenFile = helper.nhapChuoi(" - Nhập tên file để xuất (ví dụ: export.csv): ");
     ofstream file(tenFile);
     if (!file.is_open()) { cout << " (!) Không thể tạo file.\n"; return; }
@@ -1200,5 +1205,5 @@ void QuanLyNhanSu::chucNang_XuatDanhSachNhanVien() {
     }
     file.close();
     cout << " >> Đã xuất thành công ra file: " << tenFile << "\n";
-    helper.dungManHinh();
+    // helper.dungManHinh();
 }

@@ -34,7 +34,7 @@ void Helper::xoaManHinh() {
 void Helper::dungManHinh() {
     cout << "\nNhấn Enter để tiếp tục...";
     cin.clear(); 
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
 }
 
@@ -269,11 +269,11 @@ string Helper::removeVietnameseAccent(const string &s) {
     string res;
     int i = 0;
     while (i < s.size()) {
-        // Lấy đúng 1 ký tự UTF-8
+
         unsigned char c = s[i];
         int len = 1;
-        if (c >= 0xC0 && c <= 0xDF) len = 2;     // 2-byte UTF-8
-        else if (c >= 0xE0 && c <= 0xEF) len = 3; // 3-byte UTF-8
+        if (c >= 0xC0 && c <= 0xDF) len = 2;
+        else if (c >= 0xE0 && c <= 0xEF) len = 3; 
 
         string ch = s.substr(i, len);
 

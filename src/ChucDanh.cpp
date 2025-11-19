@@ -17,8 +17,8 @@ void ChucDanh::setLuongCoBan(double luong) { luongCoBan = luong; }
 void ChucDanh::hienThi() const {
     Helper helper; // <-- Phải tạo đối tượng
     cout << "| " << left << setw(8) << helper.removeVietnameseAccent(maChucDanh)
-              << " | " << setw(25) << helper.removeVietnameseAccent(tenChucDanh)
-              << " | " << right << setw(15) << helper.removeVietnameseAccent(helper.formatCurrency(luongCoBan)) << " VND |\n";
+              << " | " << setw(27) << helper.removeVietnameseAccent(tenChucDanh)
+              << " | " << right << setw(13) << helper.removeVietnameseAccent(helper.formatCurrency(luongCoBan)) << " VND |\n";
 }
 
 string ChucDanh::toStringCSV() const {
