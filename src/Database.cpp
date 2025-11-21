@@ -49,14 +49,14 @@ void Database::taiDuLieuTuFile() {
 void Database::taiPhongBan() {
     ifstream file(FILE_PHONGBAN);
     if (!file.is_open()) { return; }
-    dsPhongBan.clear();
+    dsPhongBan.clear(); // Xóa hết dữ liệu hiện tại
     string line;
-    getline(file, line); 
-    while (getline(file, line)) {
+    getline(file, line); // Đọc từng dòng, dòng đầu tiên lưu trữ các tên cột
+    while (getline(file, line)) { // Bắt đầu đọc các thông tin các phòng
         if (line.empty()) continue;
         stringstream ss(line);
         string maPB, tenPB, maTP;
-        getline(ss, maPB, ',');
+        getline(ss, maPB, ','); // Đọc dữ liệu đến dấu ',' thành maPB xóa các phần đã lấy
         getline(ss, tenPB, ',');
         getline(ss, maTP, ',');
         if (!maPB.empty()) { dsPhongBan.push_back(PhongBan(maPB, tenPB, maTP)); }
@@ -78,7 +78,7 @@ void Database::taiChucDanh() {
         getline(ss, maCD, ',');
         getline(ss, tenCD, ',');
         getline(ss, luongCBStr, ',');
-        try { luongCB = luongCBStr.empty() ? 0.0 : stod(luongCBStr); } 
+        try { luongCB = luongCBStr.empty() ? 0.0 : stod(luongCBStr); } // stod = string to double
         catch (...) { luongCB = 0.0; }
         if (!maCD.empty()) { dsChucDanh.push_back(ChucDanh(maCD, tenCD, luongCB)); }
     }
@@ -97,10 +97,10 @@ NhanVien* Database::taoNhanVienTuLoai(LoaiNhanVien loai) {
 void Database::taiNhanVien() {
     ifstream file(FILE_NHANVIEN);
     if (!file.is_open()) { return; }
-    for (NhanVien* nv : dsNhanVien) { delete nv; }
+    for (NhanVien* nv : dsNhanVien) { delete nv; } // Giải phóng
     dsNhanVien.clear();
     string line;
-    getline(file, line); 
+    getline(file, line);  // Đọc dòng thừa
     int maxId = 0;
     while (getline(file, line)) {
         if (line.empty()) continue;
@@ -110,14 +110,14 @@ void Database::taiNhanVien() {
         if (loaiNVStr.empty()) { continue; }
         LoaiNhanVien loaiNV;
         try { loaiNV = static_cast<LoaiNhanVien>(stoi(loaiNVStr)); } 
-        catch (const exception& e) { continue; }
+        catch (...) { continue; }
         NhanVien* nv = taoNhanVienTuLoai(loaiNV);
         if (nv!= nullptr) {
             nv->docTuFile(ss); 
             dsNhanVien.push_back(nv);
             try {
                 if (!nv->getMaNV().empty() && nv->getMaNV().length() > 2) {
-                    int currentId = stoi(nv->getMaNV().substr(2)); 
+                    int currentId = stoi(nv->getMaNV().substr(2)); // substr(2): Cắt bỏ 2 kí tự đầu tiên
                     if (currentId > maxId) { maxId = currentId; }
                 }
             } catch (...) { }
@@ -144,8 +144,9 @@ void Database::taiLichSu() {
         getline(ss, giaTriMoi, ',');
         
         Date dateUtil; 
-        Date ngay = dateUtil.fromString(ngayStr);
-        dsLichSu[maNV].emplace_back(ngay, moTa, giaTriCu, giaTriMoi);
+        Date ngay = dateUtil.fromString(ngayStr); // 
+        dsLichSu[maNV].emplace_back(ngay, moTa, giaTriCu, giaTriMoi); 
+        // Nó vẫn gọi hàm Constructor, nhưng nó gọi TRỰC TIẾP bên trong vector, giúp tránh việc tạo ra một bản nháp (biến tạm) rồi phải sao chép lại.
     }
     file.close();
 }
@@ -516,6 +517,7 @@ const vector<LichSuThayDoi>* Database::layLichSuCuaNV(const string& maNV) const 
     if (it!= dsLichSu.end()) return &(it->second);
     return nullptr;
 }
+
 const vector<PhucLoi>& Database::getDSPhucLoi() const { return danhSachPhucLoi; }
 PhucLoi* Database::timPhucLoiTheoMa(const string& maPL) {
     for (auto& pl : danhSachPhucLoi) {

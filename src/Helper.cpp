@@ -34,7 +34,7 @@ void Helper::xoaManHinh() {
 void Helper::dungManHinh() {
     cout << "\nNhấn Enter để tiếp tục...";
     cin.clear(); 
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Loại bỏ tất cả dấu '\n' trong xâu
     cin.get();
 }
 
@@ -64,7 +64,7 @@ string Helper::nhapChuoiSo(const string& prompt, bool choPhepRong) {
                 return input; // Cho phép rỗng nếu choPhepRong = true
             }
         }
-        if (input.find_first_not_of("0123456789") == string::npos) {
+        if (input.find_first_not_of("0123456789") == string::npos) { // Dùng để kiểm tra xem có phải input có phải là toàn số không ?
             return input; // Hợp lệ, chỉ chứa số
         } else {
             cout << " (!) Đầu vào chỉ được phép chứa số (0-9). Vui lòng nhập lại.\n";
@@ -154,7 +154,8 @@ TrangThaiLamViec Helper::stringToTrangThai(const string& str) {
 
 string Helper::toLower(const string& str) {
     string result = str;
-    transform(result.begin(), result.end(), result.begin(), ::tolower);
+    transform(result.begin(), result.end(), result.begin(), ::tolower); //  Chuyển đổi toàn bộ xâu thành chứ cái bình thường
+    // transform( [Bắt đầu lấy] , [Kết thúc lấy] , [Nơi đặt kết quả] , [Hành động] );
     return result;
 }
 
@@ -180,7 +181,7 @@ string Helper::formatCurrency(double value, bool showVND) {
 
 string Helper::taoMaTuDong(const string& tienTo, int soThuTu) {
     stringstream ss;
-    ss << tienTo << setw(3) << setfill('0') << soThuTu;
+    ss << tienTo << setw(3) << setfill('0') << soThuTu; // setfill kết hợp với setw tạo 3 số 0
     return ss.str();
 }
 
@@ -230,7 +231,7 @@ string Helper::roleToString(Role role) {
 }
 
 string Helper::removeVietnameseAccent(const string &s) {
-    static const unordered_map<string, string> mp = {
+    static const unordered_map<string, string> mp = { // static để tránh phải khởi tạo nhiều lần (chỉ 1 lần duy nhất trong khi chạy)
         {"á","a"},{"à","a"},{"ả","a"},{"ã","a"},{"ạ","a"},
         {"ă","a"},{"ắ","a"},{"ằ","a"},{"ẳ","a"},{"ẵ","a"},{"ặ","a"},
         {"â","a"},{"ấ","a"},{"ầ","a"},{"ẩ","a"},{"ẫ","a"},{"ậ","a"},
@@ -274,10 +275,10 @@ string Helper::removeVietnameseAccent(const string &s) {
         int len = 1;
         if (c >= 0xC0 && c <= 0xDF) len = 2;
         else if (c >= 0xE0 && c <= 0xEF) len = 3; 
+        // Lấy thước đo từ bảng UTF-8 để phân tích kích thước (độ dài) của kí tự
+        string ch = s.substr(i, len); // Lấy kí tự
 
-        string ch = s.substr(i, len);
-
-        if (mp.count(ch)) res += mp.at(ch);
+        if (mp.count(ch)) res += mp.at(ch); // Chuyển đổi sang không dấu
         else res += ch;
 
         i += len;

@@ -828,7 +828,7 @@ void QuanLyNhanSu::chucNang_XemDanhSach_Sort() {
     } else if (chon == 2) {
         sort(dsCopy.begin(), dsCopy.end(), [](const NhanVien* a, const NhanVien* b) {
             return a->getMaChucDanh() < b->getMaChucDanh();
-        });
+        }); // Sort costum
         cout << " >> Đã sắp xếp theo Mã Chức Danh Tăng dần (A-Z).\n";
     } else {
         return; 

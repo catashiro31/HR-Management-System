@@ -23,6 +23,6 @@ void ChucDanh::hienThi() const {
 
 string ChucDanh::toStringCSV() const {
     stringstream ss;
-    ss << maChucDanh << "," << tenChucDanh << "," << luongCoBan;
-    return ss.str();
+    ss << maChucDanh << "," << tenChucDanh << "," << luongCoBan; // Tạo một phễu lưu trữ hỗn hợp giá trị
+    return ss.str(); // Chuyển phễu đó thành xâu
 }
